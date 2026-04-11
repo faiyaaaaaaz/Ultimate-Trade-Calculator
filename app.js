@@ -60,6 +60,19 @@ function populateInstrumentSelectByMarket(selectElement, marketValue) {
   setOptions(selectElement, "Select instrument", instrumentList);
 }
 
+function populateModelSelectByMarket(selectElement, marketValue) {
+  if (!marketValue) {
+    setOptions(selectElement, "Select model", []);
+    return;
+  }
+
+  const modelList = DATA.models
+    .filter((item) => item.active && item.marketType === marketValue)
+    .map((item) => item.modelName);
+
+  setOptions(selectElement, "Select model", modelList);
+}
+
 /* -----------------------------------
    TAB SWITCHING
 ----------------------------------- */
@@ -113,16 +126,7 @@ function populateModel() {
     return;
   }
 
-  if (!market.value) {
-    setOptions(model, "Select model", []);
-    return;
-  }
-
-  const modelList = DATA.models
-    .filter((item) => item.active && item.marketType === market.value)
-    .map((item) => item.modelName);
-
-  setOptions(model, "Select model", modelList);
+  populateModelSelectByMarket(model, market.value);
 }
 
 function updateVisibility() {
@@ -425,6 +429,159 @@ function onPipMarketChange() {
 }
 
 /* -----------------------------------
+   MAX LOT CALCULATOR
+----------------------------------- */
+const maxlotMarket = document.getElementById("maxlotMarket");
+const maxlotInstrument = document.getElementById("maxlotInstrument");
+const maxlotModel = document.getElementById("maxlotModel");
+const maxlotModelGroup = document.getElementById("maxlotModelGroup");
+
+const maxlotAccountSize = document.getElementById("maxlotAccountSize");
+const maxlotPrice = document.getElementById("maxlotPrice");
+
+const maxlotUseManualLeverage = document.getElementById("maxlotUseManualLeverage");
+const maxlotManualLeverage = document.getElementById("maxlotManualLeverage");
+const maxlotManualLeverageWrap = document.getElementById("maxlotManualLeverageWrap");
+
+const maxlotResult = document.getElementById("maxlotResult");
+const maxlotContractSize = document.getElementById("maxlotContractSize");
+const maxlotConversionFactor = document.getElementById("maxlotConversionFactor");
+const maxlotLeverageUsed = document.getElementById("maxlotLeverageUsed");
+const maxlotHelperBox = document.getElementById("maxlotHelperBox");
+
+function populateMaxlotModel() {
+  if (maxlotUseManualLeverage.checked) {
+    setOptions(maxlotModel, "Select model", []);
+    return;
+  }
+
+  populateModelSelectByMarket(maxlotModel, maxlotMarket.value);
+}
+
+function updateMaxlotVisibility() {
+  if (maxlotUseManualLeverage.checked) {
+    maxlotModelGroup.style.display = "none";
+    maxlotManualLeverageWrap.style.display = "flex";
+  } else {
+    maxlotModelGroup.style.display = "";
+    maxlotManualLeverageWrap.style.display = "none";
+    maxlotManualLeverage.value = "";
+  }
+}
+
+function updateMaxlotLeverageDisplay() {
+  if (maxlotUseManualLeverage.checked) {
+    if (!maxlotManualLeverage.value) {
+      maxlotLeverageUsed.textContent = "Manual leverage not mentioned!";
+    } else {
+      maxlotLeverageUsed.textContent = maxlotManualLeverage.value;
+    }
+    return;
+  }
+
+  const selectedModel = getModelByName(maxlotModel.value);
+
+  if (!selectedModel) {
+    maxlotLeverageUsed.textContent = "-";
+    return;
+  }
+
+  maxlotLeverageUsed.textContent = selectedModel.defaultLeverage;
+}
+
+function updateMaxlotHelperText() {
+  if (!maxlotMarket.value) {
+    maxlotHelperBox.textContent = "Select a market to begin.";
+    return;
+  }
+
+  if (!maxlotInstrument.value) {
+    maxlotHelperBox.textContent = "Now choose an instrument.";
+    return;
+  }
+
+  if (maxlotUseManualLeverage.checked && !maxlotManualLeverage.value) {
+    maxlotHelperBox.textContent = "Enter manual leverage to proceed.";
+    return;
+  }
+
+  if (!maxlotUseManualLeverage.checked && !maxlotModel.value) {
+    maxlotHelperBox.textContent = "Now choose a model.";
+    return;
+  }
+
+  if (!maxlotAccountSize.value) {
+    maxlotHelperBox.textContent = "Enter the account size.";
+    return;
+  }
+
+  if (!maxlotPrice.value) {
+    maxlotHelperBox.textContent = "Enter the current price.";
+    return;
+  }
+
+  maxlotHelperBox.textContent = "All required inputs are ready.";
+}
+
+function calculateMaxlot() {
+  updateMaxlotLeverageDisplay();
+  updateMaxlotHelperText();
+
+  const selectedInstrument = getInstrumentByName(maxlotInstrument.value);
+  const selectedModel = getModelByName(maxlotModel.value);
+  const selectedConversion = getConversionByInstrument(maxlotInstrument.value);
+
+  const accountSizeValue = Number(maxlotAccountSize.value);
+  const priceValue = Number(maxlotPrice.value);
+
+  maxlotContractSize.textContent = "-";
+  maxlotConversionFactor.textContent = "-";
+  maxlotResult.textContent = "0.00";
+
+  if (!selectedInstrument) return;
+
+  maxlotContractSize.textContent = selectedInstrument.contractSize;
+
+  const conversionFactor = selectedConversion
+    ? Number(selectedConversion.finalConversionFactor || 1)
+    : 1;
+
+  maxlotConversionFactor.textContent = conversionFactor;
+
+  let leverageValue = 0;
+
+  if (maxlotUseManualLeverage.checked) {
+    leverageValue = Number(maxlotManualLeverage.value || 0);
+  } else {
+    if (!selectedModel) return;
+    leverageValue = Number(selectedModel.defaultLeverage || 0);
+  }
+
+  if (!accountSizeValue || !priceValue || !leverageValue) return;
+
+  const maxLot =
+    (accountSizeValue * leverageValue) /
+    (priceValue * Number(selectedInstrument.contractSize) * conversionFactor);
+
+  maxlotResult.textContent = formatPlainNumber(maxLot, 2);
+}
+
+function onMaxlotMarketChange() {
+  populateInstrumentSelectByMarket(maxlotInstrument, maxlotMarket.value);
+  populateMaxlotModel();
+  maxlotInstrument.value = "";
+  maxlotModel.value = "";
+  calculateMaxlot();
+}
+
+function onMaxlotManualToggleChange() {
+  updateMaxlotVisibility();
+  populateMaxlotModel();
+  maxlotModel.value = "";
+  calculateMaxlot();
+}
+
+/* -----------------------------------
    INIT
 ----------------------------------- */
 function initializeApp() {
@@ -437,6 +594,11 @@ function initializeApp() {
 
   calculatePnl();
   calculatePipPrice();
+
+  updateMaxlotVisibility();
+  populateInstrumentSelectByMarket(maxlotInstrument, maxlotMarket.value);
+  populateMaxlotModel();
+  calculateMaxlot();
 
   market.addEventListener("change", onMarginMarketChange);
   instrument.addEventListener("change", calculateMargin);
@@ -458,6 +620,14 @@ function initializeApp() {
   pipOpenPrice.addEventListener("input", calculatePipPrice);
   pipAction.addEventListener("change", calculatePipPrice);
   pipAmount.addEventListener("input", calculatePipPrice);
+
+  maxlotMarket.addEventListener("change", onMaxlotMarketChange);
+  maxlotInstrument.addEventListener("change", calculateMaxlot);
+  maxlotModel.addEventListener("change", calculateMaxlot);
+  maxlotAccountSize.addEventListener("input", calculateMaxlot);
+  maxlotPrice.addEventListener("input", calculateMaxlot);
+  maxlotUseManualLeverage.addEventListener("change", onMaxlotManualToggleChange);
+  maxlotManualLeverage.addEventListener("input", calculateMaxlot);
 }
 
 initializeApp();
