@@ -1,67 +1,53 @@
-const DATA = window.WEB_CALCULATOR_DATA;
+// SAFE DATA LOAD (prevents crashes)
+const DATA = window.WEB_CALCULATOR_DATA || {
+  instruments: [],
+  models: [],
+  conversionPrices: []
+};
 
-const marketSelect = document.getElementById("market");
-const instrumentSelect = document.getElementById("instrument");
-const modelSelect = document.getElementById("model");
-const priceInput = document.getElementById("price");
-const lotInput = document.getElementById("lotSize");
+console.log("DATA LOADED:", DATA);
 
-const manualCheckbox = document.getElementById("useManualLeverage");
+// ELEMENTS
+const market = document.getElementById("market");
+const instrument = document.getElementById("instrument");
+const model = document.getElementById("model");
+const price = document.getElementById("price");
+const lot = document.getElementById("lotSize");
+
+const manualCheck = document.getElementById("useManualLeverage");
 const manualInput = document.getElementById("manualLeverage");
 const manualWrap = document.getElementById("manualLeverageWrap");
 
-const resultBox = document.getElementById("result");
+const result = document.getElementById("result");
 const contractSizeEl = document.getElementById("contractSize");
 const conversionEl = document.getElementById("conversionFactor");
 const leverageEl = document.getElementById("leverageUsed");
 
-/* ---------- HELPERS ---------- */
+// ---------- DROPDOWNS ----------
 
-function normalize(v) {
-  return String(v || "").trim().toLowerCase();
+function populate() {
+  const selectedMarket = market.value;
+
+  instrument.innerHTML = `<option>Select instrument</option>`;
+  model.innerHTML = `<option>Select model</option>`;
+
+  DATA.instruments.forEach(i => {
+    if (i.marketType === selectedMarket && i.active) {
+      instrument.innerHTML += `<option>${i.instrumentName}</option>`;
+    }
+  });
+
+  DATA.models.forEach(m => {
+    if (m.marketType === selectedMarket && m.active) {
+      model.innerHTML += `<option>${m.modelName}</option>`;
+    }
+  });
 }
 
-function getInstrument() {
-  return DATA.instruments.find(i => i.instrumentName === instrumentSelect.value);
-}
+// ---------- LEVERAGE ----------
 
-function getModel() {
-  return DATA.models.find(m => m.modelName === modelSelect.value);
-}
-
-function getConversion() {
-  return DATA.conversionPrices.find(c => c.instrumentName === instrumentSelect.value);
-}
-
-/* ---------- DROPDOWN ---------- */
-
-function populateDropdowns() {
-  const market = normalize(marketSelect.value);
-
-  instrumentSelect.innerHTML = `<option>Select instrument</option>`;
-  modelSelect.innerHTML = `<option>Select model</option>`;
-
-  DATA.instruments
-    .filter(i => i.active)
-    .filter(i => normalize(i.marketType) === market)
-    .forEach(i => {
-      instrumentSelect.innerHTML += `<option>${i.instrumentName}</option>`;
-    });
-
-  DATA.models
-    .filter(m => m.active)
-    .filter(m => normalize(m.marketType) === market)
-    .forEach(m => {
-      modelSelect.innerHTML += `<option>${m.modelName}</option>`;
-    });
-
-  updateLeverageDisplay();
-}
-
-/* ---------- LEVERAGE DISPLAY ---------- */
-
-function updateLeverageDisplay() {
-  if (manualCheckbox.checked) {
+function updateLeverage() {
+  if (manualCheck.checked) {
     if (!manualInput.value) {
       leverageEl.textContent = "Manual leverage not mentioned!";
     } else {
@@ -70,71 +56,67 @@ function updateLeverageDisplay() {
     return;
   }
 
-  const model = getModel();
-  if (!model) {
+  const selectedModel = DATA.models.find(m => m.modelName === model.value);
+
+  if (!selectedModel) {
     leverageEl.textContent = "-";
     return;
   }
 
-  leverageEl.textContent = model.defaultLeverage;
+  leverageEl.textContent = selectedModel.defaultLeverage;
 }
 
-/* ---------- CALCULATION ---------- */
+// ---------- CALC ----------
 
 function calculate() {
-  updateLeverageDisplay();
+  updateLeverage();
 
-  const instrument = getInstrument();
-  const model = getModel();
-  const conversion = getConversion();
+  const inst = DATA.instruments.find(i => i.instrumentName === instrument.value);
+  const mod = DATA.models.find(m => m.modelName === model.value);
 
-  const price = Number(priceInput.value);
-  const lot = Number(lotInput.value);
-
-  if (!instrument || !model || !price || !lot) {
-    resultBox.textContent = "0.00";
+  if (!inst || !mod || !price.value || !lot.value) {
+    result.textContent = "0.00";
     return;
   }
 
-  const contractSize = Number(instrument.contractSize);
-  const leverage = manualCheckbox.checked
+  const leverage = manualCheck.checked
     ? Number(manualInput.value || 0)
-    : Number(model.defaultLeverage);
+    : Number(mod.defaultLeverage);
 
   if (!leverage) return;
+
+  const conversion = DATA.conversionPrices.find(c => c.instrumentName === inst.instrumentName);
 
   const conversionFactor = conversion
     ? Number(conversion.finalConversionFactor || 1)
     : 1;
 
   const margin =
-    (price * contractSize * lot / leverage) * conversionFactor;
+    (price.value * inst.contractSize * lot.value / leverage) * conversionFactor;
 
-  resultBox.textContent = margin.toFixed(2);
+  result.textContent = Number(margin).toFixed(2);
 
-  contractSizeEl.textContent = contractSize;
+  contractSizeEl.textContent = inst.contractSize;
   conversionEl.textContent = conversionFactor;
 }
 
-/* ---------- EVENTS ---------- */
+// ---------- EVENTS ----------
 
-marketSelect.addEventListener("change", populateDropdowns);
-instrumentSelect.addEventListener("change", calculate);
-modelSelect.addEventListener("change", calculate);
-priceInput.addEventListener("input", calculate);
-lotInput.addEventListener("input", calculate);
+market.addEventListener("change", populate);
+instrument.addEventListener("change", calculate);
+model.addEventListener("change", calculate);
+price.addEventListener("input", calculate);
+lot.addEventListener("input", calculate);
 
-manualCheckbox.addEventListener("change", () => {
-  manualWrap.style.display = manualCheckbox.checked ? "block" : "none";
-  updateLeverageDisplay();
-  calculate();
+manualCheck.addEventListener("change", () => {
+  manualWrap.style.display = manualCheck.checked ? "block" : "none";
+  updateLeverage();
 });
 
 manualInput.addEventListener("input", () => {
-  updateLeverageDisplay();
+  updateLeverage();
   calculate();
 });
 
-/* ---------- INIT ---------- */
-
+// INIT
 manualWrap.style.display = "none";
