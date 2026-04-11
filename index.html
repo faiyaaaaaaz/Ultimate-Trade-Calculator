@@ -1,1 +1,84 @@
-<!-- index.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FundedNext Web Calculator</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <main class="page">
+    <div class="container">
+      <h1>FundedNext Web Calculator</h1>
+      <p class="subtext">Version 1 test build — Margin Calculator</p>
+
+      <section class="card">
+        <h2>Margin Calculator</h2>
+
+        <div class="grid">
+          <div class="field">
+            <label for="market">Market</label>
+            <select id="market">
+              <option value="Currency">Currency</option>
+              <option value="Commodity">Commodity</option>
+              <option value="Indice">Indice</option>
+              <option value="Crypto">Crypto</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="instrument">Instrument</label>
+            <select id="instrument">
+              <option value="">Select instrument</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="model">Model</label>
+            <select id="model">
+              <option value="">Select model</option>
+            </select>
+          </div>
+
+          <div class="field">
+            <label for="currentPrice">Current Price</label>
+            <input id="currentPrice" type="number" step="any" placeholder="Enter current price" />
+          </div>
+
+          <div class="field">
+            <label for="lotSize">Lot Size</label>
+            <input id="lotSize" type="number" step="any" placeholder="Enter lot size" />
+          </div>
+
+          <div class="field checkbox-field">
+            <label>
+              <input id="useManualLeverage" type="checkbox" />
+              Use manual leverage
+            </label>
+          </div>
+
+          <div class="field" id="manualLeverageWrap" style="display:none;">
+            <label for="manualLeverage">Manual Leverage</label>
+            <input id="manualLeverage" type="number" step="any" placeholder="Enter manual leverage" />
+          </div>
+        </div>
+
+        <div class="result-box">
+          <div class="result-label">Required Margin (USD)</div>
+          <div class="result-value" id="marginResult">0.00</div>
+        </div>
+
+        <div class="helper-box">
+          <div><strong>Contract Size:</strong> <span id="contractSizeView">-</span></div>
+          <div><strong>Conversion Factor:</strong> <span id="conversionFactorView">-</span></div>
+          <div><strong>Leverage Used:</strong> <span id="leverageUsedView">-</span></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="calculations.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
