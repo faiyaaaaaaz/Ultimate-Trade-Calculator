@@ -22,7 +22,7 @@ const conversionEl = document.getElementById("conversionFactor");
 const leverageEl = document.getElementById("leverageUsed");
 const helper = document.getElementById("helperBox");
 
-function formatNumber(value) {
+function formatMoney(value) {
   return Number(value).toLocaleString("en-US", {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
@@ -200,7 +200,7 @@ function calculate() {
     (priceValue * Number(selectedInstrument.contractSize) * lotValue / leverageValue) *
     conversionFactor;
 
-  result.textContent = formatNumber(margin);
+  result.textContent = formatMoney(margin);
 }
 
 function onMarketChange() {
