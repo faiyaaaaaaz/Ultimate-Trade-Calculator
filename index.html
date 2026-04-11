@@ -11,82 +11,232 @@
 <div class="app-container">
 
   <div class="tabs">
-    <button class="tab active">Margin Calculator</button>
-    <button class="tab">Profit & Add Pip Calculator</button>
-    <button class="tab">Max Lot Calculator</button>
-    <button class="tab">Risk Tools</button>
+    <button class="tab active" data-tab="margin">Margin Calculator</button>
+    <button class="tab" data-tab="pnl">Profit & Add Pip Calculator</button>
+    <button class="tab" data-tab="maxlot">Max Lot Calculator</button>
+    <button class="tab" data-tab="risk">Risk Tools</button>
   </div>
 
-  <div class="card">
+  <!-- MARGIN SECTION -->
+  <div id="marginSection">
 
-    <div class="form-section">
+    <div class="card">
+      <div class="form-section">
 
-      <div class="form-group">
-        <label>Market</label>
-        <select id="market">
-          <option value="">Select market</option>
-          <option value="Currency">Currency</option>
-          <option value="Commodity">Commodity</option>
-          <option value="Indice">Indice</option>
-          <option value="Crypto">Crypto</option>
-        </select>
+        <div class="form-group">
+          <label>Market</label>
+          <select id="market">
+            <option value="">Select market</option>
+            <option value="Currency">Currency</option>
+            <option value="Commodity">Commodity</option>
+            <option value="Indice">Indice</option>
+            <option value="Crypto">Crypto</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Instrument</label>
+          <select id="instrument">
+            <option value="">Select instrument</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="modelGroup">
+          <label>Model</label>
+          <select id="model">
+            <option value="">Select model</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Current Price</label>
+          <input id="price" type="number" placeholder="Enter price">
+        </div>
+
+        <div class="form-group">
+          <label>Lot Size</label>
+          <input id="lotSize" type="number" placeholder="Enter size">
+        </div>
+
+        <div class="toggle-group">
+          <label class="switch">
+            <input type="checkbox" id="useManualLeverage">
+            <span class="slider"></span>
+          </label>
+          <span>Use manual leverage</span>
+        </div>
+
+        <div id="manualLeverageWrap" class="form-group">
+          <label>Manual Leverage</label>
+          <input id="manualLeverage" type="number" placeholder="Enter leverage">
+        </div>
+
       </div>
 
-      <div class="form-group">
-        <label>Instrument</label>
-        <select id="instrument">
-          <option value="">Select instrument</option>
-        </select>
+      <div class="result-section">
+        <p>Result</p>
+        <h2 id="result">0.00</h2>
+        <div id="resultCurrency" style="margin-top: 8px; font-size: 14px; font-weight: 600; letter-spacing: 0.5px; opacity: 0.9;">USD</div>
       </div>
-
-      <div class="form-group" id="modelGroup">
-        <label>Model</label>
-        <select id="model">
-          <option value="">Select model</option>
-        </select>
-      </div>
-
-      <div class="form-group">
-        <label>Current Price</label>
-        <input id="price" type="number" placeholder="Enter price">
-      </div>
-
-      <div class="form-group">
-        <label>Lot Size</label>
-        <input id="lotSize" type="number" placeholder="Enter size">
-      </div>
-
-      <div class="toggle-group">
-        <label class="switch">
-          <input type="checkbox" id="useManualLeverage">
-          <span class="slider"></span>
-        </label>
-        <span>Use manual leverage</span>
-      </div>
-
-      <div id="manualLeverageWrap" class="form-group">
-        <label>Manual Leverage</label>
-        <input id="manualLeverage" type="number" placeholder="Enter leverage">
-      </div>
-
     </div>
 
-    <div class="result-section">
-      <p>Result</p>
-      <h2 id="result">0.00</h2>
-      <div id="resultCurrency" style="margin-top: 8px; font-size: 14px; font-weight: 600; letter-spacing: 0.5px; opacity: 0.9;">USD</div>
+    <div class="info">
+      <p>Contract Size: <span id="contractSize">-</span></p>
+      <p>Conversion Factor: <span id="conversionFactor">-</span></p>
+      <p>Leverage Used: <span id="leverageUsed">-</span></p>
     </div>
 
+    <div id="helperBox" class="helper-box">
+      Select a market to begin.
+    </div>
   </div>
 
-  <div class="info">
-    <p>Contract Size: <span id="contractSize">-</span></p>
-    <p>Conversion Factor: <span id="conversionFactor">-</span></p>
-    <p>Leverage Used: <span id="leverageUsed">-</span></p>
+  <!-- PNL SECTION -->
+  <div id="pnlSection" style="display:none;">
+
+    <div class="card" style="margin-bottom: 24px;">
+      <div class="form-section">
+
+        <div class="form-group">
+          <label>Market</label>
+          <select id="pnlMarket">
+            <option value="">Select market</option>
+            <option value="Currency">Currency</option>
+            <option value="Commodity">Commodity</option>
+            <option value="Indice">Indice</option>
+            <option value="Crypto">Crypto</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Instrument</label>
+          <select id="pnlInstrument">
+            <option value="">Select instrument</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Position</label>
+          <select id="pnlPosition">
+            <option value="">Select position</option>
+            <option value="buy">Buy</option>
+            <option value="sell">Sell</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Opening Price</label>
+          <input id="pnlOpenPrice" type="number" placeholder="Enter opening price">
+        </div>
+
+        <div class="form-group">
+          <label>Closing Price</label>
+          <input id="pnlClosePrice" type="number" placeholder="Enter closing price">
+        </div>
+
+        <div class="form-group">
+          <label>Lot Size</label>
+          <input id="pnlLotSize" type="number" placeholder="Enter lot size">
+        </div>
+
+      </div>
+
+      <div class="result-section">
+        <p>PnL Result</p>
+        <h2 id="pnlResult">0.00</h2>
+        <div style="margin-top: 8px; font-size: 14px; font-weight: 600; letter-spacing: 0.5px; opacity: 0.9;">USD</div>
+      </div>
+    </div>
+
+    <div class="info" style="margin-bottom: 20px;">
+      <p>Pip Movement: <span id="pnlPips">-</span></p>
+      <p>Price Movement: <span id="pnlMovement">-</span></p>
+      <p>Conversion Factor: <span id="pnlConversionFactor">-</span></p>
+    </div>
+
+    <div id="pnlHelperBox" class="helper-box" style="margin-bottom: 24px;">
+      Select a market to begin.
+    </div>
+
+    <div class="card">
+      <div class="form-section">
+
+        <div class="form-group">
+          <label>Market</label>
+          <select id="pipMarket">
+            <option value="">Select market</option>
+            <option value="Currency">Currency</option>
+            <option value="Commodity">Commodity</option>
+            <option value="Indice">Indice</option>
+            <option value="Crypto">Crypto</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Instrument</label>
+          <select id="pipInstrument">
+            <option value="">Select instrument</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Opening Price</label>
+          <input id="pipOpenPrice" type="number" placeholder="Enter opening price">
+        </div>
+
+        <div class="form-group">
+          <label>Action</label>
+          <select id="pipAction">
+            <option value="">Select action</option>
+            <option value="add">Add pips</option>
+            <option value="remove">Remove pips</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Pip / Point Amount</label>
+          <input id="pipAmount" type="number" placeholder="Enter pip amount">
+        </div>
+
+      </div>
+
+      <div class="result-section">
+        <p>New Price</p>
+        <h2 id="pipResult">0.00</h2>
+      </div>
+    </div>
+
+    <div class="info">
+      <p>Pip Size Used: <span id="pipSizeUsed">-</span></p>
+    </div>
+
+    <div id="pipHelperBox" class="helper-box">
+      Select a market to begin.
+    </div>
   </div>
 
-  <div id="helperBox" class="helper-box">
-    Select a market to begin.
+  <!-- MAX LOT PLACEHOLDER -->
+  <div id="maxlotSection" style="display:none;">
+    <div class="card">
+      <div class="form-section">
+        <div class="form-group">
+          <label>Max Lot Calculator</label>
+          <div class="helper-box">Coming next. We will build this after Profit & Add Pip Calculator.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- RISK TOOLS PLACEHOLDER -->
+  <div id="riskSection" style="display:none;">
+    <div class="card">
+      <div class="form-section">
+        <div class="form-group">
+          <label>Risk Tools</label>
+          <div class="helper-box">Coming later. We will build risk by money and risk by percentage after Max Lot.</div>
+        </div>
+      </div>
+    </div>
   </div>
 
 </div>
