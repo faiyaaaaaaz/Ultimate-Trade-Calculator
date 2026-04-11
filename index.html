@@ -10,7 +10,6 @@
 
 <div class="app-container">
 
-  <!-- TOP TABS -->
   <div class="tabs">
     <button class="tab active">Margin Calculator</button>
     <button class="tab">Profit & Add Pip Calculator</button>
@@ -18,60 +17,47 @@
     <button class="tab">Risk Tools</button>
   </div>
 
-  <!-- MAIN CARD -->
   <div class="card">
 
-    <!-- LEFT -->
     <div class="form-section">
 
-      <div class="form-group">
-        <label>Market</label>
-        <select id="market">
-          <option value="">Select market</option>
-          <option value="Currency">Currency</option>
-          <option value="Commodity">Commodity</option>
-          <option value="Indice">Indice</option>
-          <option value="Crypto">Crypto</option>
-        </select>
-      </div>
+      <label>Market</label>
+      <select id="market">
+        <option value="">Select market</option>
+        <option value="Currency">Currency</option>
+        <option value="Commodity">Commodity</option>
+        <option value="Indice">Indice</option>
+        <option value="Crypto">Crypto</option>
+      </select>
 
-      <div class="form-group">
-        <label>Instrument</label>
-        <select id="instrument">
-          <option>Select instrument</option>
-        </select>
-      </div>
+      <label>Instrument</label>
+      <select id="instrument">
+        <option>Select instrument</option>
+      </select>
 
-      <div class="form-group">
-        <label>Model</label>
-        <select id="model">
-          <option>Select model</option>
-        </select>
-      </div>
+      <label>Model</label>
+      <select id="model">
+        <option>Select model</option>
+      </select>
 
-      <div class="form-group">
-        <label>Current Price</label>
-        <input type="number" id="price" placeholder="Enter price">
-      </div>
+      <label>Current Price</label>
+      <input id="price" type="number" placeholder="Enter price">
 
-      <div class="form-group">
-        <label>Lot Size</label>
-        <input type="number" id="lotSize" placeholder="Enter size">
-      </div>
+      <label>Lot Size</label>
+      <input id="lotSize" type="number" placeholder="Enter size">
 
-      <div class="form-group checkbox-group">
+      <div>
         <input type="checkbox" id="useManualLeverage">
         <label>Use manual leverage</label>
       </div>
 
-      <div id="manualLeverageWrap" class="form-group">
+      <div id="manualLeverageWrap">
         <label>Manual Leverage</label>
-        <input type="number" id="manualLeverage" placeholder="Enter leverage">
+        <input id="manualLeverage" type="number" placeholder="Enter leverage">
       </div>
 
     </div>
 
-    <!-- RIGHT -->
     <div class="result-section">
       <p>Result</p>
       <h2 id="result">0.00</h2>
@@ -79,7 +65,6 @@
 
   </div>
 
-  <!-- INFO -->
   <div class="info">
     <p>Contract Size: <span id="contractSize">-</span></p>
     <p>Conversion Factor: <span id="conversionFactor">-</span></p>
@@ -88,6 +73,7 @@
 
 </div>
 
+<!-- CRITICAL ORDER -->
 <script src="data.js"></script>
 <script src="app.js"></script>
 
