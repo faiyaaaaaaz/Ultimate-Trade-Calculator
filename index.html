@@ -5,79 +5,81 @@
   <title>FundedNext Web Calculator</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
-  <h1>FundedNext Web Calculator</h1>
-  <p>Version 1 test build — Margin Calculator</p>
+<div class="app-container">
 
+  <!-- TOP TABS (STATIC FOR NOW) -->
+  <div class="tabs">
+    <button class="tab active">Margin Calculator</button>
+    <button class="tab">Profit/Loss Calculator</button>
+    <button class="tab">Lot Size Calculator</button>
+    <button class="tab">Swap Calculator</button>
+  </div>
+
+  <!-- MAIN CARD -->
   <div class="card">
 
-    <h2>Margin Calculator</h2>
+    <!-- LEFT SIDE -->
+    <div class="form-section">
 
-    <!-- MARKET -->
-    <label>Market</label>
-    <select id="market">
-      <option value="">Select market</option>
-      <option value="Currency">Currency</option>
-      <option value="Commodity">Commodity</option>
-      <option value="Indice">Indice</option>
-      <option value="Crypto">Crypto</option>
-    </select>
+      <div class="form-group">
+        <label>Market</label>
+        <select id="market"></select>
+      </div>
 
-    <!-- INSTRUMENT -->
-    <label>Instrument</label>
-    <select id="instrument">
-      <option value="">Select instrument</option>
-    </select>
+      <div class="form-group">
+        <label>Instrument</label>
+        <select id="instrument"></select>
+      </div>
 
-    <!-- MODEL -->
-    <label>Model</label>
-    <select id="model">
-      <option value="">Select model</option>
-    </select>
+      <div class="form-group">
+        <label>Model</label>
+        <select id="model"></select>
+      </div>
 
-    <!-- PRICE -->
-    <label>Current Price</label>
-    <input type="number" id="price" placeholder="Enter current price">
+      <div class="form-group">
+        <label>Current Price</label>
+        <input type="number" id="price" placeholder="Enter price">
+      </div>
 
-    <!-- LOT SIZE -->
-    <label>Lot Size</label>
-    <input type="number" id="lotSize" placeholder="Enter lot size">
+      <div class="form-group">
+        <label>Lot Size</label>
+        <input type="number" id="lotSize" placeholder="Enter size">
+      </div>
 
-    <!-- MANUAL LEVERAGE -->
-    <div style="margin-top:10px;">
-      <input type="checkbox" id="useManualLeverage">
-      <label for="useManualLeverage">Use manual leverage</label>
+      <div class="form-group checkbox-group">
+        <input type="checkbox" id="useManualLeverage">
+        <label>Use manual leverage</label>
+      </div>
+
+      <div id="manualLeverageWrap" class="form-group">
+        <label>Manual Leverage</label>
+        <input type="number" id="manualLeverage" placeholder="Enter leverage">
+      </div>
+
     </div>
 
-    <div id="manualLeverageWrap" style="display:none;">
-      <label>Manual Leverage</label>
-      <input type="number" id="manualLeverage" placeholder="Enter leverage">
-    </div>
-
-    <!-- RESULT -->
-    <div class="result-box">
-      <p>Required Margin (USD)</p>
+    <!-- RIGHT SIDE -->
+    <div class="result-section">
+      <p>Result</p>
       <h2 id="result">0.00</h2>
-    </div>
-
-    <!-- INFO -->
-    <div class="info-box">
-      <p>Contract Size: <span id="contractSize">-</span></p>
-      <p>Conversion Factor: <span id="conversionFactor">-</span></p>
-      <p>Leverage Used: <span id="leverageUsed">-</span></p>
-    </div>
-
-    <!-- HELPER -->
-    <div id="helperBox" style="margin-top:10px;">
-      Select a market to begin.
     </div>
 
   </div>
 
-  <!-- IMPORTANT: ORDER MATTERS -->
-  <script src="data.js"></script>
-  <script src="app.js"></script>
+  <!-- INFO -->
+  <div class="info">
+    <p>Contract Size: <span id="contractSize">-</span></p>
+    <p>Conversion Factor: <span id="conversionFactor">-</span></p>
+    <p>Leverage Used: <span id="leverageUsed">-</span></p>
+  </div>
+
+</div>
+
+<script src="data.js"></script>
+<script src="app.js"></script>
 
 </body>
 </html>
