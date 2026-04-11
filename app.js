@@ -22,30 +22,24 @@ function normalize(v) {
 }
 
 function getInstrument() {
-  return DATA.instruments.find(i =>
-    i.instrumentName === instrumentSelect.value
-  );
+  return DATA.instruments.find(i => i.instrumentName === instrumentSelect.value);
 }
 
 function getModel() {
-  return DATA.models.find(m =>
-    m.modelName === modelSelect.value
-  );
+  return DATA.models.find(m => m.modelName === modelSelect.value);
 }
 
 function getConversion() {
-  return DATA.conversionPrices.find(c =>
-    c.instrumentName === instrumentSelect.value
-  );
+  return DATA.conversionPrices.find(c => c.instrumentName === instrumentSelect.value);
 }
 
-/* ---------- DROPDOWNS ---------- */
+/* ---------- DROPDOWN ---------- */
 
 function populateDropdowns() {
   const market = normalize(marketSelect.value);
 
-  instrumentSelect.innerHTML = `<option value="">Select instrument</option>`;
-  modelSelect.innerHTML = `<option value="">Select model</option>`;
+  instrumentSelect.innerHTML = `<option>Select instrument</option>`;
+  modelSelect.innerHTML = `<option>Select model</option>`;
 
   DATA.instruments
     .filter(i => i.active)
@@ -60,27 +54,36 @@ function populateDropdowns() {
     .forEach(m => {
       modelSelect.innerHTML += `<option>${m.modelName}</option>`;
     });
+
+  updateLeverageDisplay();
 }
 
-/* ---------- LEVERAGE ---------- */
+/* ---------- LEVERAGE DISPLAY ---------- */
 
-function getLeverage() {
+function updateLeverageDisplay() {
   if (manualCheckbox.checked) {
     if (!manualInput.value) {
-      return { value: null, text: "Manual leverage not mentioned!" };
+      leverageEl.textContent = "Manual leverage not mentioned!";
+    } else {
+      leverageEl.textContent = manualInput.value;
     }
-    return { value: Number(manualInput.value), text: manualInput.value };
+    return;
   }
 
   const model = getModel();
-  if (!model) return { value: null, text: "-" };
+  if (!model) {
+    leverageEl.textContent = "-";
+    return;
+  }
 
-  return { value: Number(model.defaultLeverage), text: model.defaultLeverage };
+  leverageEl.textContent = model.defaultLeverage;
 }
 
 /* ---------- CALCULATION ---------- */
 
 function calculate() {
+  updateLeverageDisplay();
+
   const instrument = getInstrument();
   const model = getModel();
   const conversion = getConversion();
@@ -94,14 +97,11 @@ function calculate() {
   }
 
   const contractSize = Number(instrument.contractSize);
+  const leverage = manualCheckbox.checked
+    ? Number(manualInput.value || 0)
+    : Number(model.defaultLeverage);
 
-  const leverageData = getLeverage();
-  if (!leverageData.value) {
-    leverageEl.textContent = leverageData.text;
-    return;
-  }
-
-  const leverage = leverageData.value;
+  if (!leverage) return;
 
   const conversionFactor = conversion
     ? Number(conversion.finalConversionFactor || 1)
@@ -114,16 +114,11 @@ function calculate() {
 
   contractSizeEl.textContent = contractSize;
   conversionEl.textContent = conversionFactor;
-  leverageEl.textContent = leverageData.text;
 }
 
 /* ---------- EVENTS ---------- */
 
-marketSelect.addEventListener("change", () => {
-  populateDropdowns();
-  calculate();
-});
-
+marketSelect.addEventListener("change", populateDropdowns);
 instrumentSelect.addEventListener("change", calculate);
 modelSelect.addEventListener("change", calculate);
 priceInput.addEventListener("input", calculate);
@@ -131,12 +126,15 @@ lotInput.addEventListener("input", calculate);
 
 manualCheckbox.addEventListener("change", () => {
   manualWrap.style.display = manualCheckbox.checked ? "block" : "none";
+  updateLeverageDisplay();
   calculate();
 });
 
-manualInput.addEventListener("input", calculate);
+manualInput.addEventListener("input", () => {
+  updateLeverageDisplay();
+  calculate();
+});
 
 /* ---------- INIT ---------- */
 
-populateDropdowns();
 manualWrap.style.display = "none";
