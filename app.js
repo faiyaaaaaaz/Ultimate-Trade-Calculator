@@ -116,6 +116,8 @@ const contractSizeEl = document.getElementById("contractSize");
 const conversionEl = document.getElementById("conversionFactor");
 const leverageEl = document.getElementById("leverageUsed");
 const helper = document.getElementById("helperBox");
+const marginMacroText = document.getElementById("marginMacroText");
+const copyMarginMacroBtn = document.getElementById("copyMarginMacroBtn");
 
 function populateModel() {
   if (manualCheck.checked) {
@@ -176,6 +178,64 @@ function updateMarginHelperText() {
   helper.textContent = "All required inputs are ready.";
 }
 
+function updateMarginMacro() {
+  const selectedInstrument = getInstrumentByName(instrument.value);
+  const selectedModel = getModelByName(model.value);
+  const selectedConversion = getConversionByInstrument(instrument.value);
+
+  if (!market.value || !instrument.value || !price.value || !lot.value) {
+    marginMacroText.textContent = "Please complete the Margin Calculator inputs to generate the explanation text.";
+    return;
+  }
+
+  if (manualCheck.checked && !manualInput.value) {
+    marginMacroText.textContent = "Please enter the manual leverage to generate the explanation text.";
+    return;
+  }
+
+  if (!manualCheck.checked && !model.value) {
+    marginMacroText.textContent = "Please select a model to generate the explanation text.";
+    return;
+  }
+
+  if (!selectedInstrument) {
+    marginMacroText.textContent = "Instrument data is missing, so the explanation text cannot be generated yet.";
+    return;
+  }
+
+  const priceValue = Number(price.value);
+  const lotValue = Number(lot.value);
+  const contractSize = Number(selectedInstrument.contractSize || 0);
+  const conversionFactor = selectedConversion ? Number(selectedConversion.finalConversionFactor || 1) : 1;
+
+  let leverageValue = 0;
+  let leverageLabel = "";
+
+  if (manualCheck.checked) {
+    leverageValue = Number(manualInput.value || 0);
+    leverageLabel = `manual leverage of ${manualInput.value}`;
+  } else {
+    leverageValue = Number(selectedModel?.defaultLeverage || 0);
+    leverageLabel = `model leverage of ${selectedModel?.defaultLeverage || "-"}`;
+  }
+
+  if (!priceValue || !lotValue || !contractSize || !conversionFactor || !leverageValue) {
+    marginMacroText.textContent = "Please complete the Margin Calculator inputs to generate the explanation text.";
+    return;
+  }
+
+  const marginValue =
+    (priceValue * contractSize * lotValue / leverageValue) * conversionFactor;
+
+  marginMacroText.textContent =
+`The estimated required margin for ${lotValue} lot(s) of ${instrument.value} at a current price of ${formatPlainNumber(priceValue, 5)} is ${formatMoney(marginValue)} USD.
+
+This calculation uses a contract size of ${formatPlainNumber(contractSize, 2)}, a conversion factor of ${formatPlainNumber(conversionFactor, 5)}, and ${leverageLabel}.
+
+Formula used:
+Required Margin = (Price × Contract Size × Lot Size ÷ Leverage) × Conversion Factor`;
+}
+
 function calculateMargin() {
   updateLeverageDisplay();
   updateMarginHelperText();
@@ -191,7 +251,10 @@ function calculateMargin() {
   conversionEl.textContent = "-";
   result.textContent = "0.00";
 
-  if (!selectedInstrument) return;
+  if (!selectedInstrument) {
+    updateMarginMacro();
+    return;
+  }
 
   contractSizeEl.textContent = selectedInstrument.contractSize;
 
@@ -202,17 +265,22 @@ function calculateMargin() {
   if (manualCheck.checked) {
     leverageValue = Number(manualInput.value || 0);
   } else {
-    if (!selectedModel) return;
+    if (!selectedModel) {
+      updateMarginMacro();
+      return;
+    }
     leverageValue = Number(selectedModel.defaultLeverage || 0);
   }
 
-  if (!priceValue || !lotValue || !leverageValue) return;
+  if (priceValue && lotValue && leverageValue) {
+    const margin =
+      (priceValue * Number(selectedInstrument.contractSize) * lotValue / leverageValue) *
+      conversionFactor;
 
-  const margin =
-    (priceValue * Number(selectedInstrument.contractSize) * lotValue / leverageValue) *
-    conversionFactor;
+    result.textContent = formatMoney(margin);
+  }
 
-  result.textContent = formatMoney(margin);
+  updateMarginMacro();
 }
 
 function onMarginMarketChange() {
@@ -229,6 +297,25 @@ function onManualToggleChange() {
   model.value = "";
   calculateMargin();
 }
+
+copyMarginMacroBtn.addEventListener("click", async () => {
+  const textToCopy = marginMacroText.textContent.trim();
+
+  if (!textToCopy) return;
+
+  try {
+    await navigator.clipboard.writeText(textToCopy);
+    copyMarginMacroBtn.textContent = "Copied!";
+    setTimeout(() => {
+      copyMarginMacroBtn.textContent = "Copy Macro";
+    }, 1400);
+  } catch (error) {
+    copyMarginMacroBtn.textContent = "Copy failed";
+    setTimeout(() => {
+      copyMarginMacroBtn.textContent = "Copy Macro";
+    }, 1400);
+  }
+});
 
 /* -----------------------------------
    PNL CALCULATOR
