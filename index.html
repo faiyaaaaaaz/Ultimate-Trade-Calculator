@@ -1,84 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
   <title>FundedNext Web Calculator</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main class="page">
-    <div class="container">
-      <h1>FundedNext Web Calculator</h1>
-      <p class="subtext">Version 1 test build — Margin Calculator</p>
 
-      <section class="card">
-        <h2>Margin Calculator</h2>
+  <h1>FundedNext Web Calculator</h1>
+  <p>Version 1 test build — Margin Calculator</p>
 
-        <div class="grid">
-          <div class="field">
-            <label for="market">Market</label>
-            <select id="market">
-              <option value="Currency">Currency</option>
-              <option value="Commodity">Commodity</option>
-              <option value="Indice">Indice</option>
-              <option value="Crypto">Crypto</option>
-            </select>
-          </div>
+  <div class="card">
 
-          <div class="field">
-            <label for="instrument">Instrument</label>
-            <select id="instrument">
-              <option value="">Select instrument</option>
-            </select>
-          </div>
+    <h2>Margin Calculator</h2>
 
-          <div class="field">
-            <label for="model">Model</label>
-            <select id="model">
-              <option value="">Select model</option>
-            </select>
-          </div>
+    <!-- MARKET -->
+    <label>Market</label>
+    <select id="market">
+      <option value="">Select market</option>
+      <option value="Currency">Currency</option>
+      <option value="Commodity">Commodity</option>
+      <option value="Indice">Indice</option>
+      <option value="Crypto">Crypto</option>
+    </select>
 
-          <div class="field">
-            <label for="currentPrice">Current Price</label>
-            <input id="currentPrice" type="number" step="any" placeholder="Enter current price" />
-          </div>
+    <!-- INSTRUMENT -->
+    <label>Instrument</label>
+    <select id="instrument">
+      <option value="">Select instrument</option>
+    </select>
 
-          <div class="field">
-            <label for="lotSize">Lot Size</label>
-            <input id="lotSize" type="number" step="any" placeholder="Enter lot size" />
-          </div>
+    <!-- MODEL -->
+    <label>Model</label>
+    <select id="model">
+      <option value="">Select model</option>
+    </select>
 
-          <div class="field checkbox-field">
-  <label class="checkbox-row" for="useManualLeverage">
-    <input id="useManualLeverage" type="checkbox" />
-    <span>Use manual leverage</span>
-  </label>
-</div>
+    <!-- PRICE -->
+    <label>Current Price</label>
+    <input type="number" id="price" placeholder="Enter current price">
 
-          <div class="field" id="manualLeverageWrap" style="display:none;">
-            <label for="manualLeverage">Manual Leverage</label>
-            <input id="manualLeverage" type="number" step="any" placeholder="Enter manual leverage" />
-          </div>
-        </div>
+    <!-- LOT SIZE -->
+    <label>Lot Size</label>
+    <input type="number" id="lotSize" placeholder="Enter lot size">
 
-        <div class="result-box">
-          <div class="result-label">Required Margin (USD)</div>
-          <div class="result-value" id="marginResult">0.00</div>
-        </div>
-
-        <div class="helper-box">
-          <div><strong>Contract Size:</strong> <span id="contractSizeView">-</span></div>
-          <div><strong>Conversion Factor:</strong> <span id="conversionFactorView">-</span></div>
-          <div><strong>Leverage Used:</strong> <span id="leverageUsedView">-</span></div>
-        </div>
-      </section>
+    <!-- MANUAL LEVERAGE -->
+    <div style="margin-top:10px;">
+      <input type="checkbox" id="useManualLeverage">
+      <label for="useManualLeverage">Use manual leverage</label>
     </div>
-  </main>
 
+    <div id="manualLeverageWrap" style="display:none;">
+      <label>Manual Leverage</label>
+      <input type="number" id="manualLeverage" placeholder="Enter leverage">
+    </div>
+
+    <!-- RESULT -->
+    <div class="result-box">
+      <p>Required Margin (USD)</p>
+      <h2 id="result">0.00</h2>
+    </div>
+
+    <!-- INFO -->
+    <div class="info-box">
+      <p>Contract Size: <span id="contractSize">-</span></p>
+      <p>Conversion Factor: <span id="conversionFactor">-</span></p>
+      <p>Leverage Used: <span id="leverageUsed">-</span></p>
+    </div>
+
+    <!-- HELPER -->
+    <div id="helperBox" style="margin-top:10px;">
+      Select a market to begin.
+    </div>
+
+  </div>
+
+  <!-- IMPORTANT: ORDER MATTERS -->
   <script src="data.js"></script>
-  <script src="calculations.js"></script>
   <script src="app.js"></script>
+
 </body>
 </html>
