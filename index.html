@@ -23,17 +23,27 @@
 
       <div class="form-group">
         <label>Market</label>
-        <select id="market"></select>
+        <select id="market">
+          <option value="">Select market</option>
+          <option value="Currency">Currency</option>
+          <option value="Commodity">Commodity</option>
+          <option value="Indice">Indice</option>
+          <option value="Crypto">Crypto</option>
+        </select>
       </div>
 
       <div class="form-group">
         <label>Instrument</label>
-        <select id="instrument"></select>
+        <select id="instrument">
+          <option value="">Select instrument</option>
+        </select>
       </div>
 
       <div class="form-group" id="modelGroup">
         <label>Model</label>
-        <select id="model"></select>
+        <select id="model">
+          <option value="">Select model</option>
+        </select>
       </div>
 
       <div class="form-group">
@@ -46,7 +56,6 @@
         <input id="lotSize" type="number" placeholder="Enter size">
       </div>
 
-      <!-- MODERN TOGGLE -->
       <div class="toggle-group">
         <label class="switch">
           <input type="checkbox" id="useManualLeverage">
@@ -75,7 +84,6 @@
     <p>Leverage Used: <span id="leverageUsed">-</span></p>
   </div>
 
-  <!-- HELPER BOX -->
   <div id="helperBox" class="helper-box">
     Select a market to begin.
   </div>
