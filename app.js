@@ -22,6 +22,13 @@ const conversionEl = document.getElementById("conversionFactor");
 const leverageEl = document.getElementById("leverageUsed");
 const helper = document.getElementById("helperBox");
 
+function formatNumber(value) {
+  return Number(value).toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  });
+}
+
 function setOptions(selectElement, placeholderText, values) {
   selectElement.innerHTML = "";
 
@@ -94,7 +101,7 @@ function updateVisibility() {
     manualWrap.style.display = "flex";
   } else {
     modelGroup.style.display = "";
-    manualWrap.style.display = "flex";
+    manualWrap.style.display = "none";
     manualInput.value = "";
   }
 }
@@ -193,7 +200,7 @@ function calculate() {
     (priceValue * Number(selectedInstrument.contractSize) * lotValue / leverageValue) *
     conversionFactor;
 
-  result.textContent = margin.toFixed(2);
+  result.textContent = formatNumber(margin);
 }
 
 function onMarketChange() {
