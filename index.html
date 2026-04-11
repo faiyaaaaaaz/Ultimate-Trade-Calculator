@@ -21,37 +21,41 @@
 
     <div class="form-section">
 
-      <label>Market</label>
-      <select id="market">
-        <option value="">Select market</option>
-        <option value="Currency">Currency</option>
-        <option value="Commodity">Commodity</option>
-        <option value="Indice">Indice</option>
-        <option value="Crypto">Crypto</option>
-      </select>
-
-      <label>Instrument</label>
-      <select id="instrument">
-        <option>Select instrument</option>
-      </select>
-
-      <label>Model</label>
-      <select id="model">
-        <option>Select model</option>
-      </select>
-
-      <label>Current Price</label>
-      <input id="price" type="number" placeholder="Enter price">
-
-      <label>Lot Size</label>
-      <input id="lotSize" type="number" placeholder="Enter size">
-
-      <div>
-        <input type="checkbox" id="useManualLeverage">
-        <label>Use manual leverage</label>
+      <div class="form-group">
+        <label>Market</label>
+        <select id="market"></select>
       </div>
 
-      <div id="manualLeverageWrap">
+      <div class="form-group">
+        <label>Instrument</label>
+        <select id="instrument"></select>
+      </div>
+
+      <div class="form-group" id="modelGroup">
+        <label>Model</label>
+        <select id="model"></select>
+      </div>
+
+      <div class="form-group">
+        <label>Current Price</label>
+        <input id="price" type="number" placeholder="Enter price">
+      </div>
+
+      <div class="form-group">
+        <label>Lot Size</label>
+        <input id="lotSize" type="number" placeholder="Enter size">
+      </div>
+
+      <!-- MODERN TOGGLE -->
+      <div class="toggle-group">
+        <label class="switch">
+          <input type="checkbox" id="useManualLeverage">
+          <span class="slider"></span>
+        </label>
+        <span>Use manual leverage</span>
+      </div>
+
+      <div id="manualLeverageWrap" class="form-group">
         <label>Manual Leverage</label>
         <input id="manualLeverage" type="number" placeholder="Enter leverage">
       </div>
@@ -71,9 +75,13 @@
     <p>Leverage Used: <span id="leverageUsed">-</span></p>
   </div>
 
+  <!-- HELPER BOX -->
+  <div id="helperBox" class="helper-box">
+    Select a market to begin.
+  </div>
+
 </div>
 
-<!-- CRITICAL ORDER -->
 <script src="data.js"></script>
 <script src="app.js"></script>
 
