@@ -1,221 +1,142 @@
-const DATA = window.WEB_CALCULATOR_DATA || {
-  instruments: [],
-  models: [],
-  conversionPrices: []
-};
+const DATA = window.WEB_CALCULATOR_DATA;
 
-function getElement(possibleIds) {
-  for (const id of possibleIds) {
-    const el = document.getElementById(id);
-    if (el) return el;
+const marketSelect = document.getElementById("market");
+const instrumentSelect = document.getElementById("instrument");
+const modelSelect = document.getElementById("model");
+const priceInput = document.getElementById("price");
+const lotInput = document.getElementById("lotSize");
+
+const manualCheckbox = document.getElementById("useManualLeverage");
+const manualInput = document.getElementById("manualLeverage");
+const manualWrap = document.getElementById("manualLeverageWrap");
+
+const resultBox = document.getElementById("result");
+const contractSizeEl = document.getElementById("contractSize");
+const conversionEl = document.getElementById("conversionFactor");
+const leverageEl = document.getElementById("leverageUsed");
+
+/* ---------- HELPERS ---------- */
+
+function normalize(v) {
+  return String(v || "").trim().toLowerCase();
+}
+
+function getInstrument() {
+  return DATA.instruments.find(i =>
+    i.instrumentName === instrumentSelect.value
+  );
+}
+
+function getModel() {
+  return DATA.models.find(m =>
+    m.modelName === modelSelect.value
+  );
+}
+
+function getConversion() {
+  return DATA.conversionPrices.find(c =>
+    c.instrumentName === instrumentSelect.value
+  );
+}
+
+/* ---------- DROPDOWNS ---------- */
+
+function populateDropdowns() {
+  const market = normalize(marketSelect.value);
+
+  instrumentSelect.innerHTML = `<option value="">Select instrument</option>`;
+  modelSelect.innerHTML = `<option value="">Select model</option>`;
+
+  DATA.instruments
+    .filter(i => i.active)
+    .filter(i => normalize(i.marketType) === market)
+    .forEach(i => {
+      instrumentSelect.innerHTML += `<option>${i.instrumentName}</option>`;
+    });
+
+  DATA.models
+    .filter(m => m.active)
+    .filter(m => normalize(m.marketType) === market)
+    .forEach(m => {
+      modelSelect.innerHTML += `<option>${m.modelName}</option>`;
+    });
+}
+
+/* ---------- LEVERAGE ---------- */
+
+function getLeverage() {
+  if (manualCheckbox.checked) {
+    if (!manualInput.value) {
+      return { value: null, text: "Manual leverage not mentioned!" };
+    }
+    return { value: Number(manualInput.value), text: manualInput.value };
   }
-  return null;
+
+  const model = getModel();
+  if (!model) return { value: null, text: "-" };
+
+  return { value: Number(model.defaultLeverage), text: model.defaultLeverage };
 }
 
-function normalizeText(value) {
-  return String(value || "").trim().toLowerCase();
-}
+/* ---------- CALCULATION ---------- */
 
-const marketSelect = getElement(["market", "marketSelect"]);
-const instrumentSelect = getElement(["instrument", "instrumentSelect"]);
-const modelSelect = getElement(["model", "modelSelect"]);
-const manualLeverageCheckbox = getElement([
-  "useManualLeverage",
-  "manualLeverageToggle",
-  "manualLeverageCheckbox"
-]);
-const manualLeverageInput = getElement([
-  "manualLeverage",
-  "manualLeverageInput"
-]);
-const manualLeverageWrap = getElement([
-  "manualLeverageWrap",
-  "manualLeverageGroup",
-  "manualLeverageContainer"
-]);
-const helperBox = getElement([
-  "helperInfo",
-  "helperBox",
-  "helperText"
-]);
+function calculate() {
+  const instrument = getInstrument();
+  const model = getModel();
+  const conversion = getConversion();
 
-function isActiveItem(item) {
-  return item && item.active === true;
-}
+  const price = Number(priceInput.value);
+  const lot = Number(lotInput.value);
 
-function clearAndFillSelect(selectElement, placeholderText, items, valueKey, labelKey) {
-  if (!selectElement) return;
-
-  selectElement.innerHTML = "";
-
-  const placeholderOption = document.createElement("option");
-  placeholderOption.value = "";
-  placeholderOption.textContent = placeholderText;
-  selectElement.appendChild(placeholderOption);
-
-  items.forEach((item) => {
-    const option = document.createElement("option");
-    option.value = item[valueKey];
-    option.textContent = item[labelKey];
-    selectElement.appendChild(option);
-  });
-}
-
-function getSelectedMarket() {
-  if (!marketSelect) return "";
-  return normalizeText(marketSelect.value);
-}
-
-function getFilteredInstruments(selectedMarket) {
-  return (DATA.instruments || [])
-    .filter((item) => isActiveItem(item))
-    .filter((item) => normalizeText(item.marketType) === selectedMarket)
-    .sort((a, b) => {
-      const aOrder = Number(a.sortOrder || 0);
-      const bOrder = Number(b.sortOrder || 0);
-      return aOrder - bOrder;
-    });
-}
-
-function getFilteredModels(selectedMarket) {
-  return (DATA.models || [])
-    .filter((item) => isActiveItem(item))
-    .filter((item) => normalizeText(item.marketType) === selectedMarket)
-    .sort((a, b) => {
-      return String(a.modelName || "").localeCompare(String(b.modelName || ""));
-    });
-}
-
-function populateDropdownsByMarket() {
-  const selectedMarket = getSelectedMarket();
-
-  if (!selectedMarket) {
-    clearAndFillSelect(
-      instrumentSelect,
-      "Select instrument",
-      [],
-      "instrumentName",
-      "instrumentName"
-    );
-
-    clearAndFillSelect(
-      modelSelect,
-      "Select model",
-      [],
-      "modelName",
-      "modelName"
-    );
-
-    updateHelperText();
+  if (!instrument || !model || !price || !lot) {
+    resultBox.textContent = "0.00";
     return;
   }
 
-  const filteredInstruments = getFilteredInstruments(selectedMarket);
-  const filteredModels = getFilteredModels(selectedMarket);
+  const contractSize = Number(instrument.contractSize);
 
-  clearAndFillSelect(
-    instrumentSelect,
-    "Select instrument",
-    filteredInstruments,
-    "instrumentName",
-    "instrumentName"
-  );
+  const leverageData = getLeverage();
+  if (!leverageData.value) {
+    leverageEl.textContent = leverageData.text;
+    return;
+  }
 
-  clearAndFillSelect(
-    modelSelect,
-    "Select model",
-    filteredModels,
-    "modelName",
-    "modelName"
-  );
+  const leverage = leverageData.value;
 
-  updateHelperText();
+  const conversionFactor = conversion
+    ? Number(conversion.finalConversionFactor || 1)
+    : 1;
+
+  const margin =
+    (price * contractSize * lot / leverage) * conversionFactor;
+
+  resultBox.textContent = margin.toFixed(2);
+
+  contractSizeEl.textContent = contractSize;
+  conversionEl.textContent = conversionFactor;
+  leverageEl.textContent = leverageData.text;
 }
 
-function updateManualLeverageVisibility() {
-  if (!manualLeverageCheckbox || !manualLeverageWrap) return;
+/* ---------- EVENTS ---------- */
 
-  if (manualLeverageCheckbox.checked) {
-    manualLeverageWrap.style.display = "block";
-  } else {
-    manualLeverageWrap.style.display = "none";
-    if (manualLeverageInput) {
-      manualLeverageInput.value = "";
-    }
-  }
+marketSelect.addEventListener("change", () => {
+  populateDropdowns();
+  calculate();
+});
 
-  updateHelperText();
-}
+instrumentSelect.addEventListener("change", calculate);
+modelSelect.addEventListener("change", calculate);
+priceInput.addEventListener("input", calculate);
+lotInput.addEventListener("input", calculate);
 
-function updateHelperText() {
-  if (!helperBox) return;
+manualCheckbox.addEventListener("change", () => {
+  manualWrap.style.display = manualCheckbox.checked ? "block" : "none";
+  calculate();
+});
 
-  const selectedMarket = marketSelect ? marketSelect.value : "";
-  const selectedInstrument = instrumentSelect ? instrumentSelect.value : "";
-  const selectedModel = modelSelect ? modelSelect.value : "";
+manualInput.addEventListener("input", calculate);
 
-  let helperMessage = "Select a market to load instruments and models.";
+/* ---------- INIT ---------- */
 
-  if (selectedMarket) {
-    helperMessage = `Market selected: ${selectedMarket}. Now choose an instrument and a model.`;
-  }
-
-  if (selectedMarket && selectedInstrument) {
-    helperMessage = `Instrument selected: ${selectedInstrument}. Now choose a model.`;
-  }
-
-  if (selectedMarket && selectedInstrument && selectedModel) {
-    helperMessage = "Ready for the next step. Instrument and model are now loaded from your exported sheet data.";
-  }
-
-  if (manualLeverageCheckbox && manualLeverageCheckbox.checked) {
-    if (manualLeverageInput && manualLeverageInput.value.trim() === "") {
-      helperMessage += " Manual leverage not mentioned!";
-    } else if (manualLeverageInput && manualLeverageInput.value.trim() !== "") {
-      helperMessage += ` Leverage Used: ${manualLeverageInput.value.trim()}`;
-    }
-  }
-
-  helperBox.textContent = helperMessage;
-}
-
-function validateSetup() {
-  console.log("WEB_CALCULATOR_DATA loaded:", DATA);
-  console.log("Instruments count:", (DATA.instruments || []).length);
-  console.log("Models count:", (DATA.models || []).length);
-  console.log("Conversion Prices count:", (DATA.conversionPrices || []).length);
-  console.log("Selected market raw value:", marketSelect ? marketSelect.value : "(not found)");
-}
-
-function bindEvents() {
-  if (marketSelect) {
-    marketSelect.addEventListener("change", populateDropdownsByMarket);
-    marketSelect.addEventListener("change", updateHelperText);
-  }
-
-  if (instrumentSelect) {
-    instrumentSelect.addEventListener("change", updateHelperText);
-  }
-
-  if (modelSelect) {
-    modelSelect.addEventListener("change", updateHelperText);
-  }
-
-  if (manualLeverageCheckbox) {
-    manualLeverageCheckbox.addEventListener("change", updateManualLeverageVisibility);
-  }
-
-  if (manualLeverageInput) {
-    manualLeverageInput.addEventListener("input", updateHelperText);
-  }
-}
-
-function initializeApp() {
-  validateSetup();
-  bindEvents();
-  populateDropdownsByMarket();
-  updateManualLeverageVisibility();
-  updateHelperText();
-}
-
-document.addEventListener("DOMContentLoaded", initializeApp);
+populateDropdowns();
+manualWrap.style.display = "none";
