@@ -73,6 +73,26 @@ function populateModelSelectByMarket(selectElement, marketValue) {
   setOptions(selectElement, "Select model", modelList);
 }
 
+function setupCopyButton(buttonElement, textElement, defaultLabel) {
+  buttonElement.addEventListener("click", async () => {
+    const textToCopy = textElement.textContent.trim();
+    if (!textToCopy) return;
+
+    try {
+      await navigator.clipboard.writeText(textToCopy);
+      buttonElement.textContent = "Copied!";
+      setTimeout(() => {
+        buttonElement.textContent = defaultLabel;
+      }, 1400);
+    } catch (error) {
+      buttonElement.textContent = "Copy failed";
+      setTimeout(() => {
+        buttonElement.textContent = defaultLabel;
+      }, 1400);
+    }
+  });
+}
+
 /* -----------------------------------
    TAB SWITCHING
 ----------------------------------- */
@@ -298,25 +318,6 @@ function onManualToggleChange() {
   calculateMargin();
 }
 
-copyMarginMacroBtn.addEventListener("click", async () => {
-  const textToCopy = marginMacroText.textContent.trim();
-
-  if (!textToCopy) return;
-
-  try {
-    await navigator.clipboard.writeText(textToCopy);
-    copyMarginMacroBtn.textContent = "Copied!";
-    setTimeout(() => {
-      copyMarginMacroBtn.textContent = "Copy Macro";
-    }, 1400);
-  } catch (error) {
-    copyMarginMacroBtn.textContent = "Copy failed";
-    setTimeout(() => {
-      copyMarginMacroBtn.textContent = "Copy Macro";
-    }, 1400);
-  }
-});
-
 /* -----------------------------------
    PNL CALCULATOR
 ----------------------------------- */
@@ -331,6 +332,8 @@ const pnlPips = document.getElementById("pnlPips");
 const pnlMovement = document.getElementById("pnlMovement");
 const pnlConversionFactor = document.getElementById("pnlConversionFactor");
 const pnlHelperBox = document.getElementById("pnlHelperBox");
+const pnlMacroText = document.getElementById("pnlMacroText");
+const copyPnlMacroBtn = document.getElementById("copyPnlMacroBtn");
 
 function updatePnlHelperText() {
   if (!pnlMarket.value) {
@@ -361,6 +364,43 @@ function updatePnlHelperText() {
   pnlHelperBox.textContent = "PnL inputs are ready.";
 }
 
+function updatePnlMacro() {
+  const selectedInstrument = getInstrumentByName(pnlInstrument.value);
+  const selectedConversion = getConversionByInstrument(pnlInstrument.value);
+
+  if (!pnlMarket.value || !pnlInstrument.value || !pnlPosition.value || !pnlOpenPrice.value || !pnlClosePrice.value || !pnlLotSize.value) {
+    pnlMacroText.textContent = "Please complete the PnL Calculator inputs to generate the explanation text.";
+    return;
+  }
+
+  if (!selectedInstrument) {
+    pnlMacroText.textContent = "Instrument data is missing, so the explanation text cannot be generated yet.";
+    return;
+  }
+
+  const openValue = Number(pnlOpenPrice.value);
+  const closeValue = Number(pnlClosePrice.value);
+  const lotValue = Number(pnlLotSize.value);
+  const contractSize = Number(selectedInstrument.contractSize || 0);
+  const pipSize = Number(selectedInstrument.pipSize || 0);
+  const conversionFactor = selectedConversion ? Number(selectedConversion.finalConversionFactor || 1) : 1;
+
+  if (!openValue || !closeValue || !lotValue || !contractSize || !pipSize || !conversionFactor) {
+    pnlMacroText.textContent = "Please complete the PnL Calculator inputs to generate the explanation text.";
+    return;
+  }
+
+  const rawMovement = closeValue - openValue;
+  const directionMovement = pnlPosition.value === "buy" ? rawMovement : -rawMovement;
+  const pipMovement = directionMovement / pipSize;
+  const pnlUsd = directionMovement * contractSize * lotValue * conversionFactor;
+
+  pnlMacroText.textContent =
+`The estimated PnL for a ${pnlPosition.value.toUpperCase()} position on ${pnlInstrument.value} from ${formatPlainNumber(openValue, 5)} to ${formatPlainNumber(closeValue, 5)} with ${lotValue} lot(s) is ${formatMoney(pnlUsd)} USD.
+
+This move represents ${formatPlainNumber(pipMovement, 2)} pips, using a contract size of ${formatPlainNumber(contractSize, 2)}, a pip size of ${formatPlainNumber(pipSize, 5)}, and a conversion factor of ${formatPlainNumber(conversionFactor, 5)}.`;
+}
+
 function calculatePnl() {
   updatePnlHelperText();
 
@@ -372,13 +412,19 @@ function calculatePnl() {
   pnlMovement.textContent = "-";
   pnlConversionFactor.textContent = "-";
 
-  if (!selectedInstrument || !pnlPosition.value) return;
+  if (!selectedInstrument || !pnlPosition.value) {
+    updatePnlMacro();
+    return;
+  }
 
   const openValue = Number(pnlOpenPrice.value);
   const closeValue = Number(pnlClosePrice.value);
   const lotValue = Number(pnlLotSize.value);
 
-  if (!openValue || !closeValue || !lotValue) return;
+  if (!openValue || !closeValue || !lotValue) {
+    updatePnlMacro();
+    return;
+  }
 
   const conversionFactor = selectedConversion ? Number(selectedConversion.finalConversionFactor || 1) : 1;
   const rawMovement = closeValue - openValue;
@@ -386,7 +432,10 @@ function calculatePnl() {
   const pipSize = Number(selectedInstrument.pipSize || 0);
   const contractSize = Number(selectedInstrument.contractSize || 0);
 
-  if (!pipSize || !contractSize) return;
+  if (!pipSize || !contractSize) {
+    updatePnlMacro();
+    return;
+  }
 
   const pipMovement = directionMovement / pipSize;
   const pnlUsd = directionMovement * contractSize * lotValue * conversionFactor;
@@ -395,6 +444,8 @@ function calculatePnl() {
   pnlPips.textContent = formatPlainNumber(pipMovement, 2);
   pnlMovement.textContent = formatPlainNumber(directionMovement, 5);
   pnlConversionFactor.textContent = conversionFactor;
+
+  updatePnlMacro();
 }
 
 function onPnlMarketChange() {
@@ -414,6 +465,8 @@ const pipAmount = document.getElementById("pipAmount");
 const pipResult = document.getElementById("pipResult");
 const pipSizeUsed = document.getElementById("pipSizeUsed");
 const pipHelperBox = document.getElementById("pipHelperBox");
+const pipMacroText = document.getElementById("pipMacroText");
+const copyPipMacroBtn = document.getElementById("copyPipMacroBtn");
 
 function updatePipHelperText() {
   if (!pipMarket.value) {
@@ -440,6 +493,38 @@ function updatePipHelperText() {
   pipHelperBox.textContent = "Add / Remove Pips inputs are ready.";
 }
 
+function updatePipMacro() {
+  const selectedInstrument = getInstrumentByName(pipInstrument.value);
+
+  if (!pipMarket.value || !pipInstrument.value || !pipOpenPrice.value || !pipAction.value || !pipAmount.value) {
+    pipMacroText.textContent = "Please complete the Add / Remove Pips Calculator inputs to generate the explanation text.";
+    return;
+  }
+
+  if (!selectedInstrument) {
+    pipMacroText.textContent = "Instrument data is missing, so the explanation text cannot be generated yet.";
+    return;
+  }
+
+  const openValue = Number(pipOpenPrice.value);
+  const amountValue = Number(pipAmount.value);
+  const pipSize = Number(selectedInstrument.pipSize || 0);
+
+  if (!openValue || !amountValue || !pipSize) {
+    pipMacroText.textContent = "Please complete the Add / Remove Pips Calculator inputs to generate the explanation text.";
+    return;
+  }
+
+  let newPrice = openValue;
+  if (pipAction.value === "add") newPrice = openValue + (amountValue * pipSize);
+  if (pipAction.value === "remove") newPrice = openValue - (amountValue * pipSize);
+
+  pipMacroText.textContent =
+`For ${pipInstrument.value}, starting from an opening price of ${formatPlainNumber(openValue, 5)}, ${pipAction.value === "add" ? "adding" : "removing"} ${formatPlainNumber(amountValue, 2)} pips / points gives a new estimated price of ${formatPlainNumber(newPrice, 5)}.
+
+This calculation uses a pip size of ${formatPlainNumber(pipSize, 5)}.`;
+}
+
 function calculatePipPrice() {
   updatePipHelperText();
 
@@ -448,7 +533,10 @@ function calculatePipPrice() {
   pipResult.textContent = "0.00";
   pipSizeUsed.textContent = "-";
 
-  if (!selectedInstrument) return;
+  if (!selectedInstrument) {
+    updatePipMacro();
+    return;
+  }
 
   const openValue = Number(pipOpenPrice.value);
   const amountValue = Number(pipAmount.value);
@@ -456,13 +544,18 @@ function calculatePipPrice() {
 
   pipSizeUsed.textContent = pipSize;
 
-  if (!openValue || !amountValue || !pipSize || !pipAction.value) return;
+  if (!openValue || !amountValue || !pipSize || !pipAction.value) {
+    updatePipMacro();
+    return;
+  }
 
   let newPrice = openValue;
   if (pipAction.value === "add") newPrice = openValue + (amountValue * pipSize);
   if (pipAction.value === "remove") newPrice = openValue - (amountValue * pipSize);
 
   pipResult.textContent = formatPlainNumber(newPrice, 5);
+
+  updatePipMacro();
 }
 
 function onPipMarketChange() {
@@ -488,6 +581,8 @@ const maxlotContractSize = document.getElementById("maxlotContractSize");
 const maxlotConversionFactor = document.getElementById("maxlotConversionFactor");
 const maxlotLeverageUsed = document.getElementById("maxlotLeverageUsed");
 const maxlotHelperBox = document.getElementById("maxlotHelperBox");
+const maxlotMacroText = document.getElementById("maxlotMacroText");
+const copyMaxlotMacroBtn = document.getElementById("copyMaxlotMacroBtn");
 
 function populateMaxlotModel() {
   if (maxlotUseManualLeverage.checked) {
@@ -548,6 +643,62 @@ function updateMaxlotHelperText() {
   maxlotHelperBox.textContent = "All required inputs are ready.";
 }
 
+function updateMaxlotMacro() {
+  const selectedInstrument = getInstrumentByName(maxlotInstrument.value);
+  const selectedModel = getModelByName(maxlotModel.value);
+  const selectedConversion = getConversionByInstrument(maxlotInstrument.value);
+
+  if (!maxlotMarket.value || !maxlotInstrument.value || !maxlotAccountSize.value || !maxlotPrice.value) {
+    maxlotMacroText.textContent = "Please complete the Max Lot Calculator inputs to generate the explanation text.";
+    return;
+  }
+
+  if (maxlotUseManualLeverage.checked && !maxlotManualLeverage.value) {
+    maxlotMacroText.textContent = "Please enter the manual leverage to generate the explanation text.";
+    return;
+  }
+
+  if (!maxlotUseManualLeverage.checked && !maxlotModel.value) {
+    maxlotMacroText.textContent = "Please select a model to generate the explanation text.";
+    return;
+  }
+
+  if (!selectedInstrument) {
+    maxlotMacroText.textContent = "Instrument data is missing, so the explanation text cannot be generated yet.";
+    return;
+  }
+
+  const accountSizeValue = Number(maxlotAccountSize.value);
+  const priceValue = Number(maxlotPrice.value);
+  const contractSize = Number(selectedInstrument.contractSize || 0);
+  const conversionFactor = selectedConversion ? Number(selectedConversion.finalConversionFactor || 1) : 1;
+
+  let leverageValue = 0;
+  let leverageLabel = "";
+
+  if (maxlotUseManualLeverage.checked) {
+    leverageValue = Number(maxlotManualLeverage.value || 0);
+    leverageLabel = `manual leverage of ${maxlotManualLeverage.value}`;
+  } else {
+    leverageValue = Number(selectedModel?.defaultLeverage || 0);
+    leverageLabel = `model leverage of ${selectedModel?.defaultLeverage || "-"}`;
+  }
+
+  if (!accountSizeValue || !priceValue || !contractSize || !conversionFactor || !leverageValue) {
+    maxlotMacroText.textContent = "Please complete the Max Lot Calculator inputs to generate the explanation text.";
+    return;
+  }
+
+  const maxLot =
+    (accountSizeValue * leverageValue) /
+    (priceValue * contractSize * conversionFactor);
+
+  maxlotMacroText.textContent =
+`With an account size of ${formatMoney(accountSizeValue)} USD, a current price of ${formatPlainNumber(priceValue, 5)}, and ${leverageLabel}, the estimated maximum lot size for ${maxlotInstrument.value} is ${formatPlainNumber(maxLot, 2)} lots.
+
+This calculation uses a contract size of ${formatPlainNumber(contractSize, 2)} and a conversion factor of ${formatPlainNumber(conversionFactor, 5)}.`;
+}
+
 function calculateMaxlot() {
   updateMaxlotLeverageDisplay();
   updateMaxlotHelperText();
@@ -563,7 +714,10 @@ function calculateMaxlot() {
   maxlotConversionFactor.textContent = "-";
   maxlotResult.textContent = "0.00";
 
-  if (!selectedInstrument) return;
+  if (!selectedInstrument) {
+    updateMaxlotMacro();
+    return;
+  }
 
   maxlotContractSize.textContent = selectedInstrument.contractSize;
 
@@ -574,17 +728,25 @@ function calculateMaxlot() {
   if (maxlotUseManualLeverage.checked) {
     leverageValue = Number(maxlotManualLeverage.value || 0);
   } else {
-    if (!selectedModel) return;
+    if (!selectedModel) {
+      updateMaxlotMacro();
+      return;
+    }
     leverageValue = Number(selectedModel.defaultLeverage || 0);
   }
 
-  if (!accountSizeValue || !priceValue || !leverageValue) return;
+  if (!accountSizeValue || !priceValue || !leverageValue) {
+    updateMaxlotMacro();
+    return;
+  }
 
   const maxLot =
     (accountSizeValue * leverageValue) /
     (priceValue * Number(selectedInstrument.contractSize) * conversionFactor);
 
   maxlotResult.textContent = formatPlainNumber(maxLot, 2);
+
+  updateMaxlotMacro();
 }
 
 function onMaxlotMarketChange() {
@@ -622,6 +784,8 @@ const riskMoneyContractSize = document.getElementById("riskMoneyContractSize");
 const riskMoneySlPips = document.getElementById("riskMoneySlPips");
 const riskMoneyTpPips = document.getElementById("riskMoneyTpPips");
 const riskMoneyHelperBox = document.getElementById("riskMoneyHelperBox");
+const riskMoneyMacroText = document.getElementById("riskMoneyMacroText");
+const copyRiskMoneyMacroBtn = document.getElementById("copyRiskMoneyMacroBtn");
 
 function updateRiskMoneyHelperText() {
   if (!riskMoneyAccountBalance.value) {
@@ -660,6 +824,53 @@ function updateRiskMoneyHelperText() {
   riskMoneyHelperBox.textContent = "Risk by Money & Lot inputs are ready.";
 }
 
+function updateRiskMoneyMacro() {
+  const selectedInstrument = getInstrumentByName(riskMoneyInstrument.value);
+  const selectedConversion = getConversionByInstrument(riskMoneyInstrument.value);
+
+  if (!riskMoneyAccountBalance.value || !riskMoneyMarket.value || !riskMoneyInstrument.value || !riskMoneyPosition.value || !riskMoneyEntryPrice.value || !riskMoneyLotSize.value || !riskMoneyRisk.value || !riskMoneyReward.value) {
+    riskMoneyMacroText.textContent = "Please complete the Risk by Money & Lot inputs to generate the explanation text.";
+    return;
+  }
+
+  if (!selectedInstrument) {
+    riskMoneyMacroText.textContent = "Instrument data is missing, so the explanation text cannot be generated yet.";
+    return;
+  }
+
+  const entryPrice = Number(riskMoneyEntryPrice.value);
+  const lotSize = Number(riskMoneyLotSize.value);
+  const riskAmount = Number(riskMoneyRisk.value);
+  const rewardAmount = Number(riskMoneyReward.value);
+  const pipSize = Number(selectedInstrument.pipSize || 0);
+  const contractSize = Number(selectedInstrument.contractSize || 0);
+  const conversionFactor = selectedConversion ? Number(selectedConversion.finalConversionFactor || 1) : 1;
+
+  if (!entryPrice || !lotSize || !riskAmount || !rewardAmount || !pipSize || !contractSize || !conversionFactor) {
+    riskMoneyMacroText.textContent = "Please complete the Risk by Money & Lot inputs to generate the explanation text.";
+    return;
+  }
+
+  const priceRiskMove = riskAmount / (contractSize * lotSize * conversionFactor);
+  const priceRewardMove = rewardAmount / (contractSize * lotSize * conversionFactor);
+
+  let stopLoss = entryPrice;
+  let takeProfit = entryPrice;
+
+  if (riskMoneyPosition.value === "buy") {
+    stopLoss = entryPrice - priceRiskMove;
+    takeProfit = entryPrice + priceRewardMove;
+  } else {
+    stopLoss = entryPrice + priceRiskMove;
+    takeProfit = entryPrice - priceRewardMove;
+  }
+
+  riskMoneyMacroText.textContent =
+`For ${riskMoneyInstrument.value}, using an entry price of ${formatPlainNumber(entryPrice, 5)}, a ${riskMoneyPosition.value.toUpperCase()} position, and ${formatPlainNumber(lotSize, 2)} lot(s), the estimated Stop Loss is ${formatPlainNumber(stopLoss, 5)} and the estimated Take Profit is ${formatPlainNumber(takeProfit, 5)}.
+
+This uses a risk amount of ${formatMoney(riskAmount)} USD, a reward amount of ${formatMoney(rewardAmount)} USD, a contract size of ${formatPlainNumber(contractSize, 2)}, a pip size of ${formatPlainNumber(pipSize, 5)}, and a conversion factor of ${formatPlainNumber(conversionFactor, 5)}.`;
+}
+
 function calculateRiskMoney() {
   updateRiskMoneyHelperText();
 
@@ -674,14 +885,20 @@ function calculateRiskMoney() {
   riskMoneySlPips.textContent = "-";
   riskMoneyTpPips.textContent = "-";
 
-  if (!selectedInstrument || !riskMoneyPosition.value) return;
+  if (!selectedInstrument || !riskMoneyPosition.value) {
+    updateRiskMoneyMacro();
+    return;
+  }
 
   const entryPrice = Number(riskMoneyEntryPrice.value);
   const lotSize = Number(riskMoneyLotSize.value);
   const riskAmount = Number(riskMoneyRisk.value);
   const rewardAmount = Number(riskMoneyReward.value);
 
-  if (!entryPrice || !lotSize || !riskAmount || !rewardAmount) return;
+  if (!entryPrice || !lotSize || !riskAmount || !rewardAmount) {
+    updateRiskMoneyMacro();
+    return;
+  }
 
   const pipSize = Number(selectedInstrument.pipSize || 0);
   const contractSize = Number(selectedInstrument.contractSize || 0);
@@ -691,7 +908,10 @@ function calculateRiskMoney() {
   riskMoneyConversionFactor.textContent = conversionFactor;
   riskMoneyContractSize.textContent = contractSize;
 
-  if (!pipSize || !contractSize || !conversionFactor) return;
+  if (!pipSize || !contractSize || !conversionFactor) {
+    updateRiskMoneyMacro();
+    return;
+  }
 
   const priceRiskMove = riskAmount / (contractSize * lotSize * conversionFactor);
   const priceRewardMove = rewardAmount / (contractSize * lotSize * conversionFactor);
@@ -714,6 +934,8 @@ function calculateRiskMoney() {
   riskMoneyTakeProfit.textContent = formatPlainNumber(takeProfit, 5);
   riskMoneySlPips.textContent = formatPlainNumber(slPips, 2);
   riskMoneyTpPips.textContent = formatPlainNumber(tpPips, 2);
+
+  updateRiskMoneyMacro();
 }
 
 function onRiskMoneyMarketChange() {
@@ -743,6 +965,8 @@ const riskPercentPipSize = document.getElementById("riskPercentPipSize");
 const riskPercentConversionFactor = document.getElementById("riskPercentConversionFactor");
 const riskPercentContractSize = document.getElementById("riskPercentContractSize");
 const riskPercentHelperBox = document.getElementById("riskPercentHelperBox");
+const riskPercentMacroText = document.getElementById("riskPercentMacroText");
+const copyRiskPercentMacroBtn = document.getElementById("copyRiskPercentMacroBtn");
 
 function updateRiskPercentHelperText() {
   if (!riskPercentAccountBalance.value) {
@@ -781,6 +1005,57 @@ function updateRiskPercentHelperText() {
   riskPercentHelperBox.textContent = "Risk by Percentage inputs are ready.";
 }
 
+function updateRiskPercentMacro() {
+  const selectedInstrument = getInstrumentByName(riskPercentInstrument.value);
+  const selectedConversion = getConversionByInstrument(riskPercentInstrument.value);
+
+  if (!riskPercentAccountBalance.value || !riskPercentMarket.value || !riskPercentInstrument.value || !riskPercentPosition.value || !riskPercentEntryPrice.value || !riskPercentRiskPercent.value || !riskPercentRewardPercent.value || !riskPercentSlPips.value) {
+    riskPercentMacroText.textContent = "Please complete the Risk by Percentage inputs to generate the explanation text.";
+    return;
+  }
+
+  if (!selectedInstrument) {
+    riskPercentMacroText.textContent = "Instrument data is missing, so the explanation text cannot be generated yet.";
+    return;
+  }
+
+  const accountBalance = Number(riskPercentAccountBalance.value);
+  const entryPrice = Number(riskPercentEntryPrice.value);
+  const riskPercentValue = Number(riskPercentRiskPercent.value);
+  const rewardPercentValue = Number(riskPercentRewardPercent.value);
+  const slPipsValue = Number(riskPercentSlPips.value);
+  const pipSize = Number(selectedInstrument.pipSize || 0);
+  const contractSize = Number(selectedInstrument.contractSize || 0);
+  const conversionFactor = selectedConversion ? Number(selectedConversion.finalConversionFactor || 1) : 1;
+
+  if (!accountBalance || !entryPrice || !riskPercentValue || !rewardPercentValue || !slPipsValue || !pipSize || !contractSize || !conversionFactor) {
+    riskPercentMacroText.textContent = "Please complete the Risk by Percentage inputs to generate the explanation text.";
+    return;
+  }
+
+  const riskDollar = accountBalance * (riskPercentValue / 100);
+  const rewardDollar = accountBalance * (rewardPercentValue / 100);
+  const lotSize = Math.abs(riskDollar / (conversionFactor * contractSize * pipSize * slPipsValue));
+
+  let stopLoss = entryPrice;
+  let takeProfit = entryPrice;
+
+  if (riskPercentPosition.value === "buy") {
+    stopLoss = entryPrice - (slPipsValue * pipSize);
+    takeProfit = entryPrice + (rewardDollar / (conversionFactor * contractSize * lotSize));
+  } else {
+    stopLoss = entryPrice + (slPipsValue * pipSize);
+    takeProfit = entryPrice - (rewardDollar / (conversionFactor * contractSize * lotSize));
+  }
+
+  riskPercentMacroText.textContent =
+`For ${riskPercentInstrument.value}, using an account balance of ${formatMoney(accountBalance)} USD, a ${riskPercentValue}% risk, a ${rewardPercentValue}% reward, and an SL distance of ${formatPlainNumber(slPipsValue, 2)} pips / points, the estimated lot size is ${formatPlainNumber(lotSize, 2)} lots.
+
+For a ${riskPercentPosition.value.toUpperCase()} position from an entry price of ${formatPlainNumber(entryPrice, 5)}, the estimated Stop Loss is ${formatPlainNumber(stopLoss, 5)} and the estimated Take Profit is ${formatPlainNumber(takeProfit, 5)}.
+
+This uses a risk amount of ${formatMoney(riskDollar)} USD, a reward amount of ${formatMoney(rewardDollar)} USD, a contract size of ${formatPlainNumber(contractSize, 2)}, a pip size of ${formatPlainNumber(pipSize, 5)}, and a conversion factor of ${formatPlainNumber(conversionFactor, 5)}.`;
+}
+
 function calculateRiskPercent() {
   updateRiskPercentHelperText();
 
@@ -796,15 +1071,21 @@ function calculateRiskPercent() {
   riskPercentConversionFactor.textContent = "-";
   riskPercentContractSize.textContent = "-";
 
-  if (!selectedInstrument || !riskPercentPosition.value) return;
+  if (!selectedInstrument || !riskPercentPosition.value) {
+    updateRiskPercentMacro();
+    return;
+  }
 
   const accountBalance = Number(riskPercentAccountBalance.value);
   const entryPrice = Number(riskPercentEntryPrice.value);
-  const riskPercent = Number(riskPercentRiskPercent.value);
-  const rewardPercent = Number(riskPercentRewardPercent.value);
-  const slPips = Number(riskPercentSlPips.value);
+  const riskPercentValue = Number(riskPercentRiskPercent.value);
+  const rewardPercentValue = Number(riskPercentRewardPercent.value);
+  const slPipsValue = Number(riskPercentSlPips.value);
 
-  if (!accountBalance || !entryPrice || !riskPercent || !rewardPercent || !slPips) return;
+  if (!accountBalance || !entryPrice || !riskPercentValue || !rewardPercentValue || !slPipsValue) {
+    updateRiskPercentMacro();
+    return;
+  }
 
   const pipSize = Number(selectedInstrument.pipSize || 0);
   const contractSize = Number(selectedInstrument.contractSize || 0);
@@ -814,23 +1095,26 @@ function calculateRiskPercent() {
   riskPercentConversionFactor.textContent = conversionFactor;
   riskPercentContractSize.textContent = contractSize;
 
-  if (!pipSize || !contractSize || !conversionFactor) return;
+  if (!pipSize || !contractSize || !conversionFactor) {
+    updateRiskPercentMacro();
+    return;
+  }
 
-  const riskDollar = accountBalance * (riskPercent / 100);
-  const rewardDollar = accountBalance * (rewardPercent / 100);
+  const riskDollar = accountBalance * (riskPercentValue / 100);
+  const rewardDollar = accountBalance * (rewardPercentValue / 100);
 
   const lotSize = Math.abs(
-    riskDollar / (conversionFactor * contractSize * pipSize * slPips)
+    riskDollar / (conversionFactor * contractSize * pipSize * slPipsValue)
   );
 
   let stopLoss = entryPrice;
   let takeProfit = entryPrice;
 
   if (riskPercentPosition.value === "buy") {
-    stopLoss = entryPrice - (slPips * pipSize);
+    stopLoss = entryPrice - (slPipsValue * pipSize);
     takeProfit = entryPrice + (rewardDollar / (conversionFactor * contractSize * lotSize));
   } else {
-    stopLoss = entryPrice + (slPips * pipSize);
+    stopLoss = entryPrice + (slPipsValue * pipSize);
     takeProfit = entryPrice - (rewardDollar / (conversionFactor * contractSize * lotSize));
   }
 
@@ -839,6 +1123,8 @@ function calculateRiskPercent() {
   riskPercentTakeProfit.textContent = formatPlainNumber(takeProfit, 5);
   riskPercentRiskDollar.textContent = formatMoney(riskDollar);
   riskPercentRewardDollar.textContent = formatMoney(rewardDollar);
+
+  updateRiskPercentMacro();
 }
 
 function onRiskPercentMarketChange() {
@@ -846,6 +1132,16 @@ function onRiskPercentMarketChange() {
   riskPercentInstrument.value = "";
   calculateRiskPercent();
 }
+
+/* -----------------------------------
+   COPY BUTTONS
+----------------------------------- */
+setupCopyButton(copyMarginMacroBtn, marginMacroText, "Copy Macro");
+setupCopyButton(copyPnlMacroBtn, pnlMacroText, "Copy Macro");
+setupCopyButton(copyPipMacroBtn, pipMacroText, "Copy Macro");
+setupCopyButton(copyMaxlotMacroBtn, maxlotMacroText, "Copy Macro");
+setupCopyButton(copyRiskMoneyMacroBtn, riskMoneyMacroText, "Copy Macro");
+setupCopyButton(copyRiskPercentMacroBtn, riskPercentMacroText, "Copy Macro");
 
 /* -----------------------------------
    INIT
