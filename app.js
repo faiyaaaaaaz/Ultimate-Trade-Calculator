@@ -12,6 +12,10 @@ function getElement(possibleIds) {
   return null;
 }
 
+function normalizeText(value) {
+  return String(value || "").trim().toLowerCase();
+}
+
 const marketSelect = getElement(["market", "marketSelect"]);
 const instrumentSelect = getElement(["instrument", "instrumentSelect"]);
 const modelSelect = getElement(["model", "modelSelect"]);
@@ -59,13 +63,13 @@ function clearAndFillSelect(selectElement, placeholderText, items, valueKey, lab
 
 function getSelectedMarket() {
   if (!marketSelect) return "";
-  return marketSelect.value.trim();
+  return normalizeText(marketSelect.value);
 }
 
 function getFilteredInstruments(selectedMarket) {
   return (DATA.instruments || [])
     .filter((item) => isActiveItem(item))
-    .filter((item) => item.marketType === selectedMarket)
+    .filter((item) => normalizeText(item.marketType) === selectedMarket)
     .sort((a, b) => {
       const aOrder = Number(a.sortOrder || 0);
       const bOrder = Number(b.sortOrder || 0);
@@ -76,9 +80,9 @@ function getFilteredInstruments(selectedMarket) {
 function getFilteredModels(selectedMarket) {
   return (DATA.models || [])
     .filter((item) => isActiveItem(item))
-    .filter((item) => item.marketType === selectedMarket)
+    .filter((item) => normalizeText(item.marketType) === selectedMarket)
     .sort((a, b) => {
-      return String(a.modelName).localeCompare(String(b.modelName));
+      return String(a.modelName || "").localeCompare(String(b.modelName || ""));
     });
 }
 
@@ -161,7 +165,7 @@ function updateHelperText() {
   }
 
   if (selectedMarket && selectedInstrument && selectedModel) {
-    helperMessage = `Ready for the next step. Instrument and model are now loaded from your exported sheet data.`;
+    helperMessage = "Ready for the next step. Instrument and model are now loaded from your exported sheet data.";
   }
 
   if (manualLeverageCheckbox && manualLeverageCheckbox.checked) {
@@ -180,18 +184,7 @@ function validateSetup() {
   console.log("Instruments count:", (DATA.instruments || []).length);
   console.log("Models count:", (DATA.models || []).length);
   console.log("Conversion Prices count:", (DATA.conversionPrices || []).length);
-
-  if (!marketSelect) {
-    console.warn("Market dropdown not found.");
-  }
-
-  if (!instrumentSelect) {
-    console.warn("Instrument dropdown not found.");
-  }
-
-  if (!modelSelect) {
-    console.warn("Model dropdown not found.");
-  }
+  console.log("Selected market raw value:", marketSelect ? marketSelect.value : "(not found)");
 }
 
 function bindEvents() {
