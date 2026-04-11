@@ -215,15 +215,77 @@
     </div>
   </div>
 
-  <!-- MAX LOT PLACEHOLDER -->
+  <!-- MAX LOT SECTION -->
   <div id="maxlotSection" style="display:none;">
+
     <div class="card">
       <div class="form-section">
+
         <div class="form-group">
-          <label>Max Lot Calculator</label>
-          <div class="helper-box">Coming next. We will build this after Profit & Add Pip Calculator.</div>
+          <label>Market</label>
+          <select id="maxlotMarket">
+            <option value="">Select market</option>
+            <option value="Currency">Currency</option>
+            <option value="Commodity">Commodity</option>
+            <option value="Indice">Indice</option>
+            <option value="Crypto">Crypto</option>
+          </select>
         </div>
+
+        <div class="form-group">
+          <label>Instrument</label>
+          <select id="maxlotInstrument">
+            <option value="">Select instrument</option>
+          </select>
+        </div>
+
+        <div class="form-group" id="maxlotModelGroup">
+          <label>Model</label>
+          <select id="maxlotModel">
+            <option value="">Select model</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Account Size</label>
+          <input id="maxlotAccountSize" type="number" placeholder="Enter account size">
+        </div>
+
+        <div class="form-group">
+          <label>Current Price</label>
+          <input id="maxlotPrice" type="number" placeholder="Enter current price">
+        </div>
+
+        <div class="toggle-group">
+          <label class="switch">
+            <input type="checkbox" id="maxlotUseManualLeverage">
+            <span class="slider"></span>
+          </label>
+          <span>Use manual leverage</span>
+        </div>
+
+        <div id="maxlotManualLeverageWrap" class="form-group">
+          <label>Manual Leverage</label>
+          <input id="maxlotManualLeverage" type="number" placeholder="Enter leverage">
+        </div>
+
       </div>
+
+      <div class="result-section">
+        <p>Max Lot</p>
+        <h2 id="maxlotResult">0.00</h2>
+        <div style="margin-top: 8px; font-size: 14px; font-weight: 600; letter-spacing: 0.5px; opacity: 0.9;">LOTS</div>
+      </div>
+    </div>
+
+    <div class="info">
+      <p>Contract Size: <span id="maxlotContractSize">-</span></p>
+      <p>Conversion Factor: <span id="maxlotConversionFactor">-</span></p>
+      <p>Leverage Used: <span id="maxlotLeverageUsed">-</span></p>
+    </div>
+
+    <div id="maxlotHelperBox" class="helper-box">
+      Select a market to begin.
     </div>
   </div>
 
