@@ -10,33 +10,43 @@
 
 <div class="app-container">
 
-  <!-- TOP TABS (STATIC FOR NOW) -->
+  <!-- TOP TABS -->
   <div class="tabs">
     <button class="tab active">Margin Calculator</button>
-    <button class="tab">Profit/Loss Calculator</button>
-    <button class="tab">Lot Size Calculator</button>
-    <button class="tab">Swap Calculator</button>
+    <button class="tab">Profit & Add Pip Calculator</button>
+    <button class="tab">Max Lot Calculator</button>
+    <button class="tab">Risk Tools</button>
   </div>
 
   <!-- MAIN CARD -->
   <div class="card">
 
-    <!-- LEFT SIDE -->
+    <!-- LEFT -->
     <div class="form-section">
 
       <div class="form-group">
         <label>Market</label>
-        <select id="market"></select>
+        <select id="market">
+          <option value="">Select market</option>
+          <option value="Currency">Currency</option>
+          <option value="Commodity">Commodity</option>
+          <option value="Indice">Indice</option>
+          <option value="Crypto">Crypto</option>
+        </select>
       </div>
 
       <div class="form-group">
         <label>Instrument</label>
-        <select id="instrument"></select>
+        <select id="instrument">
+          <option>Select instrument</option>
+        </select>
       </div>
 
       <div class="form-group">
         <label>Model</label>
-        <select id="model"></select>
+        <select id="model">
+          <option>Select model</option>
+        </select>
       </div>
 
       <div class="form-group">
@@ -61,7 +71,7 @@
 
     </div>
 
-    <!-- RIGHT SIDE -->
+    <!-- RIGHT -->
     <div class="result-section">
       <p>Result</p>
       <h2 id="result">0.00</h2>
