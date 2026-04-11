@@ -106,14 +106,11 @@ const market = document.getElementById("market");
 const instrument = document.getElementById("instrument");
 const model = document.getElementById("model");
 const modelGroup = document.getElementById("modelGroup");
-
 const price = document.getElementById("price");
 const lot = document.getElementById("lotSize");
-
 const manualCheck = document.getElementById("useManualLeverage");
 const manualInput = document.getElementById("manualLeverage");
 const manualWrap = document.getElementById("manualLeverageWrap");
-
 const result = document.getElementById("result");
 const contractSizeEl = document.getElementById("contractSize");
 const conversionEl = document.getElementById("conversionFactor");
@@ -142,22 +139,12 @@ function updateVisibility() {
 
 function updateLeverageDisplay() {
   if (manualCheck.checked) {
-    if (!manualInput.value) {
-      leverageEl.textContent = "Manual leverage not mentioned!";
-    } else {
-      leverageEl.textContent = manualInput.value;
-    }
+    leverageEl.textContent = manualInput.value ? manualInput.value : "Manual leverage not mentioned!";
     return;
   }
 
   const selectedModel = getModelByName(model.value);
-
-  if (!selectedModel) {
-    leverageEl.textContent = "-";
-    return;
-  }
-
-  leverageEl.textContent = selectedModel.defaultLeverage;
+  leverageEl.textContent = selectedModel ? selectedModel.defaultLeverage : "-";
 }
 
 function updateMarginHelperText() {
@@ -165,27 +152,22 @@ function updateMarginHelperText() {
     helper.textContent = "Select a market to begin.";
     return;
   }
-
   if (!instrument.value) {
     helper.textContent = "Now choose an instrument.";
     return;
   }
-
   if (manualCheck.checked && !manualInput.value) {
     helper.textContent = "Enter manual leverage to proceed.";
     return;
   }
-
   if (!manualCheck.checked && !model.value) {
     helper.textContent = "Now choose a model.";
     return;
   }
-
   if (!price.value) {
     helper.textContent = "Enter the current price.";
     return;
   }
-
   if (!lot.value) {
     helper.textContent = "Enter the lot size.";
     return;
@@ -213,14 +195,10 @@ function calculateMargin() {
 
   contractSizeEl.textContent = selectedInstrument.contractSize;
 
-  const conversionFactor = selectedConversion
-    ? Number(selectedConversion.finalConversionFactor || 1)
-    : 1;
-
+  const conversionFactor = selectedConversion ? Number(selectedConversion.finalConversionFactor || 1) : 1;
   conversionEl.textContent = conversionFactor;
 
   let leverageValue = 0;
-
   if (manualCheck.checked) {
     leverageValue = Number(manualInput.value || 0);
   } else {
@@ -261,7 +239,6 @@ const pnlPosition = document.getElementById("pnlPosition");
 const pnlOpenPrice = document.getElementById("pnlOpenPrice");
 const pnlClosePrice = document.getElementById("pnlClosePrice");
 const pnlLotSize = document.getElementById("pnlLotSize");
-
 const pnlResult = document.getElementById("pnlResult");
 const pnlPips = document.getElementById("pnlPips");
 const pnlMovement = document.getElementById("pnlMovement");
@@ -273,27 +250,22 @@ function updatePnlHelperText() {
     pnlHelperBox.textContent = "Select a market to begin.";
     return;
   }
-
   if (!pnlInstrument.value) {
     pnlHelperBox.textContent = "Now choose an instrument.";
     return;
   }
-
   if (!pnlPosition.value) {
     pnlHelperBox.textContent = "Choose buy or sell.";
     return;
   }
-
   if (!pnlOpenPrice.value) {
     pnlHelperBox.textContent = "Enter the opening price.";
     return;
   }
-
   if (!pnlClosePrice.value) {
     pnlHelperBox.textContent = "Enter the closing price.";
     return;
   }
-
   if (!pnlLotSize.value) {
     pnlHelperBox.textContent = "Enter the lot size.";
     return;
@@ -313,8 +285,7 @@ function calculatePnl() {
   pnlMovement.textContent = "-";
   pnlConversionFactor.textContent = "-";
 
-  if (!selectedInstrument) return;
-  if (!pnlPosition.value) return;
+  if (!selectedInstrument || !pnlPosition.value) return;
 
   const openValue = Number(pnlOpenPrice.value);
   const closeValue = Number(pnlClosePrice.value);
@@ -322,13 +293,9 @@ function calculatePnl() {
 
   if (!openValue || !closeValue || !lotValue) return;
 
-  const conversionFactor = selectedConversion
-    ? Number(selectedConversion.finalConversionFactor || 1)
-    : 1;
-
+  const conversionFactor = selectedConversion ? Number(selectedConversion.finalConversionFactor || 1) : 1;
   const rawMovement = closeValue - openValue;
   const directionMovement = pnlPosition.value === "buy" ? rawMovement : -rawMovement;
-
   const pipSize = Number(selectedInstrument.pipSize || 0);
   const contractSize = Number(selectedInstrument.contractSize || 0);
 
@@ -357,7 +324,6 @@ const pipInstrument = document.getElementById("pipInstrument");
 const pipOpenPrice = document.getElementById("pipOpenPrice");
 const pipAction = document.getElementById("pipAction");
 const pipAmount = document.getElementById("pipAmount");
-
 const pipResult = document.getElementById("pipResult");
 const pipSizeUsed = document.getElementById("pipSizeUsed");
 const pipHelperBox = document.getElementById("pipHelperBox");
@@ -367,22 +333,18 @@ function updatePipHelperText() {
     pipHelperBox.textContent = "Select a market to begin.";
     return;
   }
-
   if (!pipInstrument.value) {
     pipHelperBox.textContent = "Now choose an instrument.";
     return;
   }
-
   if (!pipOpenPrice.value) {
     pipHelperBox.textContent = "Enter the opening price.";
     return;
   }
-
   if (!pipAction.value) {
     pipHelperBox.textContent = "Choose add or remove.";
     return;
   }
-
   if (!pipAmount.value) {
     pipHelperBox.textContent = "Enter the pip or point amount.";
     return;
@@ -410,14 +372,8 @@ function calculatePipPrice() {
   if (!openValue || !amountValue || !pipSize || !pipAction.value) return;
 
   let newPrice = openValue;
-
-  if (pipAction.value === "add") {
-    newPrice = openValue + (amountValue * pipSize);
-  }
-
-  if (pipAction.value === "remove") {
-    newPrice = openValue - (amountValue * pipSize);
-  }
+  if (pipAction.value === "add") newPrice = openValue + (amountValue * pipSize);
+  if (pipAction.value === "remove") newPrice = openValue - (amountValue * pipSize);
 
   pipResult.textContent = formatPlainNumber(newPrice, 5);
 }
@@ -435,14 +391,11 @@ const maxlotMarket = document.getElementById("maxlotMarket");
 const maxlotInstrument = document.getElementById("maxlotInstrument");
 const maxlotModel = document.getElementById("maxlotModel");
 const maxlotModelGroup = document.getElementById("maxlotModelGroup");
-
 const maxlotAccountSize = document.getElementById("maxlotAccountSize");
 const maxlotPrice = document.getElementById("maxlotPrice");
-
 const maxlotUseManualLeverage = document.getElementById("maxlotUseManualLeverage");
 const maxlotManualLeverage = document.getElementById("maxlotManualLeverage");
 const maxlotManualLeverageWrap = document.getElementById("maxlotManualLeverageWrap");
-
 const maxlotResult = document.getElementById("maxlotResult");
 const maxlotContractSize = document.getElementById("maxlotContractSize");
 const maxlotConversionFactor = document.getElementById("maxlotConversionFactor");
@@ -471,22 +424,12 @@ function updateMaxlotVisibility() {
 
 function updateMaxlotLeverageDisplay() {
   if (maxlotUseManualLeverage.checked) {
-    if (!maxlotManualLeverage.value) {
-      maxlotLeverageUsed.textContent = "Manual leverage not mentioned!";
-    } else {
-      maxlotLeverageUsed.textContent = maxlotManualLeverage.value;
-    }
+    maxlotLeverageUsed.textContent = maxlotManualLeverage.value ? maxlotManualLeverage.value : "Manual leverage not mentioned!";
     return;
   }
 
   const selectedModel = getModelByName(maxlotModel.value);
-
-  if (!selectedModel) {
-    maxlotLeverageUsed.textContent = "-";
-    return;
-  }
-
-  maxlotLeverageUsed.textContent = selectedModel.defaultLeverage;
+  maxlotLeverageUsed.textContent = selectedModel ? selectedModel.defaultLeverage : "-";
 }
 
 function updateMaxlotHelperText() {
@@ -494,27 +437,22 @@ function updateMaxlotHelperText() {
     maxlotHelperBox.textContent = "Select a market to begin.";
     return;
   }
-
   if (!maxlotInstrument.value) {
     maxlotHelperBox.textContent = "Now choose an instrument.";
     return;
   }
-
   if (maxlotUseManualLeverage.checked && !maxlotManualLeverage.value) {
     maxlotHelperBox.textContent = "Enter manual leverage to proceed.";
     return;
   }
-
   if (!maxlotUseManualLeverage.checked && !maxlotModel.value) {
     maxlotHelperBox.textContent = "Now choose a model.";
     return;
   }
-
   if (!maxlotAccountSize.value) {
     maxlotHelperBox.textContent = "Enter the account size.";
     return;
   }
-
   if (!maxlotPrice.value) {
     maxlotHelperBox.textContent = "Enter the current price.";
     return;
@@ -542,14 +480,10 @@ function calculateMaxlot() {
 
   maxlotContractSize.textContent = selectedInstrument.contractSize;
 
-  const conversionFactor = selectedConversion
-    ? Number(selectedConversion.finalConversionFactor || 1)
-    : 1;
-
+  const conversionFactor = selectedConversion ? Number(selectedConversion.finalConversionFactor || 1) : 1;
   maxlotConversionFactor.textContent = conversionFactor;
 
   let leverageValue = 0;
-
   if (maxlotUseManualLeverage.checked) {
     leverageValue = Number(maxlotManualLeverage.value || 0);
   } else {
@@ -582,6 +516,251 @@ function onMaxlotManualToggleChange() {
 }
 
 /* -----------------------------------
+   RISK BY MONEY AND LOT
+----------------------------------- */
+const riskMoneyAccountBalance = document.getElementById("riskMoneyAccountBalance");
+const riskMoneyMarket = document.getElementById("riskMoneyMarket");
+const riskMoneyInstrument = document.getElementById("riskMoneyInstrument");
+const riskMoneyPosition = document.getElementById("riskMoneyPosition");
+const riskMoneyEntryPrice = document.getElementById("riskMoneyEntryPrice");
+const riskMoneyLotSize = document.getElementById("riskMoneyLotSize");
+const riskMoneyRisk = document.getElementById("riskMoneyRisk");
+const riskMoneyReward = document.getElementById("riskMoneyReward");
+
+const riskMoneyStopLoss = document.getElementById("riskMoneyStopLoss");
+const riskMoneyTakeProfit = document.getElementById("riskMoneyTakeProfit");
+const riskMoneyPipSize = document.getElementById("riskMoneyPipSize");
+const riskMoneyConversionFactor = document.getElementById("riskMoneyConversionFactor");
+const riskMoneyContractSize = document.getElementById("riskMoneyContractSize");
+const riskMoneySlPips = document.getElementById("riskMoneySlPips");
+const riskMoneyTpPips = document.getElementById("riskMoneyTpPips");
+const riskMoneyHelperBox = document.getElementById("riskMoneyHelperBox");
+
+function updateRiskMoneyHelperText() {
+  if (!riskMoneyAccountBalance.value) {
+    riskMoneyHelperBox.textContent = "Select an account balance to begin.";
+    return;
+  }
+  if (!riskMoneyMarket.value) {
+    riskMoneyHelperBox.textContent = "Now choose a market.";
+    return;
+  }
+  if (!riskMoneyInstrument.value) {
+    riskMoneyHelperBox.textContent = "Now choose an instrument.";
+    return;
+  }
+  if (!riskMoneyPosition.value) {
+    riskMoneyHelperBox.textContent = "Choose buy or sell.";
+    return;
+  }
+  if (!riskMoneyEntryPrice.value) {
+    riskMoneyHelperBox.textContent = "Enter the entry price.";
+    return;
+  }
+  if (!riskMoneyLotSize.value) {
+    riskMoneyHelperBox.textContent = "Enter the lot size.";
+    return;
+  }
+  if (!riskMoneyRisk.value) {
+    riskMoneyHelperBox.textContent = "Enter the risk amount.";
+    return;
+  }
+  if (!riskMoneyReward.value) {
+    riskMoneyHelperBox.textContent = "Enter the reward amount.";
+    return;
+  }
+
+  riskMoneyHelperBox.textContent = "Risk by Money & Lot inputs are ready.";
+}
+
+function calculateRiskMoney() {
+  updateRiskMoneyHelperText();
+
+  const selectedInstrument = getInstrumentByName(riskMoneyInstrument.value);
+  const selectedConversion = getConversionByInstrument(riskMoneyInstrument.value);
+
+  riskMoneyStopLoss.textContent = "0.00";
+  riskMoneyTakeProfit.textContent = "0.00";
+  riskMoneyPipSize.textContent = "-";
+  riskMoneyConversionFactor.textContent = "-";
+  riskMoneyContractSize.textContent = "-";
+  riskMoneySlPips.textContent = "-";
+  riskMoneyTpPips.textContent = "-";
+
+  if (!selectedInstrument || !riskMoneyPosition.value) return;
+
+  const entryPrice = Number(riskMoneyEntryPrice.value);
+  const lotSize = Number(riskMoneyLotSize.value);
+  const riskAmount = Number(riskMoneyRisk.value);
+  const rewardAmount = Number(riskMoneyReward.value);
+
+  if (!entryPrice || !lotSize || !riskAmount || !rewardAmount) return;
+
+  const pipSize = Number(selectedInstrument.pipSize || 0);
+  const contractSize = Number(selectedInstrument.contractSize || 0);
+  const conversionFactor = selectedConversion ? Number(selectedConversion.finalConversionFactor || 1) : 1;
+
+  riskMoneyPipSize.textContent = pipSize;
+  riskMoneyConversionFactor.textContent = conversionFactor;
+  riskMoneyContractSize.textContent = contractSize;
+
+  if (!pipSize || !contractSize || !conversionFactor) return;
+
+  const priceRiskMove = riskAmount / (contractSize * lotSize * conversionFactor);
+  const priceRewardMove = rewardAmount / (contractSize * lotSize * conversionFactor);
+
+  let stopLoss = entryPrice;
+  let takeProfit = entryPrice;
+
+  if (riskMoneyPosition.value === "buy") {
+    stopLoss = entryPrice - priceRiskMove;
+    takeProfit = entryPrice + priceRewardMove;
+  } else {
+    stopLoss = entryPrice + priceRiskMove;
+    takeProfit = entryPrice - priceRewardMove;
+  }
+
+  const slPips = Math.abs(entryPrice - stopLoss) / pipSize;
+  const tpPips = Math.abs(takeProfit - entryPrice) / pipSize;
+
+  riskMoneyStopLoss.textContent = formatPlainNumber(stopLoss, 5);
+  riskMoneyTakeProfit.textContent = formatPlainNumber(takeProfit, 5);
+  riskMoneySlPips.textContent = formatPlainNumber(slPips, 2);
+  riskMoneyTpPips.textContent = formatPlainNumber(tpPips, 2);
+}
+
+function onRiskMoneyMarketChange() {
+  populateInstrumentSelectByMarket(riskMoneyInstrument, riskMoneyMarket.value);
+  riskMoneyInstrument.value = "";
+  calculateRiskMoney();
+}
+
+/* -----------------------------------
+   RISK BY PERCENTAGE
+----------------------------------- */
+const riskPercentAccountBalance = document.getElementById("riskPercentAccountBalance");
+const riskPercentMarket = document.getElementById("riskPercentMarket");
+const riskPercentInstrument = document.getElementById("riskPercentInstrument");
+const riskPercentPosition = document.getElementById("riskPercentPosition");
+const riskPercentEntryPrice = document.getElementById("riskPercentEntryPrice");
+const riskPercentRiskPercent = document.getElementById("riskPercentRiskPercent");
+const riskPercentRewardPercent = document.getElementById("riskPercentRewardPercent");
+const riskPercentSlPips = document.getElementById("riskPercentSlPips");
+
+const riskPercentLotSize = document.getElementById("riskPercentLotSize");
+const riskPercentStopLoss = document.getElementById("riskPercentStopLoss");
+const riskPercentTakeProfit = document.getElementById("riskPercentTakeProfit");
+const riskPercentRiskDollar = document.getElementById("riskPercentRiskDollar");
+const riskPercentRewardDollar = document.getElementById("riskPercentRewardDollar");
+const riskPercentPipSize = document.getElementById("riskPercentPipSize");
+const riskPercentConversionFactor = document.getElementById("riskPercentConversionFactor");
+const riskPercentContractSize = document.getElementById("riskPercentContractSize");
+const riskPercentHelperBox = document.getElementById("riskPercentHelperBox");
+
+function updateRiskPercentHelperText() {
+  if (!riskPercentAccountBalance.value) {
+    riskPercentHelperBox.textContent = "Select an account balance to begin.";
+    return;
+  }
+  if (!riskPercentMarket.value) {
+    riskPercentHelperBox.textContent = "Now choose a market.";
+    return;
+  }
+  if (!riskPercentInstrument.value) {
+    riskPercentHelperBox.textContent = "Now choose an instrument.";
+    return;
+  }
+  if (!riskPercentPosition.value) {
+    riskPercentHelperBox.textContent = "Choose buy or sell.";
+    return;
+  }
+  if (!riskPercentEntryPrice.value) {
+    riskPercentHelperBox.textContent = "Enter the entry price.";
+    return;
+  }
+  if (!riskPercentRiskPercent.value) {
+    riskPercentHelperBox.textContent = "Enter the risk percentage.";
+    return;
+  }
+  if (!riskPercentRewardPercent.value) {
+    riskPercentHelperBox.textContent = "Enter the reward percentage.";
+    return;
+  }
+  if (!riskPercentSlPips.value) {
+    riskPercentHelperBox.textContent = "Enter the SL in pips or points.";
+    return;
+  }
+
+  riskPercentHelperBox.textContent = "Risk by Percentage inputs are ready.";
+}
+
+function calculateRiskPercent() {
+  updateRiskPercentHelperText();
+
+  const selectedInstrument = getInstrumentByName(riskPercentInstrument.value);
+  const selectedConversion = getConversionByInstrument(riskPercentInstrument.value);
+
+  riskPercentLotSize.textContent = "0.00";
+  riskPercentStopLoss.textContent = "0.00";
+  riskPercentTakeProfit.textContent = "0.00";
+  riskPercentRiskDollar.textContent = "-";
+  riskPercentRewardDollar.textContent = "-";
+  riskPercentPipSize.textContent = "-";
+  riskPercentConversionFactor.textContent = "-";
+  riskPercentContractSize.textContent = "-";
+
+  if (!selectedInstrument || !riskPercentPosition.value) return;
+
+  const accountBalance = Number(riskPercentAccountBalance.value);
+  const entryPrice = Number(riskPercentEntryPrice.value);
+  const riskPercent = Number(riskPercentRiskPercent.value);
+  const rewardPercent = Number(riskPercentRewardPercent.value);
+  const slPips = Number(riskPercentSlPips.value);
+
+  if (!accountBalance || !entryPrice || !riskPercent || !rewardPercent || !slPips) return;
+
+  const pipSize = Number(selectedInstrument.pipSize || 0);
+  const contractSize = Number(selectedInstrument.contractSize || 0);
+  const conversionFactor = selectedConversion ? Number(selectedConversion.finalConversionFactor || 1) : 1;
+
+  riskPercentPipSize.textContent = pipSize;
+  riskPercentConversionFactor.textContent = conversionFactor;
+  riskPercentContractSize.textContent = contractSize;
+
+  if (!pipSize || !contractSize || !conversionFactor) return;
+
+  const riskDollar = accountBalance * (riskPercent / 100);
+  const rewardDollar = accountBalance * (rewardPercent / 100);
+
+  const lotSize = Math.abs(
+    riskDollar / (conversionFactor * contractSize * pipSize * slPips)
+  );
+
+  let stopLoss = entryPrice;
+  let takeProfit = entryPrice;
+
+  if (riskPercentPosition.value === "buy") {
+    stopLoss = entryPrice - (slPips * pipSize);
+    takeProfit = entryPrice + (rewardDollar / (conversionFactor * contractSize * lotSize));
+  } else {
+    stopLoss = entryPrice + (slPips * pipSize);
+    takeProfit = entryPrice - (rewardDollar / (conversionFactor * contractSize * lotSize));
+  }
+
+  riskPercentLotSize.textContent = formatPlainNumber(lotSize, 2);
+  riskPercentStopLoss.textContent = formatPlainNumber(stopLoss, 5);
+  riskPercentTakeProfit.textContent = formatPlainNumber(takeProfit, 5);
+  riskPercentRiskDollar.textContent = formatMoney(riskDollar);
+  riskPercentRewardDollar.textContent = formatMoney(rewardDollar);
+}
+
+function onRiskPercentMarketChange() {
+  populateInstrumentSelectByMarket(riskPercentInstrument, riskPercentMarket.value);
+  riskPercentInstrument.value = "";
+  calculateRiskPercent();
+}
+
+/* -----------------------------------
    INIT
 ----------------------------------- */
 function initializeApp() {
@@ -599,6 +778,9 @@ function initializeApp() {
   populateInstrumentSelectByMarket(maxlotInstrument, maxlotMarket.value);
   populateMaxlotModel();
   calculateMaxlot();
+
+  calculateRiskMoney();
+  calculateRiskPercent();
 
   market.addEventListener("change", onMarginMarketChange);
   instrument.addEventListener("change", calculateMargin);
@@ -628,6 +810,24 @@ function initializeApp() {
   maxlotPrice.addEventListener("input", calculateMaxlot);
   maxlotUseManualLeverage.addEventListener("change", onMaxlotManualToggleChange);
   maxlotManualLeverage.addEventListener("input", calculateMaxlot);
+
+  riskMoneyAccountBalance.addEventListener("change", calculateRiskMoney);
+  riskMoneyMarket.addEventListener("change", onRiskMoneyMarketChange);
+  riskMoneyInstrument.addEventListener("change", calculateRiskMoney);
+  riskMoneyPosition.addEventListener("change", calculateRiskMoney);
+  riskMoneyEntryPrice.addEventListener("input", calculateRiskMoney);
+  riskMoneyLotSize.addEventListener("input", calculateRiskMoney);
+  riskMoneyRisk.addEventListener("input", calculateRiskMoney);
+  riskMoneyReward.addEventListener("input", calculateRiskMoney);
+
+  riskPercentAccountBalance.addEventListener("change", calculateRiskPercent);
+  riskPercentMarket.addEventListener("change", onRiskPercentMarketChange);
+  riskPercentInstrument.addEventListener("change", calculateRiskPercent);
+  riskPercentPosition.addEventListener("change", calculateRiskPercent);
+  riskPercentEntryPrice.addEventListener("input", calculateRiskPercent);
+  riskPercentRiskPercent.addEventListener("input", calculateRiskPercent);
+  riskPercentRewardPercent.addEventListener("input", calculateRiskPercent);
+  riskPercentSlPips.addEventListener("input", calculateRiskPercent);
 }
 
 initializeApp();
