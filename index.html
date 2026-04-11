@@ -17,7 +17,6 @@
     <button class="tab" data-tab="risk">Risk Tools</button>
   </div>
 
-  <!-- MARGIN SECTION -->
   <div id="marginSection">
 
     <div class="card">
@@ -91,7 +90,6 @@
     </div>
   </div>
 
-  <!-- PNL SECTION -->
   <div id="pnlSection" style="display:none;">
 
     <div class="card" style="margin-bottom: 24px;">
@@ -215,7 +213,6 @@
     </div>
   </div>
 
-  <!-- MAX LOT SECTION -->
   <div id="maxlotSection" style="display:none;">
 
     <div class="card">
@@ -289,15 +286,182 @@
     </div>
   </div>
 
-  <!-- RISK TOOLS PLACEHOLDER -->
   <div id="riskSection" style="display:none;">
+
+    <div class="card" style="margin-bottom: 24px;">
+      <div class="form-section">
+
+        <div class="form-group">
+          <label>Account Balance</label>
+          <select id="riskMoneyAccountBalance">
+            <option value="">Select account balance</option>
+            <option value="5000">5,000</option>
+            <option value="10000">10,000</option>
+            <option value="15000">15,000</option>
+            <option value="25000">25,000</option>
+            <option value="50000">50,000</option>
+            <option value="100000">100,000</option>
+            <option value="200000">200,000</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Market</label>
+          <select id="riskMoneyMarket">
+            <option value="">Select market</option>
+            <option value="Currency">Currency</option>
+            <option value="Commodity">Commodity</option>
+            <option value="Indice">Indice</option>
+            <option value="Crypto">Crypto</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Instrument</label>
+          <select id="riskMoneyInstrument">
+            <option value="">Select instrument</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Position</label>
+          <select id="riskMoneyPosition">
+            <option value="">Select position</option>
+            <option value="buy">Buy</option>
+            <option value="sell">Sell</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Entry Price</label>
+          <input id="riskMoneyEntryPrice" type="number" placeholder="Enter entry price">
+        </div>
+
+        <div class="form-group">
+          <label>Lot Size</label>
+          <input id="riskMoneyLotSize" type="number" placeholder="Enter lot size">
+        </div>
+
+        <div class="form-group">
+          <label>Risk ($)</label>
+          <input id="riskMoneyRisk" type="number" placeholder="Enter risk amount">
+        </div>
+
+        <div class="form-group">
+          <label>Reward ($)</label>
+          <input id="riskMoneyReward" type="number" placeholder="Enter reward amount">
+        </div>
+
+      </div>
+
+      <div class="result-section">
+        <p>Risk by Money & Lot</p>
+        <h2 id="riskMoneyStopLoss">0.00</h2>
+        <div style="margin-top: 8px; font-size: 14px; font-weight: 600; opacity: 0.9;">STOP LOSS</div>
+        <div style="margin-top: 18px; font-size: 18px; font-weight: 700;" id="riskMoneyTakeProfit">0.00</div>
+        <div style="margin-top: 6px; font-size: 14px; font-weight: 600; opacity: 0.9;">TAKE PROFIT</div>
+      </div>
+    </div>
+
+    <div class="info" style="margin-bottom: 20px;">
+      <p>Pip Size: <span id="riskMoneyPipSize">-</span></p>
+      <p>Conversion Factor: <span id="riskMoneyConversionFactor">-</span></p>
+      <p>Contract Size: <span id="riskMoneyContractSize">-</span></p>
+      <p>Stop Loss (Pips): <span id="riskMoneySlPips">-</span></p>
+      <p>Take Profit (Pips): <span id="riskMoneyTpPips">-</span></p>
+    </div>
+
+    <div id="riskMoneyHelperBox" class="helper-box" style="margin-bottom: 24px;">
+      Select an account balance to begin.
+    </div>
+
     <div class="card">
       <div class="form-section">
+
         <div class="form-group">
-          <label>Risk Tools</label>
-          <div class="helper-box">Coming later. We will build risk by money and risk by percentage after Max Lot.</div>
+          <label>Account Balance</label>
+          <select id="riskPercentAccountBalance">
+            <option value="">Select account balance</option>
+            <option value="5000">5,000</option>
+            <option value="10000">10,000</option>
+            <option value="15000">15,000</option>
+            <option value="25000">25,000</option>
+            <option value="50000">50,000</option>
+            <option value="100000">100,000</option>
+            <option value="200000">200,000</option>
+          </select>
         </div>
+
+        <div class="form-group">
+          <label>Market</label>
+          <select id="riskPercentMarket">
+            <option value="">Select market</option>
+            <option value="Currency">Currency</option>
+            <option value="Commodity">Commodity</option>
+            <option value="Indice">Indice</option>
+            <option value="Crypto">Crypto</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Instrument</label>
+          <select id="riskPercentInstrument">
+            <option value="">Select instrument</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Position</label>
+          <select id="riskPercentPosition">
+            <option value="">Select position</option>
+            <option value="buy">Buy</option>
+            <option value="sell">Sell</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label>Entry Price</label>
+          <input id="riskPercentEntryPrice" type="number" placeholder="Enter entry price">
+        </div>
+
+        <div class="form-group">
+          <label>Risk (%)</label>
+          <input id="riskPercentRiskPercent" type="number" placeholder="Enter risk %">
+        </div>
+
+        <div class="form-group">
+          <label>Reward (%)</label>
+          <input id="riskPercentRewardPercent" type="number" placeholder="Enter reward %">
+        </div>
+
+        <div class="form-group">
+          <label>SL (Pips / Points)</label>
+          <input id="riskPercentSlPips" type="number" placeholder="Enter SL in pips / points">
+        </div>
+
       </div>
+
+      <div class="result-section">
+        <p>Risk by Percentage</p>
+        <h2 id="riskPercentLotSize">0.00</h2>
+        <div style="margin-top: 8px; font-size: 14px; font-weight: 600; opacity: 0.9;">LOTS</div>
+        <div style="margin-top: 18px; font-size: 18px; font-weight: 700;" id="riskPercentStopLoss">0.00</div>
+        <div style="margin-top: 6px; font-size: 14px; font-weight: 600; opacity: 0.9;">STOP LOSS</div>
+        <div style="margin-top: 18px; font-size: 18px; font-weight: 700;" id="riskPercentTakeProfit">0.00</div>
+        <div style="margin-top: 6px; font-size: 14px; font-weight: 600; opacity: 0.9;">TAKE PROFIT</div>
+      </div>
+    </div>
+
+    <div class="info">
+      <p>Risk ($): <span id="riskPercentRiskDollar">-</span></p>
+      <p>Reward ($): <span id="riskPercentRewardDollar">-</span></p>
+      <p>Pip Size: <span id="riskPercentPipSize">-</span></p>
+      <p>Conversion Factor: <span id="riskPercentConversionFactor">-</span></p>
+      <p>Contract Size: <span id="riskPercentContractSize">-</span></p>
+    </div>
+
+    <div id="riskPercentHelperBox" class="helper-box">
+      Select an account balance to begin.
     </div>
   </div>
 
