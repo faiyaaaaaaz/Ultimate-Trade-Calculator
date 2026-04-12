@@ -10,6 +10,14 @@
 
 <div class="app-container">
 
+  <header class="hero-block">
+    <div class="hero-badge">Ultimate Trade Calculator</div>
+    <h1 class="hero-title">FundedNext Web Calculator</h1>
+    <p class="hero-subtitle">
+      A premium multi-tool trading calculator for margin, profit and loss, pip adjustments, max lot sizing, and risk planning.
+    </p>
+  </header>
+
   <div class="tabs">
     <button class="tab active" data-tab="margin">Margin Calculator</button>
     <button class="tab" data-tab="pnl">Profit & Add Pip Calculator</button>
@@ -18,6 +26,13 @@
   </div>
 
   <div id="marginSection">
+    <div class="section-heading">
+      <div>
+        <div class="section-kicker">Core Calculator</div>
+        <h2 class="section-title">Margin Calculator</h2>
+      </div>
+      <div class="section-chip">Live margin estimate</div>
+    </div>
 
     <div class="card">
       <div class="form-section">
@@ -72,10 +87,10 @@
 
       </div>
 
-      <div class="result-section">
+      <div class="result-section result-margin">
         <p>Result</p>
         <h2 id="result">0.00</h2>
-        <div id="resultCurrency" style="margin-top: 8px; font-size: 14px; font-weight: 600; letter-spacing: 0.5px; opacity: 0.9;">USD</div>
+        <div id="resultCurrency" class="result-unit">USD</div>
       </div>
     </div>
 
@@ -89,22 +104,29 @@
       Select a market to begin.
     </div>
 
-    <div class="helper-box" style="margin-top: 18px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:10px;">
-        <strong style="font-size:14px; color:#ffffff;">Margin Macro</strong>
-        <button id="copyMarginMacroBtn" type="button" style="border:none; border-radius:10px; padding:10px 14px; font-weight:700; cursor:pointer; background:rgba(124,92,255,0.22); color:#ffffff;">
+    <div class="macro-box">
+      <div class="macro-header">
+        <strong class="macro-title">Margin Macro</strong>
+        <button id="copyMarginMacroBtn" type="button" class="macro-copy-btn">
           Copy Macro
         </button>
       </div>
-      <div id="marginMacroText" style="white-space:pre-wrap; line-height:1.6; color:#dbe3ff;">
+      <div id="marginMacroText" class="macro-text">
 Please complete the Margin Calculator inputs to generate the explanation text.
       </div>
     </div>
   </div>
 
   <div id="pnlSection" style="display:none;">
+    <div class="section-heading">
+      <div>
+        <div class="section-kicker">Performance Tools</div>
+        <h2 class="section-title">Profit & Add Pip Calculator</h2>
+      </div>
+      <div class="section-chip">PnL and price movement tools</div>
+    </div>
 
-    <div class="card" style="margin-bottom: 24px;">
+    <div class="card card-spaced">
       <div class="form-section">
 
         <div class="form-group">
@@ -151,31 +173,31 @@ Please complete the Margin Calculator inputs to generate the explanation text.
 
       </div>
 
-      <div class="result-section">
+      <div class="result-section result-pnl">
         <p>PnL Result</p>
         <h2 id="pnlResult">0.00</h2>
-        <div style="margin-top: 8px; font-size: 14px; font-weight: 600; letter-spacing: 0.5px; opacity: 0.9;">USD</div>
+        <div class="result-unit">USD</div>
       </div>
     </div>
 
-    <div class="info" style="margin-bottom: 20px;">
+    <div class="info info-spaced">
       <p>Pip Movement: <span id="pnlPips">-</span></p>
       <p>Price Movement: <span id="pnlMovement">-</span></p>
       <p>Conversion Factor: <span id="pnlConversionFactor">-</span></p>
     </div>
 
-    <div id="pnlHelperBox" class="helper-box" style="margin-bottom: 24px;">
+    <div id="pnlHelperBox" class="helper-box helper-spaced">
       Select a market to begin.
     </div>
 
-    <div class="helper-box" style="margin-top: 0; margin-bottom: 24px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:10px;">
-        <strong style="font-size:14px; color:#ffffff;">PnL Macro</strong>
-        <button id="copyPnlMacroBtn" type="button" style="border:none; border-radius:10px; padding:10px 14px; font-weight:700; cursor:pointer; background:rgba(124,92,255,0.22); color:#ffffff;">
+    <div class="macro-box macro-spaced">
+      <div class="macro-header">
+        <strong class="macro-title">PnL Macro</strong>
+        <button id="copyPnlMacroBtn" type="button" class="macro-copy-btn">
           Copy Macro
         </button>
       </div>
-      <div id="pnlMacroText" style="white-space:pre-wrap; line-height:1.6; color:#dbe3ff;">
+      <div id="pnlMacroText" class="macro-text">
 Please complete the PnL Calculator inputs to generate the explanation text.
       </div>
     </div>
@@ -222,7 +244,7 @@ Please complete the PnL Calculator inputs to generate the explanation text.
 
       </div>
 
-      <div class="result-section">
+      <div class="result-section result-pips">
         <p>New Price</p>
         <h2 id="pipResult">0.00</h2>
       </div>
@@ -236,20 +258,27 @@ Please complete the PnL Calculator inputs to generate the explanation text.
       Select a market to begin.
     </div>
 
-    <div class="helper-box" style="margin-top: 18px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:10px;">
-        <strong style="font-size:14px; color:#ffffff;">Add / Remove Pips Macro</strong>
-        <button id="copyPipMacroBtn" type="button" style="border:none; border-radius:10px; padding:10px 14px; font-weight:700; cursor:pointer; background:rgba(124,92,255,0.22); color:#ffffff;">
+    <div class="macro-box">
+      <div class="macro-header">
+        <strong class="macro-title">Add / Remove Pips Macro</strong>
+        <button id="copyPipMacroBtn" type="button" class="macro-copy-btn">
           Copy Macro
         </button>
       </div>
-      <div id="pipMacroText" style="white-space:pre-wrap; line-height:1.6; color:#dbe3ff;">
+      <div id="pipMacroText" class="macro-text">
 Please complete the Add / Remove Pips Calculator inputs to generate the explanation text.
       </div>
     </div>
   </div>
 
   <div id="maxlotSection" style="display:none;">
+    <div class="section-heading">
+      <div>
+        <div class="section-kicker">Allocation Tools</div>
+        <h2 class="section-title">Max Lot Calculator</h2>
+      </div>
+      <div class="section-chip">Sizing based on account leverage</div>
+    </div>
 
     <div class="card">
       <div class="form-section">
@@ -304,10 +333,10 @@ Please complete the Add / Remove Pips Calculator inputs to generate the explanat
 
       </div>
 
-      <div class="result-section">
+      <div class="result-section result-maxlot">
         <p>Max Lot</p>
         <h2 id="maxlotResult">0.00</h2>
-        <div style="margin-top: 8px; font-size: 14px; font-weight: 600; letter-spacing: 0.5px; opacity: 0.9;">LOTS</div>
+        <div class="result-unit">LOTS</div>
       </div>
     </div>
 
@@ -321,22 +350,29 @@ Please complete the Add / Remove Pips Calculator inputs to generate the explanat
       Select a market to begin.
     </div>
 
-    <div class="helper-box" style="margin-top: 18px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:10px;">
-        <strong style="font-size:14px; color:#ffffff;">Max Lot Macro</strong>
-        <button id="copyMaxlotMacroBtn" type="button" style="border:none; border-radius:10px; padding:10px 14px; font-weight:700; cursor:pointer; background:rgba(124,92,255,0.22); color:#ffffff;">
+    <div class="macro-box">
+      <div class="macro-header">
+        <strong class="macro-title">Max Lot Macro</strong>
+        <button id="copyMaxlotMacroBtn" type="button" class="macro-copy-btn">
           Copy Macro
         </button>
       </div>
-      <div id="maxlotMacroText" style="white-space:pre-wrap; line-height:1.6; color:#dbe3ff;">
+      <div id="maxlotMacroText" class="macro-text">
 Please complete the Max Lot Calculator inputs to generate the explanation text.
       </div>
     </div>
   </div>
 
   <div id="riskSection" style="display:none;">
+    <div class="section-heading">
+      <div>
+        <div class="section-kicker">Risk Planning</div>
+        <h2 class="section-title">Risk Tools</h2>
+      </div>
+      <div class="section-chip">Two risk models, one workflow</div>
+    </div>
 
-    <div class="card" style="margin-bottom: 24px;">
+    <div class="card card-spaced">
       <div class="form-section">
 
         <div class="form-group">
@@ -402,16 +438,16 @@ Please complete the Max Lot Calculator inputs to generate the explanation text.
 
       </div>
 
-      <div class="result-section">
+      <div class="result-section result-risk-money">
         <p>Risk by Money & Lot</p>
         <h2 id="riskMoneyStopLoss">0.00</h2>
-        <div style="margin-top: 8px; font-size: 14px; font-weight: 600; opacity: 0.9;">STOP LOSS</div>
-        <div style="margin-top: 18px; font-size: 18px; font-weight: 700;" id="riskMoneyTakeProfit">0.00</div>
-        <div style="margin-top: 6px; font-size: 14px; font-weight: 600; opacity: 0.9;">TAKE PROFIT</div>
+        <div class="result-label">STOP LOSS</div>
+        <div class="result-secondary" id="riskMoneyTakeProfit">0.00</div>
+        <div class="result-label secondary-label">TAKE PROFIT</div>
       </div>
     </div>
 
-    <div class="info" style="margin-bottom: 20px;">
+    <div class="info info-spaced">
       <p>Pip Size: <span id="riskMoneyPipSize">-</span></p>
       <p>Conversion Factor: <span id="riskMoneyConversionFactor">-</span></p>
       <p>Contract Size: <span id="riskMoneyContractSize">-</span></p>
@@ -419,18 +455,18 @@ Please complete the Max Lot Calculator inputs to generate the explanation text.
       <p>Take Profit (Pips): <span id="riskMoneyTpPips">-</span></p>
     </div>
 
-    <div id="riskMoneyHelperBox" class="helper-box" style="margin-bottom: 24px;">
+    <div id="riskMoneyHelperBox" class="helper-box helper-spaced">
       Select an account balance to begin.
     </div>
 
-    <div class="helper-box" style="margin-top: 0; margin-bottom: 24px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:10px;">
-        <strong style="font-size:14px; color:#ffffff;">Risk by Money & Lot Macro</strong>
-        <button id="copyRiskMoneyMacroBtn" type="button" style="border:none; border-radius:10px; padding:10px 14px; font-weight:700; cursor:pointer; background:rgba(124,92,255,0.22); color:#ffffff;">
+    <div class="macro-box macro-spaced">
+      <div class="macro-header">
+        <strong class="macro-title">Risk by Money & Lot Macro</strong>
+        <button id="copyRiskMoneyMacroBtn" type="button" class="macro-copy-btn">
           Copy Macro
         </button>
       </div>
-      <div id="riskMoneyMacroText" style="white-space:pre-wrap; line-height:1.6; color:#dbe3ff;">
+      <div id="riskMoneyMacroText" class="macro-text">
 Please complete the Risk by Money & Lot inputs to generate the explanation text.
       </div>
     </div>
@@ -501,14 +537,14 @@ Please complete the Risk by Money & Lot inputs to generate the explanation text.
 
       </div>
 
-      <div class="result-section">
+      <div class="result-section result-risk-percent">
         <p>Risk by Percentage</p>
         <h2 id="riskPercentLotSize">0.00</h2>
-        <div style="margin-top: 8px; font-size: 14px; font-weight: 600; opacity: 0.9;">LOTS</div>
-        <div style="margin-top: 18px; font-size: 18px; font-weight: 700;" id="riskPercentStopLoss">0.00</div>
-        <div style="margin-top: 6px; font-size: 14px; font-weight: 600; opacity: 0.9;">STOP LOSS</div>
-        <div style="margin-top: 18px; font-size: 18px; font-weight: 700;" id="riskPercentTakeProfit">0.00</div>
-        <div style="margin-top: 6px; font-size: 14px; font-weight: 600; opacity: 0.9;">TAKE PROFIT</div>
+        <div class="result-unit">LOTS</div>
+        <div class="result-secondary" id="riskPercentStopLoss">0.00</div>
+        <div class="result-label secondary-label">STOP LOSS</div>
+        <div class="result-secondary" id="riskPercentTakeProfit">0.00</div>
+        <div class="result-label secondary-label">TAKE PROFIT</div>
       </div>
     </div>
 
@@ -524,18 +560,23 @@ Please complete the Risk by Money & Lot inputs to generate the explanation text.
       Select an account balance to begin.
     </div>
 
-    <div class="helper-box" style="margin-top: 18px;">
-      <div style="display:flex; justify-content:space-between; align-items:center; gap:12px; flex-wrap:wrap; margin-bottom:10px;">
-        <strong style="font-size:14px; color:#ffffff;">Risk by Percentage Macro</strong>
-        <button id="copyRiskPercentMacroBtn" type="button" style="border:none; border-radius:10px; padding:10px 14px; font-weight:700; cursor:pointer; background:rgba(124,92,255,0.22); color:#ffffff;">
+    <div class="macro-box">
+      <div class="macro-header">
+        <strong class="macro-title">Risk by Percentage Macro</strong>
+        <button id="copyRiskPercentMacroBtn" type="button" class="macro-copy-btn">
           Copy Macro
         </button>
       </div>
-      <div id="riskPercentMacroText" style="white-space:pre-wrap; line-height:1.6; color:#dbe3ff;">
+      <div id="riskPercentMacroText" class="macro-text">
 Please complete the Risk by Percentage inputs to generate the explanation text.
       </div>
     </div>
   </div>
+
+  <footer class="site-footer">
+    <span class="footer-line"></span>
+    <p>Developed by Faiyaz Ahmed.</p>
+  </footer>
 
 </div>
 
