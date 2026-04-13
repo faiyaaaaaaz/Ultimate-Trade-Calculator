@@ -19,10 +19,50 @@
   </header>
 
   <div class="tabs">
-    <button class="tab active" data-tab="margin">Margin Calculator</button>
-    <button class="tab" data-tab="pnl">Profit & Add Pip Calculator</button>
-    <button class="tab" data-tab="maxlot">Max Lot Calculator</button>
-    <button class="tab" data-tab="risk">Risk Tools</button>
+    <button class="tab active" data-tab="margin" type="button">
+      <span class="tab-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M4 8.5L12 4L20 8.5L12 13L4 8.5Z"></path>
+          <path d="M4 15.5L12 20L20 15.5"></path>
+          <path d="M4 12L12 16.5L20 12"></path>
+        </svg>
+      </span>
+      <span class="tab-label">Margin Calculator</span>
+    </button>
+
+    <button class="tab" data-tab="pnl" type="button">
+      <span class="tab-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M4 18L10 12L14 15L20 8"></path>
+          <path d="M16 8H20V12"></path>
+        </svg>
+      </span>
+      <span class="tab-label">Profit & Add Pip Calculator</span>
+    </button>
+
+    <button class="tab" data-tab="maxlot" type="button">
+      <span class="tab-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M4 7H20"></path>
+          <path d="M4 17H20"></path>
+          <path d="M7 7V17"></path>
+          <path d="M17 7V17"></path>
+          <path d="M10 12H14"></path>
+        </svg>
+      </span>
+      <span class="tab-label">Max Lot Calculator</span>
+    </button>
+
+    <button class="tab" data-tab="risk" type="button">
+      <span class="tab-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M12 3L19 7V12C19 16.5 16.2 19.7 12 21C7.8 19.7 5 16.5 5 12V7L12 3Z"></path>
+          <path d="M12 9V12.5"></path>
+          <path d="M12 16H12.01"></path>
+        </svg>
+      </span>
+      <span class="tab-label">Risk Tools</span>
+    </button>
   </div>
 
   <div id="marginSection">
@@ -31,7 +71,16 @@
         <div class="section-kicker">Core Calculator</div>
         <h2 class="section-title">Margin Calculator</h2>
       </div>
-      <div class="section-chip">Live margin estimate</div>
+      <div class="section-chip">
+        <span class="chip-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M4 8.5L12 4L20 8.5L12 13L4 8.5Z"></path>
+            <path d="M4 15.5L12 20L20 15.5"></path>
+            <path d="M4 12L12 16.5L20 12"></path>
+          </svg>
+        </span>
+        <span>Live margin estimate</span>
+      </div>
     </div>
 
     <div class="card">
@@ -123,7 +172,15 @@ Please complete the Margin Calculator inputs to generate the explanation text.
         <div class="section-kicker">Performance Tools</div>
         <h2 class="section-title">Profit & Add Pip Calculator</h2>
       </div>
-      <div class="section-chip">PnL and price movement tools</div>
+      <div class="section-chip">
+        <span class="chip-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M4 18L10 12L14 15L20 8"></path>
+            <path d="M16 8H20V12"></path>
+          </svg>
+        </span>
+        <span>PnL and price movement tools</span>
+      </div>
     </div>
 
     <div class="card card-spaced">
@@ -277,7 +334,18 @@ Please complete the Add / Remove Pips Calculator inputs to generate the explanat
         <div class="section-kicker">Allocation Tools</div>
         <h2 class="section-title">Max Lot Calculator</h2>
       </div>
-      <div class="section-chip">Sizing based on account leverage</div>
+      <div class="section-chip">
+        <span class="chip-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M4 7H20"></path>
+            <path d="M4 17H20"></path>
+            <path d="M7 7V17"></path>
+            <path d="M17 7V17"></path>
+            <path d="M10 12H14"></path>
+          </svg>
+        </span>
+        <span>Sizing based on account leverage</span>
+      </div>
     </div>
 
     <div class="card">
@@ -369,7 +437,16 @@ Please complete the Max Lot Calculator inputs to generate the explanation text.
         <div class="section-kicker">Risk Planning</div>
         <h2 class="section-title">Risk Tools</h2>
       </div>
-      <div class="section-chip">Two risk models, one workflow</div>
+      <div class="section-chip">
+        <span class="chip-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M12 3L19 7V12C19 16.5 16.2 19.7 12 21C7.8 19.7 5 16.5 5 12V7L12 3Z"></path>
+            <path d="M12 9V12.5"></path>
+            <path d="M12 16H12.01"></path>
+          </svg>
+        </span>
+        <span>Two risk models, one workflow</span>
+      </div>
     </div>
 
     <div class="card card-spaced">
