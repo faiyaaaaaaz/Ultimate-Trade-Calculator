@@ -38,8 +38,10 @@ function getInstrumentByName(name) {
   return DATA.instruments.find((item) => item.instrumentName === name);
 }
 
-function getModelByName(name) {
-  return DATA.models.find((item) => item.modelName === name);
+function getModelByName(name, marketType) {
+  return DATA.models.find(
+    (item) => item.modelName === name && item.marketType === marketType
+  );
 }
 
 function getConversionByInstrument(name) {
@@ -165,7 +167,7 @@ function updateLeverageDisplay() {
     return;
   }
 
-  const selectedModel = getModelByName(model.value);
+  const selectedModel = getModelByName(model.value, market.value);
   leverageEl.textContent = selectedModel ? selectedModel.defaultLeverage : "-";
 }
 
@@ -200,7 +202,7 @@ function updateMarginHelperText() {
 
 function updateMarginMacro() {
   const selectedInstrument = getInstrumentByName(instrument.value);
-  const selectedModel = getModelByName(model.value);
+  const selectedModel = getModelByName(model.value, market.value);
   const selectedConversion = getConversionByInstrument(instrument.value);
 
   if (!market.value || !instrument.value || !price.value || !lot.value) {
@@ -261,7 +263,7 @@ function calculateMargin() {
   updateMarginHelperText();
 
   const selectedInstrument = getInstrumentByName(instrument.value);
-  const selectedModel = getModelByName(model.value);
+  const selectedModel = getModelByName(model.value, market.value);
   const selectedConversion = getConversionByInstrument(instrument.value);
 
   const priceValue = Number(price.value);
@@ -610,7 +612,7 @@ function updateMaxlotLeverageDisplay() {
     return;
   }
 
-  const selectedModel = getModelByName(maxlotModel.value);
+  const selectedModel = getModelByName(maxlotModel.value, maxlotMarket.value);
   maxlotLeverageUsed.textContent = selectedModel ? selectedModel.defaultLeverage : "-";
 }
 
@@ -645,7 +647,7 @@ function updateMaxlotHelperText() {
 
 function updateMaxlotMacro() {
   const selectedInstrument = getInstrumentByName(maxlotInstrument.value);
-  const selectedModel = getModelByName(maxlotModel.value);
+  const selectedModel = getModelByName(maxlotModel.value, maxlotMarket.value);
   const selectedConversion = getConversionByInstrument(maxlotInstrument.value);
 
   if (!maxlotMarket.value || !maxlotInstrument.value || !maxlotAccountSize.value || !maxlotPrice.value) {
@@ -704,7 +706,7 @@ function calculateMaxlot() {
   updateMaxlotHelperText();
 
   const selectedInstrument = getInstrumentByName(maxlotInstrument.value);
-  const selectedModel = getModelByName(maxlotModel.value);
+  const selectedModel = getModelByName(maxlotModel.value, maxlotMarket.value);
   const selectedConversion = getConversionByInstrument(maxlotInstrument.value);
 
   const accountSizeValue = Number(maxlotAccountSize.value);
