@@ -1,5 +1,5 @@
 window.WEB_CALCULATOR_DATA = {
-  "updatedAt": "2026-04-11T12:19:19.831Z",
+  "updatedAt": "2026-05-07T03:29:30.315Z",
   "instruments": [
     {
       "instrumentName": "AUDCAD",
@@ -884,128 +884,9 @@ window.WEB_CALCULATOR_DATA = {
   ],
   "models": [
     {
-      "modelName": "Evaluation & Express Challenge Phase",
-      "marketType": "Currency",
-      "defaultLeverage": 100,
-      "active": true,
-      "sourceSheet": "Sheet1"
-    },
-    {
-      "modelName": "Evaluation & Express FundedNext Account",
-      "marketType": "Currency",
-      "defaultLeverage": 100,
-      "active": true,
-      "sourceSheet": "Sheet1"
-    },
-    {
       "modelName": "Stellar 1-step Challenge Phase",
       "marketType": "Currency",
       "defaultLeverage": 30,
-      "active": true,
-      "sourceSheet": "Sheet1"
-    },
-    {
-      "modelName": "Stellar 1-step FundedNext Account",
-      "marketType": "Currency",
-      "defaultLeverage": 30,
-      "active": true,
-      "sourceSheet": "Sheet1"
-    },
-    {
-      "modelName": "Stellar 2-step Challenge Phase",
-      "marketType": "Currency",
-      "defaultLeverage": 100,
-      "active": true,
-      "sourceSheet": "Sheet1"
-    },
-    {
-      "modelName": "Stellar 2-step FundedNext Account",
-      "marketType": "Currency",
-      "defaultLeverage": 100,
-      "active": true,
-      "sourceSheet": "Sheet1"
-    },
-    {
-      "modelName": "Stellar Lite Challenge & FundedNext Account",
-      "marketType": "Currency",
-      "defaultLeverage": 100,
-      "active": true,
-      "sourceSheet": "Sheet1"
-    },
-    {
-      "modelName": "Stellar Instant",
-      "marketType": "Currency",
-      "defaultLeverage": 30,
-      "active": true,
-      "sourceSheet": "Sheet1"
-    },
-    {
-      "modelName": "Evaluation & Express Challenge Phase",
-      "marketType": "Commodity",
-      "defaultLeverage": 15,
-      "active": true,
-      "sourceSheet": "Sheet1"
-    },
-    {
-      "modelName": "Evaluation & Express FundedNext Account",
-      "marketType": "Commodity",
-      "defaultLeverage": 15,
-      "active": true,
-      "sourceSheet": "Sheet1"
-    },
-    {
-      "modelName": "Stellar 1-step Challenge Phase",
-      "marketType": "Commodity",
-      "defaultLeverage": 10,
-      "active": true,
-      "sourceSheet": "Sheet1"
-    },
-    {
-      "modelName": "Stellar 1-step FundedNext Account",
-      "marketType": "Commodity",
-      "defaultLeverage": 10,
-      "active": true,
-      "sourceSheet": "Sheet1"
-    },
-    {
-      "modelName": "Stellar 2-step Challenge Phase",
-      "marketType": "Commodity",
-      "defaultLeverage": 15,
-      "active": true,
-      "sourceSheet": "Sheet1"
-    },
-    {
-      "modelName": "Stellar 2-step FundedNext Account",
-      "marketType": "Commodity",
-      "defaultLeverage": 15,
-      "active": true,
-      "sourceSheet": "Sheet1"
-    },
-    {
-      "modelName": "Stellar Lite Challenge & FundedNext Account",
-      "marketType": "Commodity",
-      "defaultLeverage": 15,
-      "active": true,
-      "sourceSheet": "Sheet1"
-    },
-    {
-      "modelName": "Stellar Instant",
-      "marketType": "Commodity",
-      "defaultLeverage": 7.5,
-      "active": true,
-      "sourceSheet": "Sheet1"
-    },
-    {
-      "modelName": "Evaluation & Express Challenge Phase",
-      "marketType": "Indice",
-      "defaultLeverage": 15,
-      "active": true,
-      "sourceSheet": "Sheet1"
-    },
-    {
-      "modelName": "Evaluation & Express FundedNext Account",
-      "marketType": "Indice",
-      "defaultLeverage": 15,
       "active": true,
       "sourceSheet": "Sheet1"
     },
@@ -1017,9 +898,16 @@ window.WEB_CALCULATOR_DATA = {
       "sourceSheet": "Sheet1"
     },
     {
-      "modelName": "Stellar 1-step FundedNext Account",
-      "marketType": "Indice",
-      "defaultLeverage": 5,
+      "modelName": "Stellar 1-step Challenge Phase",
+      "marketType": "Commodity",
+      "defaultLeverage": 10,
+      "active": true,
+      "sourceSheet": "Sheet1"
+    },
+    {
+      "modelName": "Stellar 2-step Challenge Phase",
+      "marketType": "Currency",
+      "defaultLeverage": 100,
       "active": true,
       "sourceSheet": "Sheet1"
     },
@@ -1031,22 +919,92 @@ window.WEB_CALCULATOR_DATA = {
       "sourceSheet": "Sheet1"
     },
     {
+      "modelName": "Stellar 2-step Challenge Phase",
+      "marketType": "Commodity",
+      "defaultLeverage": 15,
+      "active": true,
+      "sourceSheet": "Sheet1"
+    },
+    {
+      "modelName": "Stellar Lite Challenge Account",
+      "marketType": "Currency",
+      "defaultLeverage": 100,
+      "active": true,
+      "sourceSheet": "Sheet1"
+    },
+    {
+      "modelName": "Stellar Lite Challenge Account",
+      "marketType": "Indice",
+      "defaultLeverage": 15,
+      "active": true,
+      "sourceSheet": "Sheet1"
+    },
+    {
+      "modelName": "Stellar Lite Challenge Account",
+      "marketType": "Commodity",
+      "defaultLeverage": 15,
+      "active": true,
+      "sourceSheet": "Sheet1"
+    },
+    {
+      "modelName": "Stellar 1-step FundedNext Account",
+      "marketType": "Currency",
+      "defaultLeverage": 30,
+      "active": true,
+      "sourceSheet": "Sheet1"
+    },
+    {
+      "modelName": "Stellar 1-step FundedNext Account",
+      "marketType": "Indice",
+      "defaultLeverage": 5,
+      "active": true,
+      "sourceSheet": "Sheet1"
+    },
+    {
+      "modelName": "Stellar 1-step FundedNext Account",
+      "marketType": "Commodity",
+      "defaultLeverage": 5,
+      "active": true,
+      "sourceSheet": "Sheet1"
+    },
+    {
+      "modelName": "Stellar 2-step FundedNext Account",
+      "marketType": "Currency",
+      "defaultLeverage": 100,
+      "active": true,
+      "sourceSheet": "Sheet1"
+    },
+    {
       "modelName": "Stellar 2-step FundedNext Account",
       "marketType": "Indice",
-      "defaultLeverage": 15,
+      "defaultLeverage": 5,
       "active": true,
       "sourceSheet": "Sheet1"
     },
     {
-      "modelName": "Stellar Lite Challenge & FundedNext Account",
-      "marketType": "Indice",
-      "defaultLeverage": 15,
+      "modelName": "Stellar 2-step FundedNext Account",
+      "marketType": "Commodity",
+      "defaultLeverage": 5,
       "active": true,
       "sourceSheet": "Sheet1"
     },
     {
-      "modelName": "Stellar Instant",
+      "modelName": "Stellar Lite FundedNext Account",
+      "marketType": "Currency",
+      "defaultLeverage": 100,
+      "active": true,
+      "sourceSheet": "Sheet1"
+    },
+    {
+      "modelName": "Stellar Lite FundedNext Account",
       "marketType": "Indice",
+      "defaultLeverage": 5,
+      "active": true,
+      "sourceSheet": "Sheet1"
+    },
+    {
+      "modelName": "Stellar Lite FundedNext Account",
+      "marketType": "Commodity",
       "defaultLeverage": 5,
       "active": true,
       "sourceSheet": "Sheet1"
