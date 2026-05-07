@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FundedNext Web Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -19,7 +23,17 @@
   </header>
 
   <div class="tabs">
-    <button class="tab active" data-tab="margin" type="button">
+    <button class="tab active" data-tab="pnl" type="button">
+      <span class="tab-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none">
+          <path d="M4 18L10 12L14 15L20 8"></path>
+          <path d="M16 8H20V12"></path>
+        </svg>
+      </span>
+      <span class="tab-label">Profit & Add Pip Calculator</span>
+    </button>
+
+    <button class="tab" data-tab="margin" type="button">
       <span class="tab-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none">
           <path d="M4 8.5L12 4L20 8.5L12 13L4 8.5Z"></path>
@@ -28,16 +42,6 @@
         </svg>
       </span>
       <span class="tab-label">Margin Calculator</span>
-    </button>
-
-    <button class="tab" data-tab="pnl" type="button">
-      <span class="tab-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none">
-          <path d="M4 18L10 12L14 15L20 8"></path>
-          <path d="M16 8H20V12"></path>
-        </svg>
-      </span>
-      <span class="tab-label">Profit & Add Pip Calculator</span>
     </button>
 
     <button class="tab" data-tab="maxlot" type="button">
@@ -65,7 +69,7 @@
     </button>
   </div>
 
-  <div id="marginSection">
+  <div id="marginSection" style="display:none;">
     <div class="section-heading">
       <div>
         <div class="section-kicker">Core Calculator</div>
@@ -166,7 +170,7 @@ Please complete the Margin Calculator inputs to generate the explanation text.
     </div>
   </div>
 
-  <div id="pnlSection" style="display:none;">
+  <div id="pnlSection">
     <div class="section-heading">
       <div>
         <div class="section-kicker">Performance Tools</div>
@@ -435,7 +439,7 @@ Please complete the Max Lot Calculator inputs to generate the explanation text.
     <div class="section-heading">
       <div>
         <div class="section-kicker">Risk Planning</div>
-        <h2 class="section-title">Risk Tools</h2>
+        <h2 class="section-title">Risk Setting by Money &amp; Lot Size</h2>
       </div>
       <div class="section-chip">
         <span class="chip-icon" aria-hidden="true">
@@ -445,7 +449,7 @@ Please complete the Max Lot Calculator inputs to generate the explanation text.
             <path d="M12 16H12.01"></path>
           </svg>
         </span>
-        <span>Two risk models, one workflow</span>
+        <span>Structured risk planning with two clear methods</span>
       </div>
     </div>
 
@@ -545,6 +549,13 @@ Please complete the Max Lot Calculator inputs to generate the explanation text.
       </div>
       <div id="riskMoneyMacroText" class="macro-text">
 Please complete the Risk by Money & Lot inputs to generate the explanation text.
+      </div>
+    </div>
+
+    <div class="subsection-heading">
+      <div>
+        <div class="section-kicker">Risk Planning</div>
+        <h3 class="subsection-title">Risk Setting by Percentage and Stop Loss</h3>
       </div>
     </div>
 
