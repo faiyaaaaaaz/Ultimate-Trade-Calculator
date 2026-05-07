@@ -32,7 +32,183 @@ function setOptions(selectElement, placeholderText, values) {
     option.textContent = value;
     selectElement.appendChild(option);
   });
+
+  refreshSearchableSelect(selectElement);
 }
+
+
+function initializeSearchableSelects() {
+  document.querySelectorAll("select").forEach((selectElement) => {
+    if (selectElement.dataset.searchableReady === "true") return;
+
+    selectElement.dataset.searchableReady = "true";
+    selectElement.classList.add("native-select-hidden");
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "searchable-select";
+
+    const trigger = document.createElement("button");
+    trigger.type = "button";
+    trigger.className = "searchable-trigger";
+
+    const triggerText = document.createElement("span");
+    triggerText.className = "searchable-trigger-text";
+
+    const arrow = document.createElement("span");
+    arrow.className = "searchable-arrow";
+    arrow.setAttribute("aria-hidden", "true");
+
+    trigger.appendChild(triggerText);
+    trigger.appendChild(arrow);
+
+    const panel = document.createElement("div");
+    panel.className = "searchable-panel";
+
+    const searchInput = document.createElement("input");
+    searchInput.type = "text";
+    searchInput.className = "searchable-input";
+    searchInput.placeholder = "Search options...";
+    searchInput.autocomplete = "off";
+
+    const list = document.createElement("div");
+    list.className = "searchable-list";
+
+    panel.appendChild(searchInput);
+    panel.appendChild(list);
+
+    wrapper.appendChild(trigger);
+    wrapper.appendChild(panel);
+
+    selectElement.insertAdjacentElement("afterend", wrapper);
+
+    selectElement.searchableControl = {
+      wrapper,
+      trigger,
+      triggerText,
+      searchInput,
+      list
+    };
+
+    function openDropdown() {
+      closeSearchableDropdowns(wrapper);
+      wrapper.classList.add("is-open");
+      renderSearchableOptions(selectElement, "");
+      searchInput.value = "";
+      setTimeout(() => searchInput.focus(), 0);
+    }
+
+    function closeDropdown() {
+      wrapper.classList.remove("is-open");
+      searchInput.value = "";
+    }
+
+    trigger.addEventListener("click", () => {
+      if (wrapper.classList.contains("is-open")) {
+        closeDropdown();
+      } else {
+        openDropdown();
+      }
+    });
+
+    searchInput.addEventListener("input", () => {
+      renderSearchableOptions(selectElement, searchInput.value);
+    });
+
+    searchInput.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeDropdown();
+        trigger.focus();
+        return;
+      }
+
+      if (event.key === "Enter") {
+        const firstOption = list.querySelector(".searchable-option");
+        if (firstOption) {
+          firstOption.click();
+        }
+      }
+    });
+
+    selectElement.addEventListener("change", () => {
+      refreshSearchableSelect(selectElement);
+    });
+
+    refreshSearchableSelect(selectElement);
+  });
+
+  document.addEventListener("click", (event) => {
+    if (!event.target.closest(".searchable-select")) {
+      closeSearchableDropdowns();
+    }
+  });
+}
+
+function closeSearchableDropdowns(exceptWrapper) {
+  document.querySelectorAll(".searchable-select.is-open").forEach((wrapper) => {
+    if (exceptWrapper && wrapper === exceptWrapper) return;
+    wrapper.classList.remove("is-open");
+  });
+}
+
+function refreshSearchableSelect(selectElement) {
+  if (!selectElement || !selectElement.searchableControl) return;
+
+  const { trigger, triggerText } = selectElement.searchableControl;
+  const selectedOption = selectElement.options[selectElement.selectedIndex];
+  const placeholderOption = selectElement.options[0];
+  const selectedText = selectedOption ? selectedOption.textContent : "";
+  const placeholderText = placeholderOption ? placeholderOption.textContent : "Select option";
+
+  triggerText.textContent = selectedText || placeholderText;
+  trigger.classList.toggle("is-placeholder", !selectElement.value);
+  renderSearchableOptions(selectElement, "");
+}
+
+function renderSearchableOptions(selectElement, searchTerm) {
+  if (!selectElement || !selectElement.searchableControl) return;
+
+  const { list } = selectElement.searchableControl;
+  const normalizedSearch = String(searchTerm || "").trim().toLowerCase();
+  const options = Array.from(selectElement.options);
+  const filteredOptions = options.filter((option) => {
+    if (!normalizedSearch) return true;
+    return option.textContent.toLowerCase().includes(normalizedSearch);
+  });
+
+  list.innerHTML = "";
+
+  if (!filteredOptions.length) {
+    const empty = document.createElement("div");
+    empty.className = "searchable-empty";
+    empty.textContent = "No matching options";
+    list.appendChild(empty);
+    return;
+  }
+
+  filteredOptions.forEach((option) => {
+    const optionButton = document.createElement("button");
+    optionButton.type = "button";
+    optionButton.className = "searchable-option";
+    optionButton.textContent = option.textContent;
+    optionButton.classList.toggle("is-selected", option.value === selectElement.value);
+
+    optionButton.addEventListener("click", () => {
+      selectElement.value = option.value;
+      refreshSearchableSelect(selectElement);
+      closeSearchableDropdowns();
+      selectElement.dispatchEvent(new Event("change", { bubbles: true }));
+    });
+
+    list.appendChild(optionButton);
+  });
+}
+
+function refreshAllSearchableSelects() {
+  document.querySelectorAll("select").forEach((selectElement) => {
+    refreshSearchableSelect(selectElement);
+  });
+}
+
 
 function getInstrumentByName(name) {
   return DATA.instruments.find((item) => item.instrumentName === name);
@@ -310,6 +486,7 @@ function onMarginMarketChange() {
   populateModel();
   instrument.value = "";
   model.value = "";
+  refreshAllSearchableSelects();
   calculateMargin();
 }
 
@@ -317,6 +494,7 @@ function onManualToggleChange() {
   updateVisibility();
   populateModel();
   model.value = "";
+  refreshAllSearchableSelects();
   calculateMargin();
 }
 
@@ -453,6 +631,7 @@ function calculatePnl() {
 function onPnlMarketChange() {
   populateInstrumentSelectByMarket(pnlInstrument, pnlMarket.value);
   pnlInstrument.value = "";
+  refreshAllSearchableSelects();
   calculatePnl();
 }
 
@@ -563,6 +742,7 @@ function calculatePipPrice() {
 function onPipMarketChange() {
   populateInstrumentSelectByMarket(pipInstrument, pipMarket.value);
   pipInstrument.value = "";
+  refreshAllSearchableSelects();
   calculatePipPrice();
 }
 
@@ -756,6 +936,7 @@ function onMaxlotMarketChange() {
   populateMaxlotModel();
   maxlotInstrument.value = "";
   maxlotModel.value = "";
+  refreshAllSearchableSelects();
   calculateMaxlot();
 }
 
@@ -763,6 +944,7 @@ function onMaxlotManualToggleChange() {
   updateMaxlotVisibility();
   populateMaxlotModel();
   maxlotModel.value = "";
+  refreshAllSearchableSelects();
   calculateMaxlot();
 }
 
@@ -943,6 +1125,7 @@ function calculateRiskMoney() {
 function onRiskMoneyMarketChange() {
   populateInstrumentSelectByMarket(riskMoneyInstrument, riskMoneyMarket.value);
   riskMoneyInstrument.value = "";
+  refreshAllSearchableSelects();
   calculateRiskMoney();
 }
 
@@ -1132,6 +1315,7 @@ function calculateRiskPercent() {
 function onRiskPercentMarketChange() {
   populateInstrumentSelectByMarket(riskPercentInstrument, riskPercentMarket.value);
   riskPercentInstrument.value = "";
+  refreshAllSearchableSelects();
   calculateRiskPercent();
 }
 
@@ -1149,6 +1333,7 @@ setupCopyButton(copyRiskPercentMacroBtn, riskPercentMacroText, "Copy Macro");
    INIT
 ----------------------------------- */
 function initializeApp() {
+  initializeSearchableSelects();
   showSection("pnl");
 
   updateVisibility();
