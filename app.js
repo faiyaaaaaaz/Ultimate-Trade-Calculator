@@ -1149,7 +1149,7 @@ setupCopyButton(copyRiskPercentMacroBtn, riskPercentMacroText, "Copy Macro");
    INIT
 ----------------------------------- */
 function initializeApp() {
-  showSection("margin");
+  showSection("pnl");
 
   updateVisibility();
   populateInstrumentSelectByMarket(instrument, market.value);
