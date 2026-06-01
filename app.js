@@ -292,25 +292,49 @@ function setupCopyButton(buttonElement, textElement, defaultLabel) {
    TAB SWITCHING
 ----------------------------------- */
 const tabs = document.querySelectorAll(".tab");
+const calculatorCards = document.querySelectorAll(".calculator-card");
+const tabTriggers = document.querySelectorAll(".tab, .calculator-card");
 const marginSection = document.getElementById("marginSection");
 const pnlSection = document.getElementById("pnlSection");
 const maxlotSection = document.getElementById("maxlotSection");
 const riskSection = document.getElementById("riskSection");
 
-function showSection(tabName) {
-  marginSection.style.display = tabName === "margin" ? "block" : "none";
-  pnlSection.style.display = tabName === "pnl" ? "block" : "none";
-  maxlotSection.style.display = tabName === "maxlot" ? "block" : "none";
-  riskSection.style.display = tabName === "risk" ? "block" : "none";
+const sectionMap = {
+  margin: marginSection,
+  pnl: pnlSection,
+  maxlot: maxlotSection,
+  risk: riskSection
+};
+
+function showSection(tabName, scrollToSection = false) {
+  Object.entries(sectionMap).forEach(([name, section]) => {
+    if (!section) return;
+    section.style.display = name === tabName ? "block" : "none";
+  });
+
+  document.body.dataset.activeTool = tabName;
 
   tabs.forEach((tab) => {
     tab.classList.toggle("active", tab.dataset.tab === tabName);
+    tab.setAttribute("aria-selected", tab.dataset.tab === tabName ? "true" : "false");
   });
+
+  calculatorCards.forEach((card) => {
+    card.classList.toggle("active", card.dataset.tab === tabName);
+  });
+
+  closeSearchableDropdowns();
+
+  if (scrollToSection && sectionMap[tabName]) {
+    setTimeout(() => {
+      sectionMap[tabName].scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 0);
+  }
 }
 
-tabs.forEach((tab) => {
-  tab.addEventListener("click", () => {
-    showSection(tab.dataset.tab);
+tabTriggers.forEach((trigger) => {
+  trigger.addEventListener("click", () => {
+    showSection(trigger.dataset.tab, true);
   });
 });
 
