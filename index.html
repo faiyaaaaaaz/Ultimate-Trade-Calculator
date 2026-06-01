@@ -25,7 +25,51 @@
     </p>
   </header>
 
-  <div class="tabs">
+  <section class="calculator-guide" aria-label="Calculator chooser">
+    <div class="guide-copy">
+      <span class="guide-eyebrow">Choose your calculator</span>
+      <h2>Start from the task you need</h2>
+      <p>Use these quick cards to jump straight to PnL, margin, max lot, or risk tools without scanning the whole page.</p>
+    </div>
+
+    <div class="calculator-grid">
+      <button class="calculator-card active" data-tab="pnl" type="button">
+        <span class="calculator-number">01</span>
+        <span class="calculator-card-title">PnL & Pips</span>
+        <span class="calculator-card-text">Calculate profit/loss or add/remove pips from a price.</span>
+        <span class="calculator-card-cta">Open PnL tool</span>
+      </button>
+
+      <button class="calculator-card" data-tab="margin" type="button">
+        <span class="calculator-number">02</span>
+        <span class="calculator-card-title">Margin</span>
+        <span class="calculator-card-text">Find the required margin for a symbol, lot size, and leverage.</span>
+        <span class="calculator-card-cta">Open margin tool</span>
+      </button>
+
+      <button class="calculator-card" data-tab="maxlot" type="button">
+        <span class="calculator-number">03</span>
+        <span class="calculator-card-title">Max Lot</span>
+        <span class="calculator-card-text">Calculate the highest lot size possible from account size and leverage.</span>
+        <span class="calculator-card-cta">Open max lot tool</span>
+      </button>
+
+      <button class="calculator-card" data-tab="risk" type="button">
+        <span class="calculator-number">04</span>
+        <span class="calculator-card-title">Risk Tools</span>
+        <span class="calculator-card-text">Work out stop loss, take profit, risk %, reward %, and lot sizing.</span>
+        <span class="calculator-card-cta">Open risk tools</span>
+      </button>
+    </div>
+  </section>
+
+  <nav class="tool-nav-wrap" aria-label="Main calculator navigation">
+    <div class="tool-nav-header">
+      <span>Main calculator tabs</span>
+      <small>Always visible while you scroll</small>
+    </div>
+
+    <div class="tabs">
     <button class="tab active" data-tab="pnl" type="button">
       <span class="tab-icon" aria-hidden="true">
         <svg viewBox="0 0 24 24" fill="none">
@@ -33,7 +77,11 @@
           <path d="M16 8H20V12"></path>
         </svg>
       </span>
-      <span class="tab-label">Profit & Add Pip Calculator</span>
+      <span class="tab-step">01</span>
+      <span class="tab-text">
+        <span class="tab-label">PnL & Pips</span>
+        <span class="tab-desc">Profit/loss + add/remove pips</span>
+      </span>
     </button>
 
     <button class="tab" data-tab="margin" type="button">
@@ -44,7 +92,11 @@
           <path d="M4 12L12 16.5L20 12"></path>
         </svg>
       </span>
-      <span class="tab-label">Margin Calculator</span>
+      <span class="tab-step">02</span>
+      <span class="tab-text">
+        <span class="tab-label">Margin</span>
+        <span class="tab-desc">Required margin by model</span>
+      </span>
     </button>
 
     <button class="tab" data-tab="maxlot" type="button">
@@ -57,7 +109,11 @@
           <path d="M10 12H14"></path>
         </svg>
       </span>
-      <span class="tab-label">Max Lot Calculator</span>
+      <span class="tab-step">03</span>
+      <span class="tab-text">
+        <span class="tab-label">Max Lot</span>
+        <span class="tab-desc">Largest lot size estimate</span>
+      </span>
     </button>
 
     <button class="tab" data-tab="risk" type="button">
@@ -68,11 +124,16 @@
           <path d="M12 16H12.01"></path>
         </svg>
       </span>
-      <span class="tab-label">Risk Tools</span>
+      <span class="tab-step">04</span>
+      <span class="tab-text">
+        <span class="tab-label">Risk Tools</span>
+        <span class="tab-desc">SL, TP, risk and reward</span>
+      </span>
     </button>
   </div>
+  </nav>
 
-  <div id="marginSection" style="display:none;">
+  <div id="marginSection" class="tool-section tool-margin" style="display:none;">
     <div class="section-heading">
       <div>
         <div class="section-kicker">Core Calculator</div>
@@ -173,7 +234,7 @@ Please complete the Margin Calculator inputs to generate the explanation text.
     </div>
   </div>
 
-  <div id="pnlSection">
+  <div id="pnlSection" class="tool-section tool-pnl">
     <div class="section-heading">
       <div>
         <div class="section-kicker">Performance Tools</div>
@@ -335,7 +396,7 @@ Please complete the Add / Remove Pips Calculator inputs to generate the explanat
     </div>
   </div>
 
-  <div id="maxlotSection" style="display:none;">
+  <div id="maxlotSection" class="tool-section tool-maxlot" style="display:none;">
     <div class="section-heading">
       <div>
         <div class="section-kicker">Allocation Tools</div>
@@ -438,7 +499,7 @@ Please complete the Max Lot Calculator inputs to generate the explanation text.
     </div>
   </div>
 
-  <div id="riskSection" style="display:none;">
+  <div id="riskSection" class="tool-section tool-risk" style="display:none;">
     <div class="section-heading">
       <div>
         <div class="section-kicker">Risk Planning</div>
