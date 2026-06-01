@@ -18,6 +18,15 @@ function formatPlainNumber(value, decimals = 5) {
   });
 }
 
+function formatMacroPercent(value) {
+  return `${formatPlainNumber(value, 2)}%`;
+}
+
+function formatPosition(value) {
+  if (!value) return "";
+  return value.charAt(0).toUpperCase() + value.slice(1).toLowerCase();
+}
+
 function setOptions(selectElement, placeholderText, values) {
   selectElement.innerHTML = "";
 
@@ -92,6 +101,8 @@ function initializeSearchableSelects() {
     function openDropdown() {
       closeSearchableDropdowns(wrapper);
       wrapper.classList.add("is-open");
+      const parentCard = wrapper.closest(".card");
+      if (parentCard) parentCard.classList.add("dropdown-open");
       renderSearchableOptions(selectElement, "");
       searchInput.value = "";
       setTimeout(() => searchInput.focus(), 0);
@@ -99,6 +110,8 @@ function initializeSearchableSelects() {
 
     function closeDropdown() {
       wrapper.classList.remove("is-open");
+      const parentCard = wrapper.closest(".card");
+      if (parentCard) parentCard.classList.remove("dropdown-open");
       searchInput.value = "";
     }
 
@@ -144,6 +157,10 @@ function initializeSearchableSelects() {
 }
 
 function closeSearchableDropdowns(exceptWrapper) {
+  document.querySelectorAll(".card.dropdown-open").forEach((card) => {
+    card.classList.remove("dropdown-open");
+  });
+
   document.querySelectorAll(".searchable-select.is-open").forEach((wrapper) => {
     if (exceptWrapper && wrapper === exceptWrapper) return;
     wrapper.classList.remove("is-open");
@@ -405,33 +422,33 @@ function updateMarginMacro() {
   const lotValue = Number(lot.value);
   const contractSize = Number(selectedInstrument.contractSize || 0);
   const conversionFactor = selectedConversion ? Number(selectedConversion.finalConversionFactor || 1) : 1;
-
-  let leverageValue = 0;
-  let leverageLabel = "";
-
-  if (manualCheck.checked) {
-    leverageValue = Number(manualInput.value || 0);
-    leverageLabel = `manual leverage of ${manualInput.value}`;
-  } else {
-    leverageValue = Number(selectedModel?.defaultLeverage || 0);
-    leverageLabel = `model leverage of ${selectedModel?.defaultLeverage || "-"}`;
-  }
+  const leverageValue = manualCheck.checked
+    ? Number(manualInput.value || 0)
+    : Number(selectedModel?.defaultLeverage || 0);
 
   if (!priceValue || !lotValue || !contractSize || !conversionFactor || !leverageValue) {
     marginMacroText.textContent = "Please complete the Margin Calculator inputs to generate the explanation text.";
     return;
   }
 
-  const marginValue =
-    (priceValue * contractSize * lotValue / leverageValue) * conversionFactor;
+  const preConversionMargin = (priceValue * contractSize * lotValue) / leverageValue;
+  const convertedMargin = preConversionMargin * conversionFactor;
+  const formulaIntro =
+`The formula for calculating margin is as follows:
+Required Margin = (Price × Contract Size × Lot Size) ÷ Leverage`;
+
+  if (Math.abs(convertedMargin - preConversionMargin) < 0.0000001) {
+    marginMacroText.textContent =
+`${formulaIntro}
+
+Based on the pair ${instrument.value}, with a price of ${formatPlainNumber(priceValue, 5)}, lot size of ${formatPlainNumber(lotValue, 2)}, and a leverage of ${formatPlainNumber(leverageValue, 2)}, the required margin to open the trade is $${formatMoney(convertedMargin)}.`;
+    return;
+  }
 
   marginMacroText.textContent =
-`The estimated required margin for ${lotValue} lot(s) of ${instrument.value} at a current price of ${formatPlainNumber(priceValue, 5)} is ${formatMoney(marginValue)} USD.
+`${formulaIntro}
 
-This calculation uses a contract size of ${formatPlainNumber(contractSize, 2)}, a conversion factor of ${formatPlainNumber(conversionFactor, 5)}, and ${leverageLabel}.
-
-Formula used:
-Required Margin = (Price × Contract Size × Lot Size ÷ Leverage) × Conversion Factor`;
+Based on the pair ${instrument.value}, with a price of ${formatPlainNumber(priceValue, 5)}, lot size of ${formatPlainNumber(lotValue, 2)}, and a leverage of ${formatPlainNumber(leverageValue, 2)}, the calculated margin before USD conversion is ${formatMoney(preConversionMargin)}. After converting to USD, the required margin is approximately $${formatMoney(convertedMargin)}.`;
 }
 
 function calculateMargin() {
@@ -576,9 +593,7 @@ function updatePnlMacro() {
   const pnlUsd = directionMovement * contractSize * lotValue * conversionFactor;
 
   pnlMacroText.textContent =
-`The estimated PnL for a ${pnlPosition.value.toUpperCase()} position on ${pnlInstrument.value} from ${formatPlainNumber(openValue, 5)} to ${formatPlainNumber(closeValue, 5)} with ${lotValue} lot(s) is ${formatMoney(pnlUsd)} USD.
-
-This move represents ${formatPlainNumber(pipMovement, 2)} pips, using a contract size of ${formatPlainNumber(contractSize, 2)}, a pip size of ${formatPlainNumber(pipSize, 5)}, and a conversion factor of ${formatPlainNumber(conversionFactor, 5)}.`;
+`The estimated PnL for a ${pnlPosition.value.toUpperCase()} position on ${pnlInstrument.value} from price ${formatPlainNumber(openValue, 5)} to ${formatPlainNumber(closeValue, 5)} with ${formatPlainNumber(lotValue, 2)} lot(s) is ${formatMoney(pnlUsd)} USD. This position represents ${formatPlainNumber(pipMovement, 2)} pips.`;
 }
 
 function calculatePnl() {
@@ -701,9 +716,7 @@ function updatePipMacro() {
   if (pipAction.value === "remove") newPrice = openValue - (amountValue * pipSize);
 
   pipMacroText.textContent =
-`For ${pipInstrument.value}, starting from an opening price of ${formatPlainNumber(openValue, 5)}, ${pipAction.value === "add" ? "adding" : "removing"} ${formatPlainNumber(amountValue, 2)} pips / points gives a new estimated price of ${formatPlainNumber(newPrice, 5)}.
-
-This calculation uses a pip size of ${formatPlainNumber(pipSize, 5)}.`;
+`For ${pipInstrument.value}, starting from an opening price of ${formatPlainNumber(openValue, 5)}, ${pipAction.value === "add" ? "adding" : "removing"} ${formatPlainNumber(amountValue, 2)} pips / points gives a new estimated price of ${formatPlainNumber(newPrice, 5)}.`;
 }
 
 function calculatePipPrice() {
@@ -854,17 +867,9 @@ function updateMaxlotMacro() {
   const priceValue = Number(maxlotPrice.value);
   const contractSize = Number(selectedInstrument.contractSize || 0);
   const conversionFactor = selectedConversion ? Number(selectedConversion.finalConversionFactor || 1) : 1;
-
-  let leverageValue = 0;
-  let leverageLabel = "";
-
-  if (maxlotUseManualLeverage.checked) {
-    leverageValue = Number(maxlotManualLeverage.value || 0);
-    leverageLabel = `manual leverage of ${maxlotManualLeverage.value}`;
-  } else {
-    leverageValue = Number(selectedModel?.defaultLeverage || 0);
-    leverageLabel = `model leverage of ${selectedModel?.defaultLeverage || "-"}`;
-  }
+  const leverageValue = maxlotUseManualLeverage.checked
+    ? Number(maxlotManualLeverage.value || 0)
+    : Number(selectedModel?.defaultLeverage || 0);
 
   if (!accountSizeValue || !priceValue || !contractSize || !conversionFactor || !leverageValue) {
     maxlotMacroText.textContent = "Please complete the Max Lot Calculator inputs to generate the explanation text.";
@@ -875,10 +880,23 @@ function updateMaxlotMacro() {
     (accountSizeValue * leverageValue) /
     (priceValue * contractSize * conversionFactor);
 
-  maxlotMacroText.textContent =
-`With an account size of ${formatMoney(accountSizeValue)} USD, a current price of ${formatPlainNumber(priceValue, 5)}, and ${leverageLabel}, the estimated maximum lot size for ${maxlotInstrument.value} is ${formatPlainNumber(maxLot, 2)} lots.
+  const formulaIntro =
+`How the maximum lot size is calculated:
+Lot Size = (Required Margin × Leverage) ÷ (Price × Contract Size)
+(For the maximum lot size calculation, we assume that Required Margin ≈ Available Balance.)`;
 
-This calculation uses a contract size of ${formatPlainNumber(contractSize, 2)} and a conversion factor of ${formatPlainNumber(conversionFactor, 5)}.`;
+  if (maxLot < 0.01) {
+    maxlotMacroText.textContent =
+`${formulaIntro}
+
+The computed maximum lot size is below 0.01 lots, so it’s effectively not tradable. With your current balance ($${formatMoney(accountSizeValue)}), leverage (${formatPlainNumber(leverageValue, 3)}), and price ${formatPlainNumber(priceValue, 5)}, the system rounds this to Not Enough Margin to open the trade. Consider taking a smaller lot size.`;
+    return;
+  }
+
+  maxlotMacroText.textContent =
+`${formulaIntro}
+
+With a balance of $${formatMoney(accountSizeValue)}, leverage (${formatPlainNumber(leverageValue, 3)}), and price ${formatPlainNumber(priceValue, 5)}, the maximum lot size you can open on ${maxlotInstrument.value} is ${formatPlainNumber(maxLot, 2)}.`;
 }
 
 function calculateMaxlot() {
@@ -973,7 +991,7 @@ const copyRiskMoneyMacroBtn = document.getElementById("copyRiskMoneyMacroBtn");
 
 function updateRiskMoneyHelperText() {
   if (!riskMoneyAccountBalance.value) {
-    riskMoneyHelperBox.textContent = "Select an account balance to begin.";
+    riskMoneyHelperBox.textContent = "Enter the account balance to begin.";
     return;
   }
   if (!riskMoneyMarket.value) {
@@ -1026,11 +1044,10 @@ function updateRiskMoneyMacro() {
   const lotSize = Number(riskMoneyLotSize.value);
   const riskAmount = Number(riskMoneyRisk.value);
   const rewardAmount = Number(riskMoneyReward.value);
-  const pipSize = Number(selectedInstrument.pipSize || 0);
   const contractSize = Number(selectedInstrument.contractSize || 0);
   const conversionFactor = selectedConversion ? Number(selectedConversion.finalConversionFactor || 1) : 1;
 
-  if (!entryPrice || !lotSize || !riskAmount || !rewardAmount || !pipSize || !contractSize || !conversionFactor) {
+  if (!entryPrice || !lotSize || !riskAmount || !rewardAmount || !contractSize || !conversionFactor) {
     riskMoneyMacroText.textContent = "Please complete the Risk by Money & Lot inputs to generate the explanation text.";
     return;
   }
@@ -1050,9 +1067,7 @@ function updateRiskMoneyMacro() {
   }
 
   riskMoneyMacroText.textContent =
-`For ${riskMoneyInstrument.value}, using an entry price of ${formatPlainNumber(entryPrice, 5)}, a ${riskMoneyPosition.value.toUpperCase()} position, and ${formatPlainNumber(lotSize, 2)} lot(s), the estimated Stop Loss is ${formatPlainNumber(stopLoss, 5)} and the estimated Take Profit is ${formatPlainNumber(takeProfit, 5)}.
-
-This uses a risk amount of ${formatMoney(riskAmount)} USD, a reward amount of ${formatMoney(rewardAmount)} USD, a contract size of ${formatPlainNumber(contractSize, 2)}, a pip size of ${formatPlainNumber(pipSize, 5)}, and a conversion factor of ${formatPlainNumber(conversionFactor, 5)}.`;
+`If you wish to place a trade on ${riskMoneyInstrument.value}, and enter the trade at ${formatPlainNumber(entryPrice, 5)}, with a ${formatPosition(riskMoneyPosition.value)} position, with a lot size of ${formatPlainNumber(lotSize, 2)}, intending to risk ${formatMoney(riskAmount)}, and a reward of ${formatMoney(rewardAmount)}, then you have to place your Stop Loss (SL) at ${formatPlainNumber(stopLoss, 5)} and Take Profit (TP) at ${formatPlainNumber(takeProfit, 5)}.`;
 }
 
 function calculateRiskMoney() {
@@ -1155,7 +1170,7 @@ const copyRiskPercentMacroBtn = document.getElementById("copyRiskPercentMacroBtn
 
 function updateRiskPercentHelperText() {
   if (!riskPercentAccountBalance.value) {
-    riskPercentHelperBox.textContent = "Select an account balance to begin.";
+    riskPercentHelperBox.textContent = "Enter the account balance to begin.";
     return;
   }
   if (!riskPercentMarket.value) {
@@ -1234,11 +1249,7 @@ function updateRiskPercentMacro() {
   }
 
   riskPercentMacroText.textContent =
-`For ${riskPercentInstrument.value}, using an account balance of ${formatMoney(accountBalance)} USD, a ${riskPercentValue}% risk, a ${rewardPercentValue}% reward, and an SL distance of ${formatPlainNumber(slPipsValue, 2)} pips / points, the estimated lot size is ${formatPlainNumber(lotSize, 2)} lots.
-
-For a ${riskPercentPosition.value.toUpperCase()} position from an entry price of ${formatPlainNumber(entryPrice, 5)}, the estimated Stop Loss is ${formatPlainNumber(stopLoss, 5)} and the estimated Take Profit is ${formatPlainNumber(takeProfit, 5)}.
-
-This uses a risk amount of ${formatMoney(riskDollar)} USD, a reward amount of ${formatMoney(rewardDollar)} USD, a contract size of ${formatPlainNumber(contractSize, 2)}, a pip size of ${formatPlainNumber(pipSize, 5)}, and a conversion factor of ${formatPlainNumber(conversionFactor, 5)}.`;
+`If you wish to place a trade on ${riskPercentInstrument.value}, and enter the trade at ${formatPlainNumber(entryPrice, 5)}, with a ${formatPosition(riskPercentPosition.value)} position, on your account size of ${formatMoney(accountBalance)}, willing to risk ${formatMacroPercent(riskPercentValue)}, and aiming for a reward of ${formatMacroPercent(rewardPercentValue)}, and decide to set your Stop Loss (SL) at a distance of ${formatPlainNumber(slPipsValue, 2)} pips, then the appropriate lot size for that position should be ${formatPlainNumber(lotSize, 2)} lots. Additionally, you have to set your Stop Loss (SL) at ${formatPlainNumber(stopLoss, 5)} and Take Profit (TP) at ${formatPlainNumber(takeProfit, 5)}.`;
 }
 
 function calculateRiskPercent() {
@@ -1381,7 +1392,7 @@ function initializeApp() {
   maxlotUseManualLeverage.addEventListener("change", onMaxlotManualToggleChange);
   maxlotManualLeverage.addEventListener("input", calculateMaxlot);
 
-  riskMoneyAccountBalance.addEventListener("change", calculateRiskMoney);
+  riskMoneyAccountBalance.addEventListener("input", calculateRiskMoney);
   riskMoneyMarket.addEventListener("change", onRiskMoneyMarketChange);
   riskMoneyInstrument.addEventListener("change", calculateRiskMoney);
   riskMoneyPosition.addEventListener("change", calculateRiskMoney);
@@ -1390,7 +1401,7 @@ function initializeApp() {
   riskMoneyRisk.addEventListener("input", calculateRiskMoney);
   riskMoneyReward.addEventListener("input", calculateRiskMoney);
 
-  riskPercentAccountBalance.addEventListener("change", calculateRiskPercent);
+  riskPercentAccountBalance.addEventListener("input", calculateRiskPercent);
   riskPercentMarket.addEventListener("change", onRiskPercentMarketChange);
   riskPercentInstrument.addEventListener("change", calculateRiskPercent);
   riskPercentPosition.addEventListener("change", calculateRiskPercent);
