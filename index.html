@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,129 +9,106 @@
   <link rel="apple-touch-icon" href="./icon.png?v=3">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=DM+Serif+Display:ital@0;1&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-
 <div class="app-container">
+
+  <!-- ==================== TOPBAR ==================== -->
+  <div class="topbar">
+    <div class="topbar-brand">
+      <span class="topbar-brand-dot"></span>
+      FundedNext Calculator
+    </div>
+    <button class="theme-toggle" id="themeToggleBtn" type="button" aria-label="Toggle dark mode">
+      <span class="theme-toggle-icon">
+        <!-- Moon (shown in light mode) -->
+        <svg class="icon-moon" viewBox="0 0 24 24">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 1 0 9.79 9.79z"/>
+        </svg>
+        <!-- Sun (shown in dark mode) -->
+        <svg class="icon-sun" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      </span>
+      <span class="theme-toggle-label">Dark mode</span>
+    </button>
+  </div>
 
   <!-- ==================== HERO ==================== -->
   <header class="hero-block">
-    <div class="hero-badge">Ultimate Trade Calculator</div>
+    <span class="hero-eyebrow">Ultimate Trade Calculator</span>
     <h1 class="hero-title">FundedNext <em>Web</em> Calculator</h1>
-    <p class="hero-subtitle">
-      Precision tools for margin, PnL, pip adjustments, max lot sizing, and structured risk planning — all in one place.
-    </p>
+    <p class="hero-subtitle">Margin, PnL, pip adjustments, max lot sizing, and risk planning — calculated precisely, instantly.</p>
   </header>
 
   <!-- ==================== CHOOSER ==================== -->
   <section class="calculator-guide" aria-label="Calculator chooser">
-    <div class="guide-copy">
-      <span class="guide-eyebrow">Choose your calculator</span>
-      <h2>Start from what you need</h2>
-      <p>Jump straight to the right tool — PnL, margin, max lot size, or risk management — without scanning the whole page.</p>
-    </div>
-
+    <p class="guide-label">Choose a calculator</p>
     <div class="calculator-grid">
       <button class="calculator-card active" data-tab="pnl" type="button">
-        <span class="calculator-number">01</span>
+        <span class="calculator-card-label">01</span>
         <span class="calculator-card-title">PnL & Pips</span>
         <span class="calculator-card-text">Calculate profit/loss or adjust a price by pip amount.</span>
-        <span class="calculator-card-cta">Open PnL tool</span>
+        <span class="calculator-card-cta">Open →</span>
       </button>
-
       <button class="calculator-card" data-tab="margin" type="button">
-        <span class="calculator-number">02</span>
+        <span class="calculator-card-label">02</span>
         <span class="calculator-card-title">Margin</span>
         <span class="calculator-card-text">Find required margin for any symbol, lot size, and leverage.</span>
-        <span class="calculator-card-cta">Open margin tool</span>
+        <span class="calculator-card-cta">Open →</span>
       </button>
-
       <button class="calculator-card" data-tab="maxlot" type="button">
-        <span class="calculator-number">03</span>
+        <span class="calculator-card-label">03</span>
         <span class="calculator-card-title">Max Lot</span>
-        <span class="calculator-card-text">Calculate the maximum lot size from account balance and leverage.</span>
-        <span class="calculator-card-cta">Open max lot tool</span>
+        <span class="calculator-card-text">Calculate the maximum lot size from your account balance.</span>
+        <span class="calculator-card-cta">Open →</span>
       </button>
-
       <button class="calculator-card" data-tab="risk" type="button">
-        <span class="calculator-number">04</span>
+        <span class="calculator-card-label">04</span>
         <span class="calculator-card-title">Risk Tools</span>
-        <span class="calculator-card-text">Calculate stop loss, take profit, risk %, reward %, and lot sizing.</span>
-        <span class="calculator-card-cta">Open risk tools</span>
+        <span class="calculator-card-text">Calculate stop loss, take profit, risk %, and lot sizing.</span>
+        <span class="calculator-card-cta">Open →</span>
       </button>
     </div>
   </section>
 
   <!-- ==================== STICKY TAB NAV ==================== -->
-  <nav class="tool-nav-wrap" aria-label="Main calculator navigation">
-    <div class="tool-nav-header">
-      <span>Calculator tabs</span>
-      <small>Sticky — always accessible</small>
-    </div>
-
+  <nav class="tool-nav-wrap" id="toolNav" aria-label="Main calculator navigation">
     <div class="tabs" role="tablist">
       <button class="tab active" data-tab="pnl" type="button" role="tab" aria-selected="true">
         <span class="tab-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M4 18L10 12L14 15L20 8"></path>
-            <path d="M16 8H20V12"></path>
-          </svg>
+          <svg viewBox="0 0 24 24"><path d="M4 18L10 12L14 15L20 8"/><path d="M16 8H20V12"/></svg>
         </span>
-        <span class="tab-step">01</span>
-        <span class="tab-text">
-          <span class="tab-label">PnL & Pips</span>
-          <span class="tab-desc">Profit/loss + pip adjust</span>
-        </span>
+        <span class="tab-text"><span class="tab-label">PnL & Pips</span></span>
       </button>
-
       <button class="tab" data-tab="margin" type="button" role="tab" aria-selected="false">
         <span class="tab-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M4 8.5L12 4L20 8.5L12 13L4 8.5Z"></path>
-            <path d="M4 15.5L12 20L20 15.5"></path>
-            <path d="M4 12L12 16.5L20 12"></path>
-          </svg>
+          <svg viewBox="0 0 24 24"><path d="M4 8.5L12 4L20 8.5L12 13L4 8.5Z"/><path d="M4 15.5L12 20L20 15.5"/><path d="M4 12L12 16.5L20 12"/></svg>
         </span>
-        <span class="tab-step">02</span>
-        <span class="tab-text">
-          <span class="tab-label">Margin</span>
-          <span class="tab-desc">Required margin by model</span>
-        </span>
+        <span class="tab-text"><span class="tab-label">Margin</span></span>
       </button>
-
       <button class="tab" data-tab="maxlot" type="button" role="tab" aria-selected="false">
         <span class="tab-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M4 7H20"></path>
-            <path d="M4 17H20"></path>
-            <path d="M7 7V17"></path>
-            <path d="M17 7V17"></path>
-            <path d="M10 12H14"></path>
-          </svg>
+          <svg viewBox="0 0 24 24"><path d="M4 7H20"/><path d="M4 17H20"/><path d="M7 7V17"/><path d="M17 7V17"/><path d="M10 12H14"/></svg>
         </span>
-        <span class="tab-step">03</span>
-        <span class="tab-text">
-          <span class="tab-label">Max Lot</span>
-          <span class="tab-desc">Largest lot size estimate</span>
-        </span>
+        <span class="tab-text"><span class="tab-label">Max Lot</span></span>
       </button>
-
       <button class="tab" data-tab="risk" type="button" role="tab" aria-selected="false">
         <span class="tab-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M12 3L19 7V12C19 16.5 16.2 19.7 12 21C7.8 19.7 5 16.5 5 12V7L12 3Z"></path>
-            <path d="M12 9V12.5"></path>
-            <path d="M12 16H12.01"></path>
-          </svg>
+          <svg viewBox="0 0 24 24"><path d="M12 3L19 7V12C19 16.5 16.2 19.7 12 21C7.8 19.7 5 16.5 5 12V7L12 3Z"/><path d="M12 9V12.5"/><path d="M12 16H12.01"/></svg>
         </span>
-        <span class="tab-step">04</span>
-        <span class="tab-text">
-          <span class="tab-label">Risk Tools</span>
-          <span class="tab-desc">SL, TP, risk and reward</span>
-        </span>
+        <span class="tab-text"><span class="tab-label">Risk Tools</span></span>
       </button>
     </div>
   </nav>
@@ -140,24 +117,16 @@
   <div id="marginSection" class="tool-section tool-margin" style="display:none;">
     <div class="section-heading">
       <div>
-        <div class="section-kicker">Core Calculator</div>
+        <span class="section-kicker">Core Calculator</span>
         <h2 class="section-title">Margin Calculator</h2>
       </div>
       <div class="section-chip">
-        <span class="chip-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M4 8.5L12 4L20 8.5L12 13L4 8.5Z"></path>
-            <path d="M4 15.5L12 20L20 15.5"></path>
-            <path d="M4 12L12 16.5L20 12"></path>
-          </svg>
-        </span>
-        <span>Live margin estimate</span>
+        <span class="chip-icon"><svg viewBox="0 0 24 24"><path d="M4 8.5L12 4L20 8.5L12 13L4 8.5Z"/><path d="M4 15.5L12 20L20 15.5"/><path d="M4 12L12 16.5L20 12"/></svg></span>
+        Live margin estimate
       </div>
     </div>
-
     <div class="card">
       <div class="form-section">
-
         <div class="form-group">
           <label for="market">Market</label>
           <select id="market">
@@ -168,63 +137,43 @@
             <option value="Crypto">Crypto</option>
           </select>
         </div>
-
         <div class="form-group">
           <label for="instrument">Instrument</label>
-          <select id="instrument">
-            <option value="">Select instrument</option>
-          </select>
+          <select id="instrument"><option value="">Select instrument</option></select>
         </div>
-
         <div class="form-group" id="modelGroup">
           <label for="model">Model</label>
-          <select id="model">
-            <option value="">Select model</option>
-          </select>
+          <select id="model"><option value="">Select model</option></select>
         </div>
-
         <div class="form-group">
           <label for="price">Current Price</label>
           <input id="price" type="number" placeholder="e.g. 1.08450">
         </div>
-
         <div class="form-group">
           <label for="lotSize">Lot Size</label>
           <input id="lotSize" type="number" placeholder="e.g. 0.10">
         </div>
-
         <div class="toggle-group">
-          <label class="switch">
-            <input type="checkbox" id="useManualLeverage">
-            <span class="slider"></span>
-          </label>
+          <label class="switch"><input type="checkbox" id="useManualLeverage"><span class="slider"></span></label>
           <span>Use manual leverage</span>
         </div>
-
         <div id="manualLeverageWrap" class="form-group">
           <label for="manualLeverage">Manual Leverage</label>
           <input id="manualLeverage" type="number" placeholder="e.g. 100">
         </div>
-
       </div>
-
       <div class="result-section result-margin">
         <p>Required Margin</p>
         <h2 id="result">0.00</h2>
         <div id="resultCurrency" class="result-unit">USD</div>
       </div>
     </div>
-
     <div class="info">
-      <p>Contract Size: <span id="contractSize">—</span></p>
-      <p>Conversion Factor: <span id="conversionFactor">—</span></p>
-      <p>Leverage Used: <span id="leverageUsed">—</span></p>
+      <p>Contract Size <span id="contractSize">—</span></p>
+      <p>Conversion Factor <span id="conversionFactor">—</span></p>
+      <p>Leverage Used <span id="leverageUsed">—</span></p>
     </div>
-
-    <div id="helperBox" class="helper-box">
-      Select a market to begin.
-    </div>
-
+    <div id="helperBox" class="helper-box">Select a market to begin.</div>
     <div class="macro-box">
       <div class="macro-header">
         <strong class="macro-title">Margin Macro</strong>
@@ -238,24 +187,17 @@
   <div id="pnlSection" class="tool-section tool-pnl">
     <div class="section-heading">
       <div>
-        <div class="section-kicker">Performance Tools</div>
+        <span class="section-kicker">Performance Tools</span>
         <h2 class="section-title">Profit &amp; Add Pip Calculator</h2>
       </div>
       <div class="section-chip">
-        <span class="chip-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M4 18L10 12L14 15L20 8"></path>
-            <path d="M16 8H20V12"></path>
-          </svg>
-        </span>
-        <span>PnL and price movement tools</span>
+        <span class="chip-icon"><svg viewBox="0 0 24 24"><path d="M4 18L10 12L14 15L20 8"/><path d="M16 8H20V12"/></svg></span>
+        PnL and price movement tools
       </div>
     </div>
 
-    <!-- PnL sub-card -->
     <div class="card card-spaced">
       <div class="form-section">
-
         <div class="form-group">
           <label for="pnlMarket">Market</label>
           <select id="pnlMarket">
@@ -266,14 +208,10 @@
             <option value="Crypto">Crypto</option>
           </select>
         </div>
-
         <div class="form-group">
           <label for="pnlInstrument">Instrument</label>
-          <select id="pnlInstrument">
-            <option value="">Select instrument</option>
-          </select>
+          <select id="pnlInstrument"><option value="">Select instrument</option></select>
         </div>
-
         <div class="form-group">
           <label for="pnlPosition">Position</label>
           <select id="pnlPosition">
@@ -282,24 +220,19 @@
             <option value="sell">Sell</option>
           </select>
         </div>
-
         <div class="form-group">
           <label for="pnlOpenPrice">Opening Price</label>
           <input id="pnlOpenPrice" type="number" placeholder="e.g. 1.08450">
         </div>
-
         <div class="form-group">
           <label for="pnlClosePrice">Closing Price</label>
           <input id="pnlClosePrice" type="number" placeholder="e.g. 1.08750">
         </div>
-
         <div class="form-group">
           <label for="pnlLotSize">Lot Size</label>
           <input id="pnlLotSize" type="number" placeholder="e.g. 1.00">
         </div>
-
       </div>
-
       <div class="result-section result-pnl">
         <p>PnL Result</p>
         <h2 id="pnlResult">0.00</h2>
@@ -308,15 +241,11 @@
     </div>
 
     <div class="info info-spaced">
-      <p>Pip Movement: <span id="pnlPips">—</span></p>
-      <p>Price Movement: <span id="pnlMovement">—</span></p>
-      <p>Conversion Factor: <span id="pnlConversionFactor">—</span></p>
+      <p>Pip Movement <span id="pnlPips">—</span></p>
+      <p>Price Movement <span id="pnlMovement">—</span></p>
+      <p>Conversion Factor <span id="pnlConversionFactor">—</span></p>
     </div>
-
-    <div id="pnlHelperBox" class="helper-box helper-spaced">
-      Select a market to begin.
-    </div>
-
+    <div id="pnlHelperBox" class="helper-box helper-spaced">Select a market to begin.</div>
     <div class="macro-box macro-spaced">
       <div class="macro-header">
         <strong class="macro-title">PnL Macro</strong>
@@ -325,10 +254,8 @@
       <div id="pnlMacroText" class="macro-text">Please complete the PnL Calculator inputs to generate the explanation text.</div>
     </div>
 
-    <!-- Pip Adjust sub-card -->
     <div class="card">
       <div class="form-section">
-
         <div class="form-group">
           <label for="pipMarket">Market</label>
           <select id="pipMarket">
@@ -339,19 +266,14 @@
             <option value="Crypto">Crypto</option>
           </select>
         </div>
-
         <div class="form-group">
           <label for="pipInstrument">Instrument</label>
-          <select id="pipInstrument">
-            <option value="">Select instrument</option>
-          </select>
+          <select id="pipInstrument"><option value="">Select instrument</option></select>
         </div>
-
         <div class="form-group">
           <label for="pipOpenPrice">Opening Price</label>
           <input id="pipOpenPrice" type="number" placeholder="e.g. 1.08450">
         </div>
-
         <div class="form-group">
           <label for="pipAction">Action</label>
           <select id="pipAction">
@@ -360,28 +282,20 @@
             <option value="remove">Remove pips</option>
           </select>
         </div>
-
         <div class="form-group">
           <label for="pipAmount">Pip / Point Amount</label>
           <input id="pipAmount" type="number" placeholder="e.g. 50">
         </div>
-
       </div>
-
       <div class="result-section result-pips">
         <p>New Price</p>
         <h2 id="pipResult">0.00</h2>
       </div>
     </div>
-
     <div class="info">
-      <p>Pip Size Used: <span id="pipSizeUsed">—</span></p>
+      <p>Pip Size Used <span id="pipSizeUsed">—</span></p>
     </div>
-
-    <div id="pipHelperBox" class="helper-box">
-      Select a market to begin.
-    </div>
-
+    <div id="pipHelperBox" class="helper-box">Select a market to begin.</div>
     <div class="macro-box">
       <div class="macro-header">
         <strong class="macro-title">Add / Remove Pips Macro</strong>
@@ -395,26 +309,16 @@
   <div id="maxlotSection" class="tool-section tool-maxlot" style="display:none;">
     <div class="section-heading">
       <div>
-        <div class="section-kicker">Allocation Tools</div>
+        <span class="section-kicker">Allocation Tools</span>
         <h2 class="section-title">Max Lot Calculator</h2>
       </div>
       <div class="section-chip">
-        <span class="chip-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M4 7H20"></path>
-            <path d="M4 17H20"></path>
-            <path d="M7 7V17"></path>
-            <path d="M17 7V17"></path>
-            <path d="M10 12H14"></path>
-          </svg>
-        </span>
-        <span>Sizing based on account leverage</span>
+        <span class="chip-icon"><svg viewBox="0 0 24 24"><path d="M4 7H20"/><path d="M4 17H20"/><path d="M7 7V17"/><path d="M17 7V17"/><path d="M10 12H14"/></svg></span>
+        Sizing by account leverage
       </div>
     </div>
-
     <div class="card">
       <div class="form-section">
-
         <div class="form-group">
           <label for="maxlotMarket">Market</label>
           <select id="maxlotMarket">
@@ -425,63 +329,43 @@
             <option value="Crypto">Crypto</option>
           </select>
         </div>
-
         <div class="form-group">
           <label for="maxlotInstrument">Instrument</label>
-          <select id="maxlotInstrument">
-            <option value="">Select instrument</option>
-          </select>
+          <select id="maxlotInstrument"><option value="">Select instrument</option></select>
         </div>
-
         <div class="form-group" id="maxlotModelGroup">
           <label for="maxlotModel">Model</label>
-          <select id="maxlotModel">
-            <option value="">Select model</option>
-          </select>
+          <select id="maxlotModel"><option value="">Select model</option></select>
         </div>
-
         <div class="form-group">
           <label for="maxlotAccountSize">Account Size</label>
           <input id="maxlotAccountSize" type="number" placeholder="e.g. 10000">
         </div>
-
         <div class="form-group">
           <label for="maxlotPrice">Current Price</label>
           <input id="maxlotPrice" type="number" placeholder="e.g. 1.08450">
         </div>
-
         <div class="toggle-group">
-          <label class="switch">
-            <input type="checkbox" id="maxlotUseManualLeverage">
-            <span class="slider"></span>
-          </label>
+          <label class="switch"><input type="checkbox" id="maxlotUseManualLeverage"><span class="slider"></span></label>
           <span>Use manual leverage</span>
         </div>
-
         <div id="maxlotManualLeverageWrap" class="form-group">
           <label for="maxlotManualLeverage">Manual Leverage</label>
           <input id="maxlotManualLeverage" type="number" placeholder="e.g. 100">
         </div>
-
       </div>
-
       <div class="result-section result-maxlot">
         <p>Max Lot Size</p>
         <h2 id="maxlotResult">0.00</h2>
         <div class="result-unit">LOTS</div>
       </div>
     </div>
-
     <div class="info">
-      <p>Contract Size: <span id="maxlotContractSize">—</span></p>
-      <p>Conversion Factor: <span id="maxlotConversionFactor">—</span></p>
-      <p>Leverage Used: <span id="maxlotLeverageUsed">—</span></p>
+      <p>Contract Size <span id="maxlotContractSize">—</span></p>
+      <p>Conversion Factor <span id="maxlotConversionFactor">—</span></p>
+      <p>Leverage Used <span id="maxlotLeverageUsed">—</span></p>
     </div>
-
-    <div id="maxlotHelperBox" class="helper-box">
-      Select a market to begin.
-    </div>
-
+    <div id="maxlotHelperBox" class="helper-box">Select a market to begin.</div>
     <div class="macro-box">
       <div class="macro-header">
         <strong class="macro-title">Max Lot Macro</strong>
@@ -495,30 +379,21 @@
   <div id="riskSection" class="tool-section tool-risk" style="display:none;">
     <div class="section-heading">
       <div>
-        <div class="section-kicker">Risk Planning</div>
-        <h2 class="section-title">Risk Setting by Money &amp; Lot Size</h2>
+        <span class="section-kicker">Risk Planning</span>
+        <h2 class="section-title">Risk by Money &amp; Lot Size</h2>
       </div>
       <div class="section-chip">
-        <span class="chip-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none">
-            <path d="M12 3L19 7V12C19 16.5 16.2 19.7 12 21C7.8 19.7 5 16.5 5 12V7L12 3Z"></path>
-            <path d="M12 9V12.5"></path>
-            <path d="M12 16H12.01"></path>
-          </svg>
-        </span>
-        <span>Two structured risk methods</span>
+        <span class="chip-icon"><svg viewBox="0 0 24 24"><path d="M12 3L19 7V12C19 16.5 16.2 19.7 12 21C7.8 19.7 5 16.5 5 12V7L12 3Z"/><path d="M12 9V12.5"/><path d="M12 16H12.01"/></svg></span>
+        Two structured risk methods
       </div>
     </div>
 
-    <!-- Risk by Money -->
     <div class="card card-spaced">
       <div class="form-section">
-
         <div class="form-group">
           <label for="riskMoneyAccountBalance">Account Balance</label>
           <input id="riskMoneyAccountBalance" type="number" placeholder="e.g. 10000">
         </div>
-
         <div class="form-group">
           <label for="riskMoneyMarket">Market</label>
           <select id="riskMoneyMarket">
@@ -529,14 +404,10 @@
             <option value="Crypto">Crypto</option>
           </select>
         </div>
-
         <div class="form-group">
           <label for="riskMoneyInstrument">Instrument</label>
-          <select id="riskMoneyInstrument">
-            <option value="">Select instrument</option>
-          </select>
+          <select id="riskMoneyInstrument"><option value="">Select instrument</option></select>
         </div>
-
         <div class="form-group">
           <label for="riskMoneyPosition">Position</label>
           <select id="riskMoneyPosition">
@@ -545,29 +416,23 @@
             <option value="sell">Sell</option>
           </select>
         </div>
-
         <div class="form-group">
           <label for="riskMoneyEntryPrice">Entry Price</label>
           <input id="riskMoneyEntryPrice" type="number" placeholder="e.g. 1.08450">
         </div>
-
         <div class="form-group">
           <label for="riskMoneyLotSize">Lot Size</label>
           <input id="riskMoneyLotSize" type="number" placeholder="e.g. 1.00">
         </div>
-
         <div class="form-group">
           <label for="riskMoneyRisk">Risk ($)</label>
           <input id="riskMoneyRisk" type="number" placeholder="e.g. 200">
         </div>
-
         <div class="form-group">
           <label for="riskMoneyReward">Reward ($)</label>
           <input id="riskMoneyReward" type="number" placeholder="e.g. 400">
         </div>
-
       </div>
-
       <div class="result-section result-risk-money">
         <p>Risk by Money &amp; Lot</p>
         <h2 id="riskMoneyStopLoss">0.00</h2>
@@ -578,17 +443,13 @@
     </div>
 
     <div class="info info-spaced">
-      <p>Pip Size: <span id="riskMoneyPipSize">—</span></p>
-      <p>Conversion Factor: <span id="riskMoneyConversionFactor">—</span></p>
-      <p>Contract Size: <span id="riskMoneyContractSize">—</span></p>
-      <p>Stop Loss (Pips): <span id="riskMoneySlPips">—</span></p>
-      <p>Take Profit (Pips): <span id="riskMoneyTpPips">—</span></p>
+      <p>Pip Size <span id="riskMoneyPipSize">—</span></p>
+      <p>Conversion Factor <span id="riskMoneyConversionFactor">—</span></p>
+      <p>Contract Size <span id="riskMoneyContractSize">—</span></p>
+      <p>Stop Loss (Pips) <span id="riskMoneySlPips">—</span></p>
+      <p>Take Profit (Pips) <span id="riskMoneyTpPips">—</span></p>
     </div>
-
-    <div id="riskMoneyHelperBox" class="helper-box helper-spaced">
-      Enter the account balance to begin.
-    </div>
-
+    <div id="riskMoneyHelperBox" class="helper-box helper-spaced">Enter the account balance to begin.</div>
     <div class="macro-box macro-spaced">
       <div class="macro-header">
         <strong class="macro-title">Risk by Money &amp; Lot Macro</strong>
@@ -597,22 +458,19 @@
       <div id="riskMoneyMacroText" class="macro-text">Please complete the Risk by Money &amp; Lot inputs to generate the explanation text.</div>
     </div>
 
-    <!-- Risk by Percentage -->
     <div class="subsection-heading">
       <div>
-        <div class="section-kicker">Risk Planning</div>
-        <h3 class="subsection-title">Risk Setting by Percentage &amp; Stop Loss</h3>
+        <span class="section-kicker">Risk Planning</span>
+        <h3 class="subsection-title">Risk by Percentage &amp; Stop Loss</h3>
       </div>
     </div>
 
     <div class="card">
       <div class="form-section">
-
         <div class="form-group">
           <label for="riskPercentAccountBalance">Account Balance</label>
           <input id="riskPercentAccountBalance" type="number" placeholder="e.g. 10000">
         </div>
-
         <div class="form-group">
           <label for="riskPercentMarket">Market</label>
           <select id="riskPercentMarket">
@@ -623,14 +481,10 @@
             <option value="Crypto">Crypto</option>
           </select>
         </div>
-
         <div class="form-group">
           <label for="riskPercentInstrument">Instrument</label>
-          <select id="riskPercentInstrument">
-            <option value="">Select instrument</option>
-          </select>
+          <select id="riskPercentInstrument"><option value="">Select instrument</option></select>
         </div>
-
         <div class="form-group">
           <label for="riskPercentPosition">Position</label>
           <select id="riskPercentPosition">
@@ -639,29 +493,23 @@
             <option value="sell">Sell</option>
           </select>
         </div>
-
         <div class="form-group">
           <label for="riskPercentEntryPrice">Entry Price</label>
           <input id="riskPercentEntryPrice" type="number" placeholder="e.g. 1.08450">
         </div>
-
         <div class="form-group">
           <label for="riskPercentRiskPercent">Risk (%)</label>
           <input id="riskPercentRiskPercent" type="number" placeholder="e.g. 2">
         </div>
-
         <div class="form-group">
           <label for="riskPercentRewardPercent">Reward (%)</label>
           <input id="riskPercentRewardPercent" type="number" placeholder="e.g. 4">
         </div>
-
         <div class="form-group">
           <label for="riskPercentSlPips">SL (Pips / Points)</label>
           <input id="riskPercentSlPips" type="number" placeholder="e.g. 30">
         </div>
-
       </div>
-
       <div class="result-section result-risk-percent">
         <p>Risk by Percentage</p>
         <h2 id="riskPercentLotSize">0.00</h2>
@@ -672,19 +520,14 @@
         <div class="result-label secondary-label">Take Profit</div>
       </div>
     </div>
-
     <div class="info">
-      <p>Risk ($): <span id="riskPercentRiskDollar">—</span></p>
-      <p>Reward ($): <span id="riskPercentRewardDollar">—</span></p>
-      <p>Pip Size: <span id="riskPercentPipSize">—</span></p>
-      <p>Conversion Factor: <span id="riskPercentConversionFactor">—</span></p>
-      <p>Contract Size: <span id="riskPercentContractSize">—</span></p>
+      <p>Risk ($) <span id="riskPercentRiskDollar">—</span></p>
+      <p>Reward ($) <span id="riskPercentRewardDollar">—</span></p>
+      <p>Pip Size <span id="riskPercentPipSize">—</span></p>
+      <p>Conversion Factor <span id="riskPercentConversionFactor">—</span></p>
+      <p>Contract Size <span id="riskPercentContractSize">—</span></p>
     </div>
-
-    <div id="riskPercentHelperBox" class="helper-box">
-      Enter the account balance to begin.
-    </div>
-
+    <div id="riskPercentHelperBox" class="helper-box">Enter the account balance to begin.</div>
     <div class="macro-box">
       <div class="macro-header">
         <strong class="macro-title">Risk by Percentage Macro</strong>
@@ -696,7 +539,6 @@
 
   <!-- ==================== FOOTER ==================== -->
   <footer class="site-footer">
-    <span class="footer-line"></span>
     <p>Developed by Faiyaz Ahmed.</p>
   </footer>
 
@@ -704,6 +546,38 @@
 
 <script src="data.js"></script>
 <script src="app.js"></script>
+<script>
+  // ── Dark mode toggle ──────────────────────────────────────
+  const html = document.documentElement;
+  const btn  = document.getElementById('themeToggleBtn');
+  const lbl  = btn.querySelector('.theme-toggle-label');
+
+  // Restore saved preference
+  const saved = localStorage.getItem('fn-theme');
+  if (saved === 'dark') {
+    html.setAttribute('data-theme', 'dark');
+    lbl.textContent = 'Light mode';
+  }
+
+  btn.addEventListener('click', () => {
+    const isDark = html.getAttribute('data-theme') === 'dark';
+    html.setAttribute('data-theme', isDark ? 'light' : 'dark');
+    lbl.textContent = isDark ? 'Dark mode' : 'Light mode';
+    localStorage.setItem('fn-theme', isDark ? 'light' : 'dark');
+  });
+
+  // ── Sticky nav shadow ─────────────────────────────────────
+  const nav = document.getElementById('toolNav');
+  const obs = new IntersectionObserver(
+    ([e]) => nav.classList.toggle('is-stuck', !e.isIntersecting),
+    { threshold: 1, rootMargin: '-1px 0px 0px 0px' }
+  );
+  // Observe a sentinel just above the nav
+  const sentinel = document.createElement('div');
+  sentinel.style.cssText = 'position:absolute;height:1px;top:0;left:0;right:0;pointer-events:none;';
+  nav.parentElement.insertBefore(sentinel, nav);
+  obs.observe(sentinel);
+</script>
 
 </body>
 </html>
