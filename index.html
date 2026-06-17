@@ -9,7 +9,7 @@
   <link rel="apple-touch-icon" href="./icon.png?v=3">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 
@@ -17,122 +17,126 @@
 
 <div class="app-container">
 
+  <!-- ==================== HERO ==================== -->
   <header class="hero-block">
     <div class="hero-badge">Ultimate Trade Calculator</div>
-    <h1 class="hero-title">FundedNext Web Calculator</h1>
+    <h1 class="hero-title">FundedNext <em>Web</em> Calculator</h1>
     <p class="hero-subtitle">
-      A polished trading support calculator for margin, PnL, pip adjustments, max lot sizing, and risk planning.
+      Precision tools for margin, PnL, pip adjustments, max lot sizing, and structured risk planning — all in one place.
     </p>
   </header>
 
+  <!-- ==================== CHOOSER ==================== -->
   <section class="calculator-guide" aria-label="Calculator chooser">
     <div class="guide-copy">
       <span class="guide-eyebrow">Choose your calculator</span>
-      <h2>Start from the task you need</h2>
-      <p>Use these quick cards to jump straight to PnL, margin, max lot, or risk tools without scanning the whole page.</p>
+      <h2>Start from what you need</h2>
+      <p>Jump straight to the right tool — PnL, margin, max lot size, or risk management — without scanning the whole page.</p>
     </div>
 
     <div class="calculator-grid">
       <button class="calculator-card active" data-tab="pnl" type="button">
         <span class="calculator-number">01</span>
         <span class="calculator-card-title">PnL & Pips</span>
-        <span class="calculator-card-text">Calculate profit/loss or add/remove pips from a price.</span>
+        <span class="calculator-card-text">Calculate profit/loss or adjust a price by pip amount.</span>
         <span class="calculator-card-cta">Open PnL tool</span>
       </button>
 
       <button class="calculator-card" data-tab="margin" type="button">
         <span class="calculator-number">02</span>
         <span class="calculator-card-title">Margin</span>
-        <span class="calculator-card-text">Find the required margin for a symbol, lot size, and leverage.</span>
+        <span class="calculator-card-text">Find required margin for any symbol, lot size, and leverage.</span>
         <span class="calculator-card-cta">Open margin tool</span>
       </button>
 
       <button class="calculator-card" data-tab="maxlot" type="button">
         <span class="calculator-number">03</span>
         <span class="calculator-card-title">Max Lot</span>
-        <span class="calculator-card-text">Calculate the highest lot size possible from account size and leverage.</span>
+        <span class="calculator-card-text">Calculate the maximum lot size from account balance and leverage.</span>
         <span class="calculator-card-cta">Open max lot tool</span>
       </button>
 
       <button class="calculator-card" data-tab="risk" type="button">
         <span class="calculator-number">04</span>
         <span class="calculator-card-title">Risk Tools</span>
-        <span class="calculator-card-text">Work out stop loss, take profit, risk %, reward %, and lot sizing.</span>
+        <span class="calculator-card-text">Calculate stop loss, take profit, risk %, reward %, and lot sizing.</span>
         <span class="calculator-card-cta">Open risk tools</span>
       </button>
     </div>
   </section>
 
+  <!-- ==================== STICKY TAB NAV ==================== -->
   <nav class="tool-nav-wrap" aria-label="Main calculator navigation">
     <div class="tool-nav-header">
-      <span>Main calculator tabs</span>
-      <small>Always visible while you scroll</small>
+      <span>Calculator tabs</span>
+      <small>Sticky — always accessible</small>
     </div>
 
-    <div class="tabs">
-    <button class="tab active" data-tab="pnl" type="button">
-      <span class="tab-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none">
-          <path d="M4 18L10 12L14 15L20 8"></path>
-          <path d="M16 8H20V12"></path>
-        </svg>
-      </span>
-      <span class="tab-step">01</span>
-      <span class="tab-text">
-        <span class="tab-label">PnL & Pips</span>
-        <span class="tab-desc">Profit/loss + add/remove pips</span>
-      </span>
-    </button>
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-tab="pnl" type="button" role="tab" aria-selected="true">
+        <span class="tab-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M4 18L10 12L14 15L20 8"></path>
+            <path d="M16 8H20V12"></path>
+          </svg>
+        </span>
+        <span class="tab-step">01</span>
+        <span class="tab-text">
+          <span class="tab-label">PnL & Pips</span>
+          <span class="tab-desc">Profit/loss + pip adjust</span>
+        </span>
+      </button>
 
-    <button class="tab" data-tab="margin" type="button">
-      <span class="tab-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none">
-          <path d="M4 8.5L12 4L20 8.5L12 13L4 8.5Z"></path>
-          <path d="M4 15.5L12 20L20 15.5"></path>
-          <path d="M4 12L12 16.5L20 12"></path>
-        </svg>
-      </span>
-      <span class="tab-step">02</span>
-      <span class="tab-text">
-        <span class="tab-label">Margin</span>
-        <span class="tab-desc">Required margin by model</span>
-      </span>
-    </button>
+      <button class="tab" data-tab="margin" type="button" role="tab" aria-selected="false">
+        <span class="tab-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M4 8.5L12 4L20 8.5L12 13L4 8.5Z"></path>
+            <path d="M4 15.5L12 20L20 15.5"></path>
+            <path d="M4 12L12 16.5L20 12"></path>
+          </svg>
+        </span>
+        <span class="tab-step">02</span>
+        <span class="tab-text">
+          <span class="tab-label">Margin</span>
+          <span class="tab-desc">Required margin by model</span>
+        </span>
+      </button>
 
-    <button class="tab" data-tab="maxlot" type="button">
-      <span class="tab-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none">
-          <path d="M4 7H20"></path>
-          <path d="M4 17H20"></path>
-          <path d="M7 7V17"></path>
-          <path d="M17 7V17"></path>
-          <path d="M10 12H14"></path>
-        </svg>
-      </span>
-      <span class="tab-step">03</span>
-      <span class="tab-text">
-        <span class="tab-label">Max Lot</span>
-        <span class="tab-desc">Largest lot size estimate</span>
-      </span>
-    </button>
+      <button class="tab" data-tab="maxlot" type="button" role="tab" aria-selected="false">
+        <span class="tab-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M4 7H20"></path>
+            <path d="M4 17H20"></path>
+            <path d="M7 7V17"></path>
+            <path d="M17 7V17"></path>
+            <path d="M10 12H14"></path>
+          </svg>
+        </span>
+        <span class="tab-step">03</span>
+        <span class="tab-text">
+          <span class="tab-label">Max Lot</span>
+          <span class="tab-desc">Largest lot size estimate</span>
+        </span>
+      </button>
 
-    <button class="tab" data-tab="risk" type="button">
-      <span class="tab-icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24" fill="none">
-          <path d="M12 3L19 7V12C19 16.5 16.2 19.7 12 21C7.8 19.7 5 16.5 5 12V7L12 3Z"></path>
-          <path d="M12 9V12.5"></path>
-          <path d="M12 16H12.01"></path>
-        </svg>
-      </span>
-      <span class="tab-step">04</span>
-      <span class="tab-text">
-        <span class="tab-label">Risk Tools</span>
-        <span class="tab-desc">SL, TP, risk and reward</span>
-      </span>
-    </button>
-  </div>
+      <button class="tab" data-tab="risk" type="button" role="tab" aria-selected="false">
+        <span class="tab-icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none">
+            <path d="M12 3L19 7V12C19 16.5 16.2 19.7 12 21C7.8 19.7 5 16.5 5 12V7L12 3Z"></path>
+            <path d="M12 9V12.5"></path>
+            <path d="M12 16H12.01"></path>
+          </svg>
+        </span>
+        <span class="tab-step">04</span>
+        <span class="tab-text">
+          <span class="tab-label">Risk Tools</span>
+          <span class="tab-desc">SL, TP, risk and reward</span>
+        </span>
+      </button>
+    </div>
   </nav>
 
+  <!-- ==================== MARGIN SECTION ==================== -->
   <div id="marginSection" class="tool-section tool-margin" style="display:none;">
     <div class="section-heading">
       <div>
@@ -155,7 +159,7 @@
       <div class="form-section">
 
         <div class="form-group">
-          <label>Market</label>
+          <label for="market">Market</label>
           <select id="market">
             <option value="">Select market</option>
             <option value="Currency">Currency</option>
@@ -166,27 +170,27 @@
         </div>
 
         <div class="form-group">
-          <label>Instrument</label>
+          <label for="instrument">Instrument</label>
           <select id="instrument">
             <option value="">Select instrument</option>
           </select>
         </div>
 
         <div class="form-group" id="modelGroup">
-          <label>Model</label>
+          <label for="model">Model</label>
           <select id="model">
             <option value="">Select model</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label>Current Price</label>
-          <input id="price" type="number" placeholder="Enter price">
+          <label for="price">Current Price</label>
+          <input id="price" type="number" placeholder="e.g. 1.08450">
         </div>
 
         <div class="form-group">
-          <label>Lot Size</label>
-          <input id="lotSize" type="number" placeholder="Enter size">
+          <label for="lotSize">Lot Size</label>
+          <input id="lotSize" type="number" placeholder="e.g. 0.10">
         </div>
 
         <div class="toggle-group">
@@ -198,23 +202,23 @@
         </div>
 
         <div id="manualLeverageWrap" class="form-group">
-          <label>Manual Leverage</label>
-          <input id="manualLeverage" type="number" placeholder="Enter leverage">
+          <label for="manualLeverage">Manual Leverage</label>
+          <input id="manualLeverage" type="number" placeholder="e.g. 100">
         </div>
 
       </div>
 
       <div class="result-section result-margin">
-        <p>Result</p>
+        <p>Required Margin</p>
         <h2 id="result">0.00</h2>
         <div id="resultCurrency" class="result-unit">USD</div>
       </div>
     </div>
 
     <div class="info">
-      <p>Contract Size: <span id="contractSize">-</span></p>
-      <p>Conversion Factor: <span id="conversionFactor">-</span></p>
-      <p>Leverage Used: <span id="leverageUsed">-</span></p>
+      <p>Contract Size: <span id="contractSize">—</span></p>
+      <p>Conversion Factor: <span id="conversionFactor">—</span></p>
+      <p>Leverage Used: <span id="leverageUsed">—</span></p>
     </div>
 
     <div id="helperBox" class="helper-box">
@@ -224,21 +228,18 @@
     <div class="macro-box">
       <div class="macro-header">
         <strong class="macro-title">Margin Macro</strong>
-        <button id="copyMarginMacroBtn" type="button" class="macro-copy-btn">
-          Copy Macro
-        </button>
+        <button id="copyMarginMacroBtn" type="button" class="macro-copy-btn">Copy Macro</button>
       </div>
-      <div id="marginMacroText" class="macro-text">
-Please complete the Margin Calculator inputs to generate the explanation text.
-      </div>
+      <div id="marginMacroText" class="macro-text">Please complete the Margin Calculator inputs to generate the explanation text.</div>
     </div>
   </div>
 
+  <!-- ==================== PNL SECTION ==================== -->
   <div id="pnlSection" class="tool-section tool-pnl">
     <div class="section-heading">
       <div>
         <div class="section-kicker">Performance Tools</div>
-        <h2 class="section-title">Profit & Add Pip Calculator</h2>
+        <h2 class="section-title">Profit &amp; Add Pip Calculator</h2>
       </div>
       <div class="section-chip">
         <span class="chip-icon" aria-hidden="true">
@@ -251,11 +252,12 @@ Please complete the Margin Calculator inputs to generate the explanation text.
       </div>
     </div>
 
+    <!-- PnL sub-card -->
     <div class="card card-spaced">
       <div class="form-section">
 
         <div class="form-group">
-          <label>Market</label>
+          <label for="pnlMarket">Market</label>
           <select id="pnlMarket">
             <option value="">Select market</option>
             <option value="Currency">Currency</option>
@@ -266,14 +268,14 @@ Please complete the Margin Calculator inputs to generate the explanation text.
         </div>
 
         <div class="form-group">
-          <label>Instrument</label>
+          <label for="pnlInstrument">Instrument</label>
           <select id="pnlInstrument">
             <option value="">Select instrument</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label>Position</label>
+          <label for="pnlPosition">Position</label>
           <select id="pnlPosition">
             <option value="">Select position</option>
             <option value="buy">Buy</option>
@@ -282,18 +284,18 @@ Please complete the Margin Calculator inputs to generate the explanation text.
         </div>
 
         <div class="form-group">
-          <label>Opening Price</label>
-          <input id="pnlOpenPrice" type="number" placeholder="Enter opening price">
+          <label for="pnlOpenPrice">Opening Price</label>
+          <input id="pnlOpenPrice" type="number" placeholder="e.g. 1.08450">
         </div>
 
         <div class="form-group">
-          <label>Closing Price</label>
-          <input id="pnlClosePrice" type="number" placeholder="Enter closing price">
+          <label for="pnlClosePrice">Closing Price</label>
+          <input id="pnlClosePrice" type="number" placeholder="e.g. 1.08750">
         </div>
 
         <div class="form-group">
-          <label>Lot Size</label>
-          <input id="pnlLotSize" type="number" placeholder="Enter lot size">
+          <label for="pnlLotSize">Lot Size</label>
+          <input id="pnlLotSize" type="number" placeholder="e.g. 1.00">
         </div>
 
       </div>
@@ -306,9 +308,9 @@ Please complete the Margin Calculator inputs to generate the explanation text.
     </div>
 
     <div class="info info-spaced">
-      <p>Pip Movement: <span id="pnlPips">-</span></p>
-      <p>Price Movement: <span id="pnlMovement">-</span></p>
-      <p>Conversion Factor: <span id="pnlConversionFactor">-</span></p>
+      <p>Pip Movement: <span id="pnlPips">—</span></p>
+      <p>Price Movement: <span id="pnlMovement">—</span></p>
+      <p>Conversion Factor: <span id="pnlConversionFactor">—</span></p>
     </div>
 
     <div id="pnlHelperBox" class="helper-box helper-spaced">
@@ -318,20 +320,17 @@ Please complete the Margin Calculator inputs to generate the explanation text.
     <div class="macro-box macro-spaced">
       <div class="macro-header">
         <strong class="macro-title">PnL Macro</strong>
-        <button id="copyPnlMacroBtn" type="button" class="macro-copy-btn">
-          Copy Macro
-        </button>
+        <button id="copyPnlMacroBtn" type="button" class="macro-copy-btn">Copy Macro</button>
       </div>
-      <div id="pnlMacroText" class="macro-text">
-Please complete the PnL Calculator inputs to generate the explanation text.
-      </div>
+      <div id="pnlMacroText" class="macro-text">Please complete the PnL Calculator inputs to generate the explanation text.</div>
     </div>
 
+    <!-- Pip Adjust sub-card -->
     <div class="card">
       <div class="form-section">
 
         <div class="form-group">
-          <label>Market</label>
+          <label for="pipMarket">Market</label>
           <select id="pipMarket">
             <option value="">Select market</option>
             <option value="Currency">Currency</option>
@@ -342,19 +341,19 @@ Please complete the PnL Calculator inputs to generate the explanation text.
         </div>
 
         <div class="form-group">
-          <label>Instrument</label>
+          <label for="pipInstrument">Instrument</label>
           <select id="pipInstrument">
             <option value="">Select instrument</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label>Opening Price</label>
-          <input id="pipOpenPrice" type="number" placeholder="Enter opening price">
+          <label for="pipOpenPrice">Opening Price</label>
+          <input id="pipOpenPrice" type="number" placeholder="e.g. 1.08450">
         </div>
 
         <div class="form-group">
-          <label>Action</label>
+          <label for="pipAction">Action</label>
           <select id="pipAction">
             <option value="">Select action</option>
             <option value="add">Add pips</option>
@@ -363,8 +362,8 @@ Please complete the PnL Calculator inputs to generate the explanation text.
         </div>
 
         <div class="form-group">
-          <label>Pip / Point Amount</label>
-          <input id="pipAmount" type="number" placeholder="Enter pip amount">
+          <label for="pipAmount">Pip / Point Amount</label>
+          <input id="pipAmount" type="number" placeholder="e.g. 50">
         </div>
 
       </div>
@@ -376,7 +375,7 @@ Please complete the PnL Calculator inputs to generate the explanation text.
     </div>
 
     <div class="info">
-      <p>Pip Size Used: <span id="pipSizeUsed">-</span></p>
+      <p>Pip Size Used: <span id="pipSizeUsed">—</span></p>
     </div>
 
     <div id="pipHelperBox" class="helper-box">
@@ -386,16 +385,13 @@ Please complete the PnL Calculator inputs to generate the explanation text.
     <div class="macro-box">
       <div class="macro-header">
         <strong class="macro-title">Add / Remove Pips Macro</strong>
-        <button id="copyPipMacroBtn" type="button" class="macro-copy-btn">
-          Copy Macro
-        </button>
+        <button id="copyPipMacroBtn" type="button" class="macro-copy-btn">Copy Macro</button>
       </div>
-      <div id="pipMacroText" class="macro-text">
-Please complete the Add / Remove Pips Calculator inputs to generate the explanation text.
-      </div>
+      <div id="pipMacroText" class="macro-text">Please complete the Add / Remove Pips Calculator inputs to generate the explanation text.</div>
     </div>
   </div>
 
+  <!-- ==================== MAX LOT SECTION ==================== -->
   <div id="maxlotSection" class="tool-section tool-maxlot" style="display:none;">
     <div class="section-heading">
       <div>
@@ -420,7 +416,7 @@ Please complete the Add / Remove Pips Calculator inputs to generate the explanat
       <div class="form-section">
 
         <div class="form-group">
-          <label>Market</label>
+          <label for="maxlotMarket">Market</label>
           <select id="maxlotMarket">
             <option value="">Select market</option>
             <option value="Currency">Currency</option>
@@ -431,27 +427,27 @@ Please complete the Add / Remove Pips Calculator inputs to generate the explanat
         </div>
 
         <div class="form-group">
-          <label>Instrument</label>
+          <label for="maxlotInstrument">Instrument</label>
           <select id="maxlotInstrument">
             <option value="">Select instrument</option>
           </select>
         </div>
 
         <div class="form-group" id="maxlotModelGroup">
-          <label>Model</label>
+          <label for="maxlotModel">Model</label>
           <select id="maxlotModel">
             <option value="">Select model</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label>Account Size</label>
-          <input id="maxlotAccountSize" type="number" placeholder="Enter account size">
+          <label for="maxlotAccountSize">Account Size</label>
+          <input id="maxlotAccountSize" type="number" placeholder="e.g. 10000">
         </div>
 
         <div class="form-group">
-          <label>Current Price</label>
-          <input id="maxlotPrice" type="number" placeholder="Enter current price">
+          <label for="maxlotPrice">Current Price</label>
+          <input id="maxlotPrice" type="number" placeholder="e.g. 1.08450">
         </div>
 
         <div class="toggle-group">
@@ -463,23 +459,23 @@ Please complete the Add / Remove Pips Calculator inputs to generate the explanat
         </div>
 
         <div id="maxlotManualLeverageWrap" class="form-group">
-          <label>Manual Leverage</label>
-          <input id="maxlotManualLeverage" type="number" placeholder="Enter leverage">
+          <label for="maxlotManualLeverage">Manual Leverage</label>
+          <input id="maxlotManualLeverage" type="number" placeholder="e.g. 100">
         </div>
 
       </div>
 
       <div class="result-section result-maxlot">
-        <p>Max Lot</p>
+        <p>Max Lot Size</p>
         <h2 id="maxlotResult">0.00</h2>
         <div class="result-unit">LOTS</div>
       </div>
     </div>
 
     <div class="info">
-      <p>Contract Size: <span id="maxlotContractSize">-</span></p>
-      <p>Conversion Factor: <span id="maxlotConversionFactor">-</span></p>
-      <p>Leverage Used: <span id="maxlotLeverageUsed">-</span></p>
+      <p>Contract Size: <span id="maxlotContractSize">—</span></p>
+      <p>Conversion Factor: <span id="maxlotConversionFactor">—</span></p>
+      <p>Leverage Used: <span id="maxlotLeverageUsed">—</span></p>
     </div>
 
     <div id="maxlotHelperBox" class="helper-box">
@@ -489,16 +485,13 @@ Please complete the Add / Remove Pips Calculator inputs to generate the explanat
     <div class="macro-box">
       <div class="macro-header">
         <strong class="macro-title">Max Lot Macro</strong>
-        <button id="copyMaxlotMacroBtn" type="button" class="macro-copy-btn">
-          Copy Macro
-        </button>
+        <button id="copyMaxlotMacroBtn" type="button" class="macro-copy-btn">Copy Macro</button>
       </div>
-      <div id="maxlotMacroText" class="macro-text">
-Please complete the Max Lot Calculator inputs to generate the explanation text.
-      </div>
+      <div id="maxlotMacroText" class="macro-text">Please complete the Max Lot Calculator inputs to generate the explanation text.</div>
     </div>
   </div>
 
+  <!-- ==================== RISK SECTION ==================== -->
   <div id="riskSection" class="tool-section tool-risk" style="display:none;">
     <div class="section-heading">
       <div>
@@ -513,20 +506,21 @@ Please complete the Max Lot Calculator inputs to generate the explanation text.
             <path d="M12 16H12.01"></path>
           </svg>
         </span>
-        <span>Structured risk planning with two clear methods</span>
+        <span>Two structured risk methods</span>
       </div>
     </div>
 
+    <!-- Risk by Money -->
     <div class="card card-spaced">
       <div class="form-section">
 
         <div class="form-group">
-          <label>Account Balance</label>
-          <input id="riskMoneyAccountBalance" type="number" placeholder="Enter account balance">
+          <label for="riskMoneyAccountBalance">Account Balance</label>
+          <input id="riskMoneyAccountBalance" type="number" placeholder="e.g. 10000">
         </div>
 
         <div class="form-group">
-          <label>Market</label>
+          <label for="riskMoneyMarket">Market</label>
           <select id="riskMoneyMarket">
             <option value="">Select market</option>
             <option value="Currency">Currency</option>
@@ -537,14 +531,14 @@ Please complete the Max Lot Calculator inputs to generate the explanation text.
         </div>
 
         <div class="form-group">
-          <label>Instrument</label>
+          <label for="riskMoneyInstrument">Instrument</label>
           <select id="riskMoneyInstrument">
             <option value="">Select instrument</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label>Position</label>
+          <label for="riskMoneyPosition">Position</label>
           <select id="riskMoneyPosition">
             <option value="">Select position</option>
             <option value="buy">Buy</option>
@@ -553,42 +547,42 @@ Please complete the Max Lot Calculator inputs to generate the explanation text.
         </div>
 
         <div class="form-group">
-          <label>Entry Price</label>
-          <input id="riskMoneyEntryPrice" type="number" placeholder="Enter entry price">
+          <label for="riskMoneyEntryPrice">Entry Price</label>
+          <input id="riskMoneyEntryPrice" type="number" placeholder="e.g. 1.08450">
         </div>
 
         <div class="form-group">
-          <label>Lot Size</label>
-          <input id="riskMoneyLotSize" type="number" placeholder="Enter lot size">
+          <label for="riskMoneyLotSize">Lot Size</label>
+          <input id="riskMoneyLotSize" type="number" placeholder="e.g. 1.00">
         </div>
 
         <div class="form-group">
-          <label>Risk ($)</label>
-          <input id="riskMoneyRisk" type="number" placeholder="Enter risk amount">
+          <label for="riskMoneyRisk">Risk ($)</label>
+          <input id="riskMoneyRisk" type="number" placeholder="e.g. 200">
         </div>
 
         <div class="form-group">
-          <label>Reward ($)</label>
-          <input id="riskMoneyReward" type="number" placeholder="Enter reward amount">
+          <label for="riskMoneyReward">Reward ($)</label>
+          <input id="riskMoneyReward" type="number" placeholder="e.g. 400">
         </div>
 
       </div>
 
       <div class="result-section result-risk-money">
-        <p>Risk by Money & Lot</p>
+        <p>Risk by Money &amp; Lot</p>
         <h2 id="riskMoneyStopLoss">0.00</h2>
-        <div class="result-label">STOP LOSS</div>
+        <div class="result-label">Stop Loss</div>
         <div class="result-secondary" id="riskMoneyTakeProfit">0.00</div>
-        <div class="result-label secondary-label">TAKE PROFIT</div>
+        <div class="result-label secondary-label">Take Profit</div>
       </div>
     </div>
 
     <div class="info info-spaced">
-      <p>Pip Size: <span id="riskMoneyPipSize">-</span></p>
-      <p>Conversion Factor: <span id="riskMoneyConversionFactor">-</span></p>
-      <p>Contract Size: <span id="riskMoneyContractSize">-</span></p>
-      <p>Stop Loss (Pips): <span id="riskMoneySlPips">-</span></p>
-      <p>Take Profit (Pips): <span id="riskMoneyTpPips">-</span></p>
+      <p>Pip Size: <span id="riskMoneyPipSize">—</span></p>
+      <p>Conversion Factor: <span id="riskMoneyConversionFactor">—</span></p>
+      <p>Contract Size: <span id="riskMoneyContractSize">—</span></p>
+      <p>Stop Loss (Pips): <span id="riskMoneySlPips">—</span></p>
+      <p>Take Profit (Pips): <span id="riskMoneyTpPips">—</span></p>
     </div>
 
     <div id="riskMoneyHelperBox" class="helper-box helper-spaced">
@@ -597,20 +591,17 @@ Please complete the Max Lot Calculator inputs to generate the explanation text.
 
     <div class="macro-box macro-spaced">
       <div class="macro-header">
-        <strong class="macro-title">Risk by Money & Lot Macro</strong>
-        <button id="copyRiskMoneyMacroBtn" type="button" class="macro-copy-btn">
-          Copy Macro
-        </button>
+        <strong class="macro-title">Risk by Money &amp; Lot Macro</strong>
+        <button id="copyRiskMoneyMacroBtn" type="button" class="macro-copy-btn">Copy Macro</button>
       </div>
-      <div id="riskMoneyMacroText" class="macro-text">
-Please complete the Risk by Money & Lot inputs to generate the explanation text.
-      </div>
+      <div id="riskMoneyMacroText" class="macro-text">Please complete the Risk by Money &amp; Lot inputs to generate the explanation text.</div>
     </div>
 
+    <!-- Risk by Percentage -->
     <div class="subsection-heading">
       <div>
         <div class="section-kicker">Risk Planning</div>
-        <h3 class="subsection-title">Risk Setting by Percentage and Stop Loss</h3>
+        <h3 class="subsection-title">Risk Setting by Percentage &amp; Stop Loss</h3>
       </div>
     </div>
 
@@ -618,12 +609,12 @@ Please complete the Risk by Money & Lot inputs to generate the explanation text.
       <div class="form-section">
 
         <div class="form-group">
-          <label>Account Balance</label>
-          <input id="riskPercentAccountBalance" type="number" placeholder="Enter account balance">
+          <label for="riskPercentAccountBalance">Account Balance</label>
+          <input id="riskPercentAccountBalance" type="number" placeholder="e.g. 10000">
         </div>
 
         <div class="form-group">
-          <label>Market</label>
+          <label for="riskPercentMarket">Market</label>
           <select id="riskPercentMarket">
             <option value="">Select market</option>
             <option value="Currency">Currency</option>
@@ -634,14 +625,14 @@ Please complete the Risk by Money & Lot inputs to generate the explanation text.
         </div>
 
         <div class="form-group">
-          <label>Instrument</label>
+          <label for="riskPercentInstrument">Instrument</label>
           <select id="riskPercentInstrument">
             <option value="">Select instrument</option>
           </select>
         </div>
 
         <div class="form-group">
-          <label>Position</label>
+          <label for="riskPercentPosition">Position</label>
           <select id="riskPercentPosition">
             <option value="">Select position</option>
             <option value="buy">Buy</option>
@@ -650,23 +641,23 @@ Please complete the Risk by Money & Lot inputs to generate the explanation text.
         </div>
 
         <div class="form-group">
-          <label>Entry Price</label>
-          <input id="riskPercentEntryPrice" type="number" placeholder="Enter entry price">
+          <label for="riskPercentEntryPrice">Entry Price</label>
+          <input id="riskPercentEntryPrice" type="number" placeholder="e.g. 1.08450">
         </div>
 
         <div class="form-group">
-          <label>Risk (%)</label>
-          <input id="riskPercentRiskPercent" type="number" placeholder="Enter risk %">
+          <label for="riskPercentRiskPercent">Risk (%)</label>
+          <input id="riskPercentRiskPercent" type="number" placeholder="e.g. 2">
         </div>
 
         <div class="form-group">
-          <label>Reward (%)</label>
-          <input id="riskPercentRewardPercent" type="number" placeholder="Enter reward %">
+          <label for="riskPercentRewardPercent">Reward (%)</label>
+          <input id="riskPercentRewardPercent" type="number" placeholder="e.g. 4">
         </div>
 
         <div class="form-group">
-          <label>SL (Pips / Points)</label>
-          <input id="riskPercentSlPips" type="number" placeholder="Enter SL in pips / points">
+          <label for="riskPercentSlPips">SL (Pips / Points)</label>
+          <input id="riskPercentSlPips" type="number" placeholder="e.g. 30">
         </div>
 
       </div>
@@ -676,18 +667,18 @@ Please complete the Risk by Money & Lot inputs to generate the explanation text.
         <h2 id="riskPercentLotSize">0.00</h2>
         <div class="result-unit">LOTS</div>
         <div class="result-secondary" id="riskPercentStopLoss">0.00</div>
-        <div class="result-label secondary-label">STOP LOSS</div>
+        <div class="result-label secondary-label">Stop Loss</div>
         <div class="result-secondary" id="riskPercentTakeProfit">0.00</div>
-        <div class="result-label secondary-label">TAKE PROFIT</div>
+        <div class="result-label secondary-label">Take Profit</div>
       </div>
     </div>
 
     <div class="info">
-      <p>Risk ($): <span id="riskPercentRiskDollar">-</span></p>
-      <p>Reward ($): <span id="riskPercentRewardDollar">-</span></p>
-      <p>Pip Size: <span id="riskPercentPipSize">-</span></p>
-      <p>Conversion Factor: <span id="riskPercentConversionFactor">-</span></p>
-      <p>Contract Size: <span id="riskPercentContractSize">-</span></p>
+      <p>Risk ($): <span id="riskPercentRiskDollar">—</span></p>
+      <p>Reward ($): <span id="riskPercentRewardDollar">—</span></p>
+      <p>Pip Size: <span id="riskPercentPipSize">—</span></p>
+      <p>Conversion Factor: <span id="riskPercentConversionFactor">—</span></p>
+      <p>Contract Size: <span id="riskPercentContractSize">—</span></p>
     </div>
 
     <div id="riskPercentHelperBox" class="helper-box">
@@ -697,16 +688,13 @@ Please complete the Risk by Money & Lot inputs to generate the explanation text.
     <div class="macro-box">
       <div class="macro-header">
         <strong class="macro-title">Risk by Percentage Macro</strong>
-        <button id="copyRiskPercentMacroBtn" type="button" class="macro-copy-btn">
-          Copy Macro
-        </button>
+        <button id="copyRiskPercentMacroBtn" type="button" class="macro-copy-btn">Copy Macro</button>
       </div>
-      <div id="riskPercentMacroText" class="macro-text">
-Please complete the Risk by Percentage inputs to generate the explanation text.
-      </div>
+      <div id="riskPercentMacroText" class="macro-text">Please complete the Risk by Percentage inputs to generate the explanation text.</div>
     </div>
   </div>
 
+  <!-- ==================== FOOTER ==================== -->
   <footer class="site-footer">
     <span class="footer-line"></span>
     <p>Developed by Faiyaz Ahmed.</p>
